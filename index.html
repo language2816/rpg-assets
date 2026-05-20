@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命運之旅 — 奇幻RPG (改進版)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1209;--parchment:#f5e9cc;--parchment2:#ede0b8;--parchment3:#d4c08a;
+  --blood:#8b1a1a;--gold:#a87820;--gold2:#d4a843;--shadow:#2d1f0e;
+  --rare-common:#888;--rare-uncommon:#2d7a3a;--rare-elite:#1a5fa8;--rare-boss:#7b2fa8;--rare-legendary:#b8760a;
+}
+body{background:#1a0f05;color:#e8d5a3;font-family:'Crimson Text',serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
+#game-root{background:linear-gradient(160deg,#2a1a0a,#1a0f05);width:100%;max-width:600px;min-height:500px;padding:0;position:relative;overflow:hidden;border-radius:12px;border:1px solid rgba(168,120,32,.3)}
+#game-root::before{content:'';position:absolute;inset:0;background-image:radial-gradient(ellipse at 30% 20%,rgba(180,130,40,.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(100,40,10,.12) 0%,transparent 50%);pointer-events:none}
+.panel{padding:20px 24px;position:relative;z-index:1}
+.title-panel{text-align:center;padding:32px 24px 28px}
+.game-title{font-family:'Cinzel',serif;font-size:32px;font-weight:700;color:#d4a843;letter-spacing:3px;text-shadow:0 0 20px rgba(212,168,67,.4);margin-bottom:6px}
+.game-sub{font-size:14px;color:#a89060;letter-spacing:2px;margin-bottom:20px}
+.lore-text{font-size:15px;line-height:1.8;color:#c8b48a;max-width:460px;margin:0 auto 24px;font-style:italic}
+.start-btn{background:linear-gradient(135deg,#5a3210,#3d2008);border:1px solid #a87820;color:#d4a843;font-family:'Cinzel',serif;font-size:15px;padding:12px 36px;border-radius:6px;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.start-btn:hover{background:linear-gradient(135deg,#7a4520,#5a3010);border-color:#d4a843;box-shadow:0 0 12px rgba(212,168,67,.3)}
+.section-title{font-family:'Cinzel',serif;font-size:16px;color:#d4a843;letter-spacing:2px;margin-bottom:4px}
+.section-sub{font-size:13px;color:#a89060;margin-bottom:18px}
+.hero-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.hero-card{background:rgba(30,18,5,.7);border:1px solid rgba(168,120,32,.3);border-radius:8px;padding:10px 6px 10px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.hero-card:hover{border-color:rgba(212,168,67,.6);background:rgba(50,30,8,.8)}
+.hero-card.selected{border:2px solid #d4a843;background:rgba(80,50,10,.7);box-shadow:0 0 12px rgba(212,168,67,.25)}
+.hero-name{font-family:'Cinzel',serif;font-size:11px;color:#d4a843;font-weight:600;margin-bottom:2px}
+.hero-class{font-size:11px;color:#a89060}
+.hero-stats{display:flex;gap:4px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.stat-badge{font-size:10px;color:#c8a878;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px;border:0.5px solid rgba(168,120,32,.3)}
+.selected-badge{position:absolute;top:4px;right:4px;background:#d4a843;color:#1a0f05;font-size:9px;font-family:'Cinzel',serif;padding:2px 5px;border-radius:3px;font-weight:700}
+.adv-btn{display:block;margin:0 auto;background:linear-gradient(135deg,#5a3210,#3d2008);border:1px solid #a87820;color:#d4a843;font-family:'Cinzel',serif;font-size:14px;padding:11px 32px;border-radius:6px;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.adv-btn:hover:not(:disabled){background:linear-gradient(135deg,#7a4520,#5a3010);border-color:#d4a843}
+.adv-btn:disabled{opacity:.4;cursor:not-allowed}
+.story-panel{padding:20px 24px}
+.location-tag{font-size:11px;color:#a89060;letter-spacing:2px;margin-bottom:8px}
+.story-box{border-left:3px solid #a87820;padding:12px 16px;background:rgba(0,0,0,.25);border-radius:0 6px 6px 0;margin-bottom:16px}
+.story-text{font-size:14px;line-height:1.9;color:#c8b48a;font-style:italic}
+.encounter-box{display:flex;align-items:center;gap:14px;background:rgba(30,10,5,.6);border:1px solid rgba(139,26,26,.4);border-radius:8px;padding:14px;margin-bottom:16px}
+.monster-name{font-family:'Cinzel',serif;font-size:15px;color:#e8c07a;font-weight:600}
+.rarity-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:3px;font-family:'Cinzel',serif;letter-spacing:1px;margin:3px 0}
+.rarity-common{background:rgba(80,80,80,.3);color:#aaa;border:0.5px solid #888}
+.rarity-uncommon{background:rgba(30,90,50,.3);color:#5dba72;border:0.5px solid #2d7a3a}
+.rarity-elite{background:rgba(20,60,120,.3);color:#6aaee8;border:0.5px solid #1a5fa8}
+.rarity-boss{background:rgba(80,20,120,.3);color:#c07ae8;border:0.5px solid #7b2fa8}
+.rarity-legendary{background:rgba(120,60,10,.3);color:#e8a832;border:0.5px solid #b8760a}
+.rarity-rare{background:rgba(100,40,10,.3);color:#e8a070;border:0.5px solid #a05020}
+.fight-btn{background:linear-gradient(135deg,#6b1a1a,#4a1010);border:1px solid #8b1a1a;color:#e8a0a0;font-family:'Cinzel',serif;font-size:14px;padding:11px 32px;border-radius:6px;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.fight-btn:hover{background:linear-gradient(135deg,#8b2020,#6b1010);border-color:#cc4444;box-shadow:0 0 10px rgba(200,50,50,.3)}
+.combat-panel{padding:16px 20px}
+.hp-bar-wrap{background:rgba(0,0,0,.4);height:10px;border-radius:5px;overflow:hidden;margin:6px 0;border:0.5px solid rgba(139,26,26,.4)}
+.hp-bar-fill{height:100%;border-radius:5px;transition:width .5s ease;background:#d4533a}
+.mp-bar-wrap{background:rgba(0,0,0,.4);height:6px;border-radius:3px;overflow:hidden;border:0.5px solid rgba(40,60,139,.4)}
+.mp-bar-fill{height:100%;border-radius:3px;background:#2a4ea8;transition:width .4s ease}
+.skills-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.skill-btn{background:rgba(30,18,5,.8);border:1px solid rgba(168,120,32,.4);color:#c8a878;font-family:'Crimson Text',serif;font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .15s}
+.skill-btn:hover:not(:disabled){background:rgba(80,50,10,.7);border-color:#d4a843;color:#e8c87a}
+.skill-btn:disabled{opacity:.35;cursor:not-allowed}
+.skill-btn.active-class{border-color:#d4a843;color:#e8c87a}
+.log-box{background:rgba(0,0,0,.4);border:0.5px solid rgba(168,120,32,.2);border-radius:6px;max-height:120px;overflow-y:auto;padding:8px 12px;scrollbar-width:thin;scrollbar-color:rgba(168,120,32,.3) transparent}
+.log-line{font-size:12px;color:#a89060;line-height:1.7;border-bottom:0.5px solid rgba(168,120,32,.1);padding-bottom:2px;margin-bottom:2px}
+.log-line:last-child{border-bottom:none}
+.over-panel,.win-panel{text-align:center;padding:36px 24px}
+.result-icon{font-size:52px;margin-bottom:14px}
+.result-title{font-family:'Cinzel',serif;font-size:24px;color:#d4a843;margin-bottom:8px}
+.result-story{border-left:3px solid #a87820;padding:10px 16px;text-align:left;max-width:440px;margin:0 auto 20px;font-size:14px;line-height:1.9;color:#c8b48a;font-style:italic;background:rgba(0,0,0,.2)}
+.restart-btn{background:rgba(30,18,5,.8);border:1px solid rgba(168,120,32,.5);color:#d4a843;font-family:'Cinzel',serif;font-size:14px;padding:11px 32px;border-radius:6px;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.restart-btn:hover{border-color:#d4a843;background:rgba(80,50,10,.7)}
+.loading-spin{display:inline-block;animation:spin 1s linear infinite;font-size:22px;color:#a87820}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes floatDamage{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-30px);opacity:0}}
+.damage-float{position:absolute;font-weight:bold;font-size:16px;pointer-events:none;animation:floatDamage 1s ease-out forwards}
+.level-info{font-size:11px;color:#d4a843;margin:8px 0;text-align:center}
+.progress-stat{font-size:12px;color:#a89060;margin:4px 0}
+.exp-bar{background:rgba(0,0,0,.3);height:8px;border-radius:4px;margin:4px 0;overflow:hidden;border:0.5px solid rgba(168,120,32,.3)}
+.exp-bar-fill{height:100%;background:linear-gradient(90deg,#d4a843,#e8c07a);transition:width .5s ease}
+</style>
+</head>
+<body>
+<div id="game-root">
+  <div id="gr" class="panel title-panel"></div>
+</div>
+<script>
+const IMG = 'https://raw.githubusercontent.com/language2816/rpg-assets/main';
+
+const HERO_IMGS = {
+  knight: IMG+'/knight.png',
+  archer: IMG+'/archer.png',
+  cleric: IMG+'/cleric.png',
+  rogue:  IMG+'/rogue.png',
+  witch:  IMG+'/witch.png',
+};
+
+const MONSTER_IMGS = {
+  goblin:          IMG+'/goblin.png',
+  werewolf:        IMG+'/werewolf.png',
+  skeleton:        IMG+'/skeleton.png',
+  zombie:          IMG+'/zombie.png',
+  necromancer:     IMG+'/necromancer.png',
+  ogre:            IMG+'/ogre.png',
+  giant_spider:    IMG+'/giant_spider.png',
+  lizardman:       IMG+'/lizardman.png',
+  mimic:           IMG+'/mimic.png',
+  dire_boar:       IMG+'/dire_boar.png',
+  iron_crab:       IMG+'/iron_crab.png',
+  harpy:           IMG+'/harpy.png',
+  shadow_archer:   IMG+'/shadow_archer.png',
+  iron_guardian:   IMG+'/iron_guardian.png',
+  beholder:        IMG+'/beholder.png',
+  stone_golem:     IMG+'/stone_golem.png',
+  lava_titan:      IMG+'/lava_titan.png',
+  death_wraith:    IMG+'/death_wraith.png',
+  demon_lord:      IMG+'/demon_lord.png',
+  fenrir:          IMG+'/fenrir.png',
+  abyss_dragon:    IMG+'/abyss_dragon.png',
+  // 遊戲內怪物對應圖片
+  bandit:          IMG+'/shadow_archer.png',
+  troll:           IMG+'/ogre.png',
+  sorcerer:        IMG+'/necromancer.png',
+  dragon_sakaso:   IMG+'/abyss_dragon.png',
+  ancient_mummy:   IMG+'/zombie.png',
+  shadow_assassin: IMG+'/shadow_archer.png',
+  flame_elemental: IMG+'/lava_titan.png',
+};
+
+const HEROES_DATA = {
+  knight:{id:'knight',name:'阿德里克',title:'鐵壁騎士',
+    cc:'#378ADD',baseHp:140,baseMp:20,baseAtk:24,baseDef:20,baseSpd:8,maxHp:140,maxMp:20,atk:24,def:20,spd:8,
+    desc:'身披厚重鎧甲的堅定戰士，以血肉之軀護衛同伴。',
+    skills:[
+      {name:'劍擊',mp:0,type:'dmg',base:28,desc:'基本劍術攻擊'},
+      {name:'盾牌衝撞',mp:5,type:'dmg_stun',base:18,desc:'造成傷害並眩暈敵人'},
+      {name:'鐵壁防禦',mp:6,type:'defend',base:0,desc:'本回合傷害減少65%'},
+    ]},
+  archer:{id:'archer',name:'希薇拉',title:'精靈遊俠',
+    cc:'#4a9a22',baseHp:85,baseMp:30,baseAtk:34,baseDef:10,baseSpd:15,maxHp:85,maxMp:30,atk:34,def:10,spd:15,
+    desc:'身手敏捷的精靈弓手，精準箭術讓敵人防不勝防。',
+    skills:[
+      {name:'箭矢射擊',mp:0,type:'dmg',base:33,desc:'基本弓箭攻擊'},
+      {name:'連射',mp:8,type:'multi',base:17,hits:2,desc:'連續射出2支箭矢'},
+      {name:'穿甲箭',mp:12,type:'pierce',base:52,desc:'無視防禦造成大量傷害'},
+    ]},
+  cleric:{id:'cleric',name:'莉莉亞',title:'聖光祭司',
+    cc:'#c8900a',baseHp:95,baseMp:65,baseAtk:16,baseDef:14,baseSpd:10,maxHp:95,maxMp:65,atk:16,def:14,spd:10,
+    desc:'引導神聖力量的祭司，治療術守護夥伴不倒。',
+    skills:[
+      {name:'聖光衝擊',mp:0,type:'dmg',base:20,desc:'神聖能量攻擊'},
+      {name:'治癒術',mp:18,type:'heal',base:50,desc:'恢復HP最低夥伴的大量生命'},
+      {name:'聖域爆發',mp:22,type:'aoe',base:28,desc:'對敵人造成神聖傷害'},
+    ]},
+  rogue:{id:'rogue',name:'凱爾',title:'暗影刺客',
+    cc:'#7a4ab7',baseHp:78,baseMp:25,baseAtk:44,baseDef:8,baseSpd:18,maxHp:78,maxMp:25,atk:44,def:8,spd:18,
+    desc:'潛伏黑暗的死亡使者，一擊致命讓敵人瞬間消失。',
+    skills:[
+      {name:'快速刺擊',mp:0,type:'dmg',base:40,desc:'基本快速攻擊'},
+      {name:'背刺',mp:10,type:'crit',base:78,desc:'致命一擊，無視部分防禦'},
+      {name:'煙霧彈',mp:8,type:'blind',base:0,desc:'令敵人致盲2回合'},
+    ]},
+  witch:{id:'witch',name:'皮普',title:'奧術巫女',
+    cc:'#c8500a',baseHp:68,baseMp:70,baseAtk:20,baseDef:8,baseSpd:12,maxHp:68,maxMp:70,atk:20,def:8,spd:12,
+    desc:'蘊含遠古力量的怪奇魔女，毀滅性魔法撼動戰局。',
+    skills:[
+      {name:'火焰箭',mp:8,type:'dmg',base:46,desc:'精準火系魔法攻擊'},
+      {name:'寒冰風暴',mp:15,type:'aoe_slow',base:28,desc:'範圍冰系攻擊並減速'},
+      {name:'隕石術',mp:25,type:'aoe',base:56,desc:'毀滅性大範圍魔法'},
+    ]},
+};
+
+const MONSTERS_DATA = [
+  {id:'goblin',name:'哥布林斥候',rarity:'common',rarityTxt:'普通',
+   hp:90,atk:14,def:3,spd:10,
+   loc:'幽暗森林入口',intro:'森林深處傳來騷動聲，一群哥布林嗥叫著從樹叢衝出！'},
+  {id:'werewolf',name:'魔化狼人',rarity:'uncommon',rarityTxt:'罕見',
+   hp:140,atk:22,def:6,spd:14,
+   loc:'血月荒野',intro:'月光下，一聲震天嚎叫劃破夜空——狼人從暗處猛撲而來！'},
+  {id:'skeleton',name:'枯骨戰士',rarity:'common',rarityTxt:'普通',
+   hp:80,atk:16,def:5,spd:8,
+   loc:'廢棄地下墓穴',intro:'骨骼碰撞聲迴盪，枯骨戰士舉起鏽劍向你逼近！'},
+  {id:'bandit',name:'盜匪首領',rarity:'uncommon',rarityTxt:'罕見',
+   hp:120,atk:24,def:8,spd:12,
+   loc:'荒蕪村鎮',intro:'山匪首領帶著嗜血的笑容，拔出了長刀！'},
+  {id:'troll',name:'山岭巨魔',rarity:'elite',rarityTxt:'精英',
+   hp:180,atk:28,def:12,spd:6,
+   loc:'峽谷通道',intro:'地面開始震動！一隻巨大的巨魔從岩石後現身，發出震耳欲聾的吼聲！'},
+  {id:'sorcerer',name:'黑暗法師',rarity:'elite',rarityTxt:'精英',
+   hp:110,atk:32,def:6,spd:14,
+   loc:'廢墟塔樓',intro:'空氣中瀰漫著詭異的魔力，黑暗法師開始吟唱禁咒！'},
+  {id:'dragon_sakaso',name:'深淵暗龍 沙卡索',rarity:'legendary',rarityTxt:'傳說',
+   hp:350,atk:48,def:18,spd:10,
+   loc:'世界之心',intro:'天地為之變色！深淵暗龍沙卡索展開翅膀，黑霧籠罩整個世界！',
+   isBoss:true,stages:[
+     {hpPercent:100,stage:1,skill:'breath'},
+     {hpPercent:60,stage:2,skill:'dark_aura'},
+     {hpPercent:30,stage:3,skill:'desperation'}
+   ]},
+  {id:'ancient_mummy',name:'遠古法老',rarity:'elite',rarityTxt:'精英',
+   hp:160,atk:26,def:10,spd:8,
+   loc:'沙漠古墓',intro:'法老的詛咒被喚醒！木乃伊發出尖銳的咆哮！'},
+  {id:'shadow_assassin',name:'暗影刺客',rarity:'uncommon',rarityTxt:'罕見',
+   hp:100,atk:28,def:5,spd:16,
+   loc:'黑暗森林',intro:'陰影中閃現出一位刺客！致命的匕首在月光下閃爍！'},
+  {id:'flame_elemental',name:'烈火精靈',rarity:'elite',rarityTxt:'精英',
+   hp:130,atk:30,def:7,spd:14,
+   loc:'火山溶洞',intro:'熾熱的岩漿中升起一個火焰生命體！'},
+];
+
+const STORY_SEQUENCE = [
+  ['goblin','goblin','shadow_assassin'],
+  ['werewolf','bandit','ancient_mummy'],
+  ['troll','flame_elemental'],
+  ['sorcerer'],
+  ['dragon_sakaso']
+];
+
+const ITEMS = {
+  potion_hp:{id:'potion_hp',name:'生命藥水',type:'consumable',healHp:60,price:30},
+  potion_mp:{id:'potion_mp',name:'法力藥水',type:'consumable',healMp:40,price:25},
+  sword_iron:{id:'sword_iron',name:'鐵劍',type:'weapon',atkBonus:8,price:50},
+  sword_steel:{id:'sword_steel',name:'鋼劍',type:'weapon',atkBonus:15,price:120},
+  shield_leather:{id:'shield_leather',name:'皮革盾',type:'armor',defBonus:4,price:40},
+  shield_iron:{id:'shield_iron',name:'鐵盾',type:'armor',defBonus:8,price:100},
+};
+
+let G = {
+  screen:'title',heroId:null,party:null,
+  waveIdx:0,monstersInWave:[],curMonsterIdx:0,
+  btl:null,phase:'player',log:[],story:'',loading:false,
+  level:1,exp:0,expToLevel:100,attributePoints:0,
+  inventory:[],gold:0,
+  stats:{totalDamage:0,totalHealing:0,enemiesDefeated:0}
+};
+
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function calcDmg(atk,def,base){return Math.max(1,Math.round((base+atk-def*0.4)*(rnd(88,112)/100)))}
+function addLog(t){G.log.unshift(t);if(G.log.length>20)G.log.pop()}
+function getRarityClass(r){return 'rarity-'+r}
+
+function initParty(heroId) {
+  const h = HEROES_DATA[heroId];
+  const atkBonus = G.inventory.filter(i=>i.type==='weapon').reduce((s,i)=>s+(i.atkBonus||0),0);
+  const defBonus = G.inventory.filter(i=>i.type==='armor').reduce((s,i)=>s+(i.defBonus||0),0);
+  
+  G.party = {
+    hp: h.maxHp,
+    mp: h.maxMp,
+    eff:{},
+    atkBonus,
+    defBonus
+  };
+}
+
+function initBattle(monster) {
+  G.btl = {
+    ...monster,
+    curHp: monster.hp,
+    eff:{stun:0,slow:0,blind:0},
+    round:1,
+    currentStage:1,
+    canUseSkills:true
+  };
+  G.log = [];
+  addLog('⚔ 遭遇【'+monster.name+'】！ ['+monster.rarityTxt+']');
+}
+
+function applyHeroSkill(skillIdx) {
+  const hero = HEROES_DATA[G.heroId];
+  const sk = hero.skills[skillIdx];
+  const hs = G.party;
+  const b = G.btl;
+  
+  if(hs.mp < sk.mp){ addLog('❌ MP不足！'); return false; }
+  hs.mp -= sk.mp;
+  if(hs.eff && hs.eff.stun>0){ hs.eff.stun=0; addLog('😵 你被眩暈，無法行動！'); return true; }
+  
+  const miss = hs.eff && hs.eff.blind>0 && Math.random()<0.35;
+  switch(sk.type){
+    case 'dmg':{
+      if(miss){addLog('❌ 使用【'+sk.name+'】未能命中！');break;}
+      const d=calcDmg(hero.atk+hs.atkBonus,b.def,sk.base);
+      b.curHp=Math.max(0,b.curHp-d);
+      addLog(hero.name+'【'+sk.name+'】造成 '+d+' 點傷害！');
+      G.stats.totalDamage+=d;
+      break;
+    }
+    case 'multi':{
+      let tot=0;
+      for(let i=0;i<sk.hits;i++){const d=calcDmg(hero.atk+hs.atkBonus,b.def,sk.base);b.curHp=Math.max(0,b.curHp-d);tot+=d;}
+      addLog(hero.name+'【'+sk.name+'】連擊共造成 '+tot+' 點傷害！');
+      G.stats.totalDamage+=tot;
+      break;
+    }
+    case 'pierce':{
+      if(miss){addLog('❌ 使用【'+sk.name+'】未能命中！');break;}
+      const d=calcDmg(hero.atk+hs.atkBonus,0,sk.base);
+      b.curHp=Math.max(0,b.curHp-d);
+      addLog('🏹'+hero.name+'【'+sk.name+'】無視防禦造成 '+d+' 傷害！');
+      G.stats.totalDamage+=d;
+      break;
+    }
+    case 'crit':{
+      if(miss){addLog('❌ 【'+sk.name+'】未能命中！');break;}
+      const d=calcDmg(hero.atk+hs.atkBonus,b.def*0.25,sk.base);
+      b.curHp=Math.max(0,b.curHp-d);
+      addLog('💥'+hero.name+'【'+sk.name+'】致命一擊！造成 '+d+' 傷害！');
+      G.stats.totalDamage+=d;
+      break;
+    }
+    case 'aoe':case 'aoe_slow':{
+      const d=calcDmg(hero.atk+hs.atkBonus,b.def,sk.base);
+      b.curHp=Math.max(0,b.curHp-d);
+      if(sk.type==='aoe_slow')b.eff.slow=3;
+      addLog('✨'+hero.name+'【'+sk.name+'】造成 '+d+' 點傷害！');
+      G.stats.totalDamage+=d;
+      break;
+    }
+    case 'heal':{
+      const amt=Math.round(sk.base+hero.atk*0.4);
+      G.party.hp=Math.min(HEROES_DATA[G.heroId].maxHp,G.party.hp+amt);
+      addLog('💚'+hero.name+'【'+sk.name+'】恢復 '+amt+' 點生命！');
+      G.stats.totalHealing+=amt;
+      break;
+    }
+    case 'defend':{
+      if(!hs.eff)hs.eff={};hs.eff.defending=1;
+      addLog('🛡️'+hero.name+'【'+sk.name+'】進入防禦姿態！');break;
+    }
+    case 'blind':{
+      b.eff.blind=3;
+      addLog('💨'+hero.name+'投擲煙霧彈！敵人致盲3回合！');break;
+    }
+    case 'dmg_stun':{
+      if(miss){addLog('❌ 使用【'+sk.name+'】未能命中！');break;}
+      const d=calcDmg(hero.atk+hs.atkBonus,b.def,sk.base);
+      b.curHp=Math.max(0,b.curHp-d);b.eff.stun=1;
+      addLog(hero.name+'【'+sk.name+'】造成 '+d+' 傷害並眩暈敵人！');
+      G.stats.totalDamage+=d;
+      break;
+    }
+  }
+  return true;
+}
+
+function enemyAct() {
+  const b = G.btl;
+  const hero = HEROES_DATA[G.heroId];
+  const hs = G.party;
+  
+  if(b.eff.stun>0){ b.eff.stun=0; addLog('😵【'+b.name+'】被眩暈，無法行動！'); return; }
+  if(b.eff.blind>0 && Math.random()<0.4){ addLog('⚠️【'+b.name+'】攻擊未能命中！'); b.eff.blind--; return; }
+  
+  let atk=b.atk;
+  if(b.eff.slow>0){ atk=Math.round(atk*0.65); b.eff.slow--; }
+  
+  // 改進的 AI 決策樹
+  const hpPercent = b.curHp / b.hp;
+  const playerHpPercent = hs.hp / HEROES_DATA[G.heroId].maxHp;
+  
+  // BOSS 特殊技能 - 多階段切換
+  if(b.isBoss) {
+    if(hpPercent <= 0.33 && b.round % 2 === 0) {
+      const dmg = Math.round(calcDmg(atk, hero.def, 15) * 1.4);
+      hs.hp = Math.max(0, hs.hp - dmg);
+      addLog('💥【'+b.name+'】爆發出最後的絕望之力！造成 '+dmg+' 點傷害！');
+      return;
+    } else if(hpPercent <= 0.66 && b.round % 3 === 0) {
+      b.eff.slow = 3;
+      const dmg = Math.round(calcDmg(atk, hero.def, 12) * 1.2);
+      hs.hp = Math.max(0, hs.hp - dmg);
+      addLog('🌑【'+b.name+'】施放黑暗氣場！敵人減速並受到 '+dmg+' 傷害！');
+      return;
+    }
+  }
+  
+  // 普通敵人 AI
+  if(hpPercent < 0.25 && Math.random() < 0.5) {
+    addLog('⚠️【'+b.name+'】試圖逃脫！');
+    return;
+  }
+  
+  // 根據對手防禦改變策略
+  if(hs.eff && hs.eff.defending && Math.random() < 0.6) {
+    // 對手在防禦，改用魔法或特殊攻擊
+    const special = Math.round(calcDmg(atk, hero.def*0.5, 8) * 1.15);
+    hs.hp = Math.max(0, hs.hp - special);
+    addLog('✨【'+b.name+'】使用特殊攻擊突破防禦！造成 '+special+' 點傷害！');
+    return;
+  }
+  
+  // 正常攻擊
+  const d=calcDmg(atk,hero.def-hs.defBonus,6);
+  if(hs.eff && hs.eff.defending){
+    const rd=Math.round(d*0.35);hs.eff.defending=0;
+    hs.hp=Math.max(0,hs.hp-rd);
+    addLog('🛡️【'+b.name+'】攻擊被格擋！僅受 '+rd+' 點傷害！');
+  } else {
+    hs.hp=Math.max(0,hs.hp-d);
+    addLog('⚡【'+b.name+'】攻擊造成 '+d+' 點傷害！');
+  }
+}
+
+async function callAI(sys,usr) {
+  G.loading=true; re();
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+        system:sys,messages:[{role:'user',content:usr}]})
+    });
+    const d = await r.json();
+    G.loading=false;
+    return d.content?.[0]?.text||'';
+  } catch(e){ G.loading=false; return ''; }
+}
+
+function re() {
+  const root = document.getElementById('gr');
+  if(!root)return;
+  switch(G.screen){
+    case 'title': root.innerHTML=rTitle();break;
+    case 'select': root.innerHTML=rSelect();break;
+    case 'story': root.innerHTML=rStory();break;
+    case 'combat': root.innerHTML=rCombat();break;
+    case 'wave_clear': root.innerHTML=rWaveClear();break;
+    case 'over': root.innerHTML=rOver();break;
+    case 'win': root.innerHTML=rWin();break;
+  }
+}
+
+function rTitle(){
+  return '<div class="title-panel">'
+    +'<div style="font-size:11px;letter-spacing:4px;color:#806040;margin-bottom:8px">FANTASY RPG</div>'
+    +'<div class="game-title">命運之旅</div>'
+    +'<div class="game-sub">選擇英雄 · 征服怪物 · 拯救世界</div>'
+    +'<p class="lore-text">深淵暗龍沙卡索甦醒了，邪惡之氣蔓延至大地每個角落。命運的齒輪開始轉動——只有你，才能阻止這場浩劫。</p>'
+    +'<button class="start-btn" onclick="W.gStart()">開始冒險 →</button>'
+    +'</div>';
+}
+
+function rSelect(){
+  const ids=Object.keys(HEROES_DATA);
+  return '<div class="panel">'
+    +'<div class="section-title">選擇你的職業</div>'
+    +'<div class="section-sub">選擇一位英雄踏上旅途（已選 '+(G.heroId?1:0)+'/1）</div>'
+    +'<div class="hero-grid">'
+    +ids.map(id=>{
+        const h=HEROES_DATA[id];
+        const sel=G.heroId===id;
+        return '<div class="hero-card '+(sel?'selected':'')+'" onclick="W.selectHero(\''+id+'\')">'
+          +(sel?'<div class="selected-badge">✓ 選擇</div>':'')
+          +'<div style="height:80px;display:flex;align-items:center;justify-content:center;margin:4px 0">'
+          +'<img src="'+HERO_IMGS[id]+'" style="max-height:80px;max-width:100%;object-fit:contain" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">'
+          +'<span style="display:none;font-size:24px">🗡️</span></div>'
+          +'<div class="hero-name">'+h.name+'</div>'
+          +'<div class="hero-class">'+h.title+'</div>'
+          +'<div class="hero-stats">'
+          +'<span class="stat-badge">❤'+h.maxHp+'</span>'
+          +'<span class="stat-badge">⚔'+h.atk+'</span>'
+          +'<span class="stat-badge">🛡'+h.def+'</span>'
+          +'</div>'
+          +'<div style="font-size:10px;color:#806040;margin-top:6px;line-height:1.5">'+h.desc+'</div>'
+          +'</div>';
+      }).join('')
+    +'</div>'
+    +(G.heroId?
+      '<div style="text-align:center">'
+      +'<div class="level-info">等級 '+G.level+' | 金幣 '+G.gold+' | 經驗值 '+Math.round(G.exp)+'/'+G.expToLevel+'</div>'
+      +'<div class="exp-bar"><div class="exp-bar-fill" style="width:'+(G.exp/G.expToLevel*100)+'%"></div></div>'
+      +'<div style="font-size:12px;color:#a89060;margin:10px 0">已選擇：'+HEROES_DATA[G.heroId].name+' —— '+HEROES_DATA[G.heroId].title+'</div>'
+      +'<button class="adv-btn" onclick="W.gAdv()">踏上命運之旅 →</button>'
+      +'</div>':
+      '<div style="text-align:center;font-size:13px;color:#806040">點選英雄卡片以選擇職業</div>')
+    +'</div>';
+}
+
+function rStory(){
+  const m=G.monstersInWave[G.curMonsterIdx];
+  return '<div class="story-panel">'
+    +'<div style="text-align:center;margin-bottom:16px">'
+    +'<div class="section-title">第 '+(G.waveIdx+1)+' 波戰鬥</div>'
+    +'<div class="level-info">等級 '+G.level+' | 經驗值 '+Math.round(G.exp)+'/'+G.expToLevel+'</div>'
+    +'</div>'
+    +(MONSTER_IMGS[m.id]?'<div style="text-align:center;margin-bottom:12px"><img src="'+MONSTER_IMGS[m.id]+'" style="height:100px;object-fit:contain" onerror="this.style.display=\'none\'"></div>':'')
+    +'<div class="story-box"><div class="story-text">'+G.story+'</div></div>'
+    +'<button class="fight-btn" onclick="W.gFight()" style="width:100%">進入戰鬥 ⚔️</button>'
+    +'</div>';
+}
+
+function rCombat(){
+  const hero=HEROES_DATA[G.heroId];
+  const m=G.btl;
+  const hpPercent=(G.party.hp/hero.maxHp*100).toFixed(0);
+  const mpPercent=(G.party.mp/hero.maxMp*100).toFixed(0);
+  const enemyHpPercent=(m.curHp/m.hp*100).toFixed(0);
+  
+  return '<div class="combat-panel">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px">'
+    +'<div style="flex:1"><div style="font-size:12px;color:#d4a843">'+hero.name+'</div>'
+    +'<img src="'+(HERO_IMGS[G.heroId]||'')+'" style="height:80px;object-fit:contain;display:block;margin:4px 0" onerror="this.style.display=\'none\'">'
+    +'<div style="font-size:10px;color:#a89060">生命</div>'
+    +'<div class="hp-bar-wrap"><div class="hp-bar-fill" style="width:'+hpPercent+'%"></div></div>'
+    +'<div style="font-size:10px;color:#c8a878">'+G.party.hp+'/'+hero.maxHp+'</div>'
+    +'<div style="font-size:10px;color:#a89060;margin-top:4px">法力</div>'
+    +'<div class="mp-bar-wrap"><div class="mp-bar-fill" style="width:'+mpPercent+'%"></div></div>'
+    +'<div style="font-size:10px;color:#c8a878">'+G.party.mp+'/'+hero.maxMp+'</div>'
+    +'</div>'
+    +'<div style="flex:1;text-align:right">'
+    +'<div style="font-size:12px;color:#e8c07a">【'+m.name+'】</div>'
+    +'<img src="'+(MONSTER_IMGS[m.id]||'')+'" style="height:80px;object-fit:contain;display:block;margin:4px 0 4px auto" onerror="this.style.display=\'none\'">'
+    +'<div style="font-size:10px;color:#a89060">生命</div>'
+    +'<div class="hp-bar-wrap"><div class="hp-bar-fill" style="width:'+enemyHpPercent+'%"></div></div>'
+    +'<div style="font-size:10px;color:#c8a878">'+m.curHp+'/'+m.hp+'</div>'
+    +'</div>'
+    +'</div>'
+    +'<div style="font-size:11px;color:#a89060;margin:8px 0;text-align:center">回合 '+m.round+'</div>'
+    +(G.phase==='player'?
+      '<div class="skills-row">'
+      +hero.skills.map((sk,idx)=>'<button class="skill-btn" onclick="W.useSkill('+idx+')" '+(G.party.mp<sk.mp?'disabled':'')+' title="'+sk.desc+'">'
+        +sk.name+(sk.mp>0?'<span style="font-size:10px;opacity:.65"> MP'+sk.mp+'</span>':'')
+        +'</button>')
+      .join('')
+      +'</div>'
+      +'<div style="font-size:10px;color:#706050">'+hero.skills.map(s=>s.desc).join(' · ')+'</div>'
+      +'</div>':'')
+    +(G.phase==='enemy'?'<div style="padding:8px 12px;background:rgba(139,26,26,.15);border-radius:6px;margin-bottom:10px;font-size:13px;color:#cc8888">敵人行動中...</div>':'')
+    +'<div class="log-box">'
+    +G.log.map(t=>'<div class="log-line">'+t+'</div>').join('')
+    +'</div></div>';
+}
+
+function rWaveClear(){
+  const wave=STORY_SEQUENCE[G.waveIdx-1];
+  const cleared=wave.map(i=>MONSTERS_DATA.find(m=>m.id===i));
+  return '<div class="panel" style="text-align:center;padding:28px 24px">'
+    +'<div style="font-size:40px;margin-bottom:12px">⚔</div>'
+    +'<div class="section-title" style="color:#d4a843;margin-bottom:6px">區域清除！</div>'
+    +'<div style="font-size:13px;color:#a89060;margin-bottom:16px">擊敗了 '+cleared.length+' 隻怪物</div>'
+    +'<div style="font-size:13px;color:#d4a843;margin-bottom:12px">+ '+Math.round(cleared.length*50)+' 經驗值</div>'
+    +'<div class="level-info">現在等級 '+G.level+' | 經驗值 '+Math.round(G.exp)+'/'+G.expToLevel+'</div>'
+    +(G.loading?'<div style="color:#a89060;font-size:13px"><i class="ti ti-loader loading-spin"></i> 繼續冒險中...</div>':
+    '<button class="adv-btn" onclick="W.gNextWave()">繼續前進 →</button>')
+    +'</div>';
+}
+
+function rOver(){
+  const hero=HEROES_DATA[G.heroId];
+  return '<div class="over-panel">'
+    +'<div class="result-icon">💀</div>'
+    +'<div class="result-title" style="color:#cc4444">英雄隕落...</div>'
+    +'<div style="font-size:13px;color:#a89060;margin-bottom:20px">'+hero.name+' 倒在了旅途中，世界陷入黑暗</div>'
+    +'<div style="font-size:12px;color:#a89060;margin:12px 0">'
+    +'傷害造成: '+G.stats.totalDamage+' | 治療: '+G.stats.totalHealing+' | 敵人擊敗: '+G.stats.enemiesDefeated
+    +'</div>'
+    +'<button class="restart-btn" onclick="W.gRestart()">重新開始</button>'
+    +'</div>';
+}
+
+function rWin(){
+  const hero=HEROES_DATA[G.heroId];
+  return '<div class="win-panel">'
+    +'<div class="result-icon">🏆</div>'
+    +'<div class="result-title">勝利！傳說英雄！</div>'
+    +'<div style="font-size:13px;color:#a89060;margin-bottom:14px">深淵暗龍沙卡索已被擊敗，世界重獲光明！</div>'
+    +'<div style="font-size:12px;color:#d4a843;margin:12px 0">'
+    +'最終等級: '+G.level+' | 總傷害: '+G.stats.totalDamage+' | 總治療: '+G.stats.totalHealing
+    +'</div>'
+    +'<button class="restart-btn" onclick="W.gRestart()">再玩一次</button>'
+    +'</div>';
+}
+
+const W = {
+  gStart(){ G.screen='select'; G.heroId=null; re(); },
+  selectHero(id){ G.heroId=id; re(); },
+  async gAdv(){
+    const hero=HEROES_DATA[G.heroId];
+    initParty(G.heroId);
+    G.waveIdx=0;
+    G.monstersInWave = STORY_SEQUENCE[0].map(i=>MONSTERS_DATA.find(m=>m.id===i));
+    G.curMonsterIdx=0;
+    G.screen='story'; G.story='';
+    const m=G.monstersInWave[0];
+    const t=await callAI(
+      '你是奇幻RPG遊戲旁白，以繁體中文寫3-4句富有史詩感的場景描述，不加引號和標題，語氣緊張神秘。',
+      '英雄'+hero.name+'（'+hero.title+'）孤身來到'+m.loc+'。場景：'+m.intro+'。請描述這個緊張的相遇時刻。'
+    );
+    G.story=t||m.intro; re();
+  },
+  gFight(){
+    const m=G.monstersInWave[G.curMonsterIdx];
+    initBattle(m);
+    G.screen='combat'; G.phase='player'; re();
+  },
+  useSkill(sIdx){
+    if(!W.canAct()) return;
+    applyHeroSkill(sIdx);
+    if(G.btl.curHp<=0){
+      addLog('🎉【'+G.btl.name+'】被擊敗！');re();
+      setTimeout(()=>W._winMonster(),1200);return;
+    }
+    G.phase='enemy'; re();
+    setTimeout(()=>{
+      enemyAct();
+      G.btl.round++;
+      G.phase='player';
+      if(G.party.hp<=0){ re(); setTimeout(()=>W._gameOver(),1200); return; }
+      re();
+    },900);
+  },
+  canAct(){return G.phase==='player';},
+  async _winMonster(){
+    G.stats.enemiesDefeated++;
+    const baseExp = 50;
+    const expGain = baseExp + G.btl.hp;
+    G.exp += expGain;
+    G.gold += Math.round(G.btl.hp * 0.5);
+    
+    // 升級檢查
+    while(G.exp >= G.expToLevel) {
+      G.level++;
+      G.exp -= G.expToLevel;
+      G.expToLevel = Math.round(G.expToLevel * 1.15);
+      G.attributePoints += 3;
+      const hero = HEROES_DATA[G.heroId];
+      hero.maxHp = Math.round(hero.baseHp * (1 + G.level * 0.08));
+      hero.maxMp = Math.round(hero.baseMp * (1 + G.level * 0.1));
+      hero.atk = Math.round(hero.baseAtk * (1 + G.level * 0.05));
+      hero.def = Math.round(hero.baseDef * (1 + G.level * 0.05));
+      addLog('🎓 升級到等級 '+G.level+'！');
+    }
+    
+    G.curMonsterIdx++;
+    if(G.curMonsterIdx < G.monstersInWave.length){
+      const m=G.monstersInWave[G.curMonsterIdx];
+      initBattle(m);
+      G.phase='player';
+      addLog('新的敵人出現：【'+m.name+'】['+m.rarityTxt+']');
+      re();
+    } else {
+      G.waveIdx++;
+      if(G.waveIdx >= STORY_SEQUENCE.length){
+        G.screen='win'; G.story='';
+        const hero=HEROES_DATA[G.heroId];
+        const t=await callAI('你是奇幻RPG旁白，繁體中文寫3-4句感人且史詩性的勝利結局，不加標題。',
+          '英雄'+hero.name+'擊敗了深淵暗龍沙卡索，拯救了世界。請描述這個光輝的勝利時刻。');
+        G.story=t; re();
+      } else {
+        G.screen='wave_clear'; G.story=''; re();
+      }
+    }
+  },
+  async gNextWave(){
+    G.monstersInWave=STORY_SEQUENCE[G.waveIdx].map(i=>MONSTERS_DATA.find(m=>m.id===i));
+    G.curMonsterIdx=0;
+    G.screen='story'; G.story='';
+    const hero=HEROES_DATA[G.heroId];
+    const m=G.monstersInWave[0];
+    const t=await callAI('你是奇幻RPG旁白，繁體中文寫2-3句過場敘述，不加標題，語氣悲壯或緊張。',
+      '英雄'+hero.name+'繼續前進來到'+m.loc+'。'+m.intro+'。請描述這個新場景。');
+    G.story=t||m.intro; re();
+  },
+  async _gameOver(){
+    G.screen='over'; G.story='';
+    const b=G.btl;
+    const hero=HEROES_DATA[G.heroId];
+    const t=await callAI('你是奇幻RPG旁白，繁體中文寫2-3句悲壯的失敗結局，不加標題。',
+      '英雄'+hero.name+'在對抗'+b.name+'時不幸倒下，黑暗籠罩世界。請描述這個悲劇性結局。');
+    G.story=t; re();
+  },
+  gRestart(){
+    G={screen:'title',heroId:null,party:null,waveIdx:0,monstersInWave:[],curMonsterIdx:0,btl:null,phase:'player',log:[],story:'',loading:false,level:1,exp:0,expToLevel:100,attributePoints:0,inventory:[],gold:0,stats:{totalDamage:0,totalHealing:0,enemiesDefeated:0}};
+    re();
+  }
+};
+
+re();
+</script>
+</body>
+</html>
