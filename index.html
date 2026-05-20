@@ -87,6 +87,48 @@ body{background:#1a0f05;color:#e8d5a3;font-family:'Crimson Text',serif;min-heigh
   <div id="gr" class="panel title-panel"></div>
 </div>
 <script>
+const IMG = 'https://raw.githubusercontent.com/language2816/rpg-assets/main';
+
+const HERO_IMGS = {
+  knight: IMG+'/knight.png',
+  archer: IMG+'/archer.png',
+  cleric: IMG+'/cleric.png',
+  rogue:  IMG+'/rogue.png',
+  witch:  IMG+'/witch.png',
+};
+
+const MONSTER_IMGS = {
+  goblin:          IMG+'/goblin.png',
+  werewolf:        IMG+'/werewolf.png',
+  skeleton:        IMG+'/skeleton.png',
+  zombie:          IMG+'/zombie.png',
+  necromancer:     IMG+'/necromancer.png',
+  ogre:            IMG+'/ogre.png',
+  giant_spider:    IMG+'/giant_spider.png',
+  lizardman:       IMG+'/lizardman.png',
+  mimic:           IMG+'/mimic.png',
+  dire_boar:       IMG+'/dire_boar.png',
+  iron_crab:       IMG+'/iron_crab.png',
+  harpy:           IMG+'/harpy.png',
+  shadow_archer:   IMG+'/shadow_archer.png',
+  iron_guardian:   IMG+'/iron_guardian.png',
+  beholder:        IMG+'/beholder.png',
+  stone_golem:     IMG+'/stone_golem.png',
+  lava_titan:      IMG+'/lava_titan.png',
+  death_wraith:    IMG+'/death_wraith.png',
+  demon_lord:      IMG+'/demon_lord.png',
+  fenrir:          IMG+'/fenrir.png',
+  abyss_dragon:    IMG+'/abyss_dragon.png',
+  // 遊戲內怪物對應圖片
+  bandit:          IMG+'/shadow_archer.png',
+  troll:           IMG+'/ogre.png',
+  sorcerer:        IMG+'/necromancer.png',
+  dragon_sakaso:   IMG+'/abyss_dragon.png',
+  ancient_mummy:   IMG+'/zombie.png',
+  shadow_assassin: IMG+'/shadow_archer.png',
+  flame_elemental: IMG+'/lava_titan.png',
+};
+
 const HEROES_DATA = {
   knight:{id:'knight',name:'阿德里克',title:'鐵壁騎士',
     cc:'#378ADD',baseHp:140,baseMp:20,baseAtk:24,baseDef:20,baseSpd:8,maxHp:140,maxMp:20,atk:24,def:20,spd:8,
@@ -411,7 +453,9 @@ function rSelect(){
         const sel=G.heroId===id;
         return '<div class="hero-card '+(sel?'selected':'')+'" onclick="W.selectHero(\''+id+'\')">'
           +(sel?'<div class="selected-badge">✓ 選擇</div>':'')
-          +'<div style="font-size:24px;margin:8px 0">🗡️</div>'
+          +'<div style="height:80px;display:flex;align-items:center;justify-content:center;margin:4px 0">'
+          +'<img src="'+HERO_IMGS[id]+'" style="max-height:80px;max-width:100%;object-fit:contain" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'">'
+          +'<span style="display:none;font-size:24px">🗡️</span></div>'
           +'<div class="hero-name">'+h.name+'</div>'
           +'<div class="hero-class">'+h.title+'</div>'
           +'<div class="hero-stats">'
@@ -435,11 +479,13 @@ function rSelect(){
 }
 
 function rStory(){
+  const m=G.monstersInWave[G.curMonsterIdx];
   return '<div class="story-panel">'
     +'<div style="text-align:center;margin-bottom:16px">'
     +'<div class="section-title">第 '+(G.waveIdx+1)+' 波戰鬥</div>'
     +'<div class="level-info">等級 '+G.level+' | 經驗值 '+Math.round(G.exp)+'/'+G.expToLevel+'</div>'
     +'</div>'
+    +(MONSTER_IMGS[m.id]?'<div style="text-align:center;margin-bottom:12px"><img src="'+MONSTER_IMGS[m.id]+'" style="height:100px;object-fit:contain" onerror="this.style.display=\'none\'"></div>':'')
     +'<div class="story-box"><div class="story-text">'+G.story+'</div></div>'
     +'<button class="fight-btn" onclick="W.gFight()" style="width:100%">進入戰鬥 ⚔️</button>'
     +'</div>';
@@ -453,8 +499,9 @@ function rCombat(){
   const enemyHpPercent=(m.curHp/m.hp*100).toFixed(0);
   
   return '<div class="combat-panel">'
-    +'<div style="display:flex;justify-content:space-between;margin-bottom:12px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px">'
     +'<div style="flex:1"><div style="font-size:12px;color:#d4a843">'+hero.name+'</div>'
+    +'<img src="'+(HERO_IMGS[G.heroId]||'')+'" style="height:80px;object-fit:contain;display:block;margin:4px 0" onerror="this.style.display=\'none\'">'
     +'<div style="font-size:10px;color:#a89060">生命</div>'
     +'<div class="hp-bar-wrap"><div class="hp-bar-fill" style="width:'+hpPercent+'%"></div></div>'
     +'<div style="font-size:10px;color:#c8a878">'+G.party.hp+'/'+hero.maxHp+'</div>'
@@ -464,6 +511,7 @@ function rCombat(){
     +'</div>'
     +'<div style="flex:1;text-align:right">'
     +'<div style="font-size:12px;color:#e8c07a">【'+m.name+'】</div>'
+    +'<img src="'+(MONSTER_IMGS[m.id]||'')+'" style="height:80px;object-fit:contain;display:block;margin:4px 0 4px auto" onerror="this.style.display=\'none\'">'
     +'<div style="font-size:10px;color:#a89060">生命</div>'
     +'<div class="hp-bar-wrap"><div class="hp-bar-fill" style="width:'+enemyHpPercent+'%"></div></div>'
     +'<div style="font-size:10px;color:#c8a878">'+m.curHp+'/'+m.hp+'</div>'
