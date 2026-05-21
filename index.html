@@ -133,11 +133,11 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 }
 
 /* ===== SELECT ===== */
-#s-select{padding:1.25rem;background:linear-gradient(180deg,#0c0a1c,var(--bg))}
+#s-select{padding:1.25rem;background:linear-gradient(180deg,#0c0a1c,var(--bg));overflow-y:auto}
 .s-hd{text-align:center;margin-bottom:1.25rem;border-bottom:1px solid var(--border2);padding-bottom:1rem}
 .s-hd-title{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--gold);margin-bottom:.2rem}
 .s-hd-sub{font-size:.75rem;color:var(--text2);letter-spacing:2px}
-.hero-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1.25rem}
+.hero-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1.25rem;max-height:70vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 .hcard{background:var(--bg2);border:1px solid var(--border);padding:.75rem .5rem;cursor:pointer;
   transition:all .2s;position:relative;display:flex;flex-direction:column;align-items:center}
 .hcard:hover{border-color:var(--border2);transform:translateY(-2px)}
@@ -276,9 +276,35 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 .ps-head{display:flex;align-items:center;gap:4px;margin-bottom:3px}
 .ps-ico{font-size:.85rem}
 .ps-name{font-size:.58rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.ps-val{font-size:.52rem;color:var(--text3);margin-bottom:2px}
+.ps-val{font-size:.52rem;color:var(--text3);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mini-bar{height:3px;border-radius:2px;background:var(--border);overflow:hidden}
 .mini-fill{height:100%;border-radius:2px;transition:width .3s}
+
+/* Portrait avatar row above party bar */
+.portrait-bar{display:flex;gap:5px;margin-bottom:4px}
+.portrait-slot{flex:1;display:flex;justify-content:center;position:relative}
+.portrait-av{
+  width:44px;height:44px;border-radius:4px;overflow:hidden;
+  border:1px solid var(--border2);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;transition:border-color .2s;
+}
+.portrait-av.active{border-color:var(--gold3);box-shadow:0 0 8px rgba(201,168,76,.4)}
+.portrait-av.dead{opacity:.3;filter:grayscale(1)}
+.portrait-av img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;
+  mix-blend-mode:normal;
+  /* remove white background from portrait art */
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,.8));
+}
+.portrait-av .portrait-fb{font-size:1.4rem;line-height:1}
+.portrait-turn-ring{
+  position:absolute;inset:-2px;border-radius:5px;
+  border:2px solid var(--gold);
+  box-shadow:0 0 10px rgba(201,168,76,.6),inset 0 0 6px rgba(201,168,76,.2);
+  pointer-events:none;animation:ringPulse 1s ease-in-out infinite;
+}
+@keyframes ringPulse{0%,100%{opacity:1}50%{opacity:.5}}
 /* Log */
 .log-box{max-height:90px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:3px;padding:5px 7px;
   border:1px solid var(--border);scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
@@ -327,6 +353,29 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 .bag-item-row:last-child{border-bottom:none;margin-bottom:0}
 .bag-use-btn{font-size:.52rem;padding:2px 7px;background:transparent;border:1px solid var(--gold3);color:var(--gold);cursor:pointer;border-radius:2px;white-space:nowrap;transition:all .15s}
 .bag-use-btn:hover{background:rgba(201,168,76,.1);border-color:var(--gold)}
+
+/* Equipment Button & Panel */
+.equip-btn{position:absolute;bottom:60px;left:8px;z-index:22;background:rgba(8,6,18,.88);
+  border:1px solid rgba(46,159,216,.45);color:var(--blue2);font-size:.62rem;padding:5px 11px;
+  cursor:pointer;border-radius:4px;letter-spacing:1px;backdrop-filter:blur(4px);transition:border-color .2s}
+.equip-btn:hover{border-color:var(--blue2);background:rgba(46,159,216,.08)}
+.equip-panel{position:absolute;bottom:92px;left:8px;z-index:31;background:rgba(6,5,16,.96);
+  border:1px solid rgba(46,159,216,.45);border-radius:5px;padding:8px 9px;width:220px;
+  backdrop-filter:blur(8px);display:none;box-shadow:0 4px 20px rgba(0,0,0,.7);max-height:320px;overflow-y:auto}
+.equip-item-row{margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.05)}
+.equip-item-row:last-child{border-bottom:none;margin-bottom:0}
+.equip-item-header{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.equip-char-row{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.equip-char-btn{font-size:.5rem;padding:2px 6px;background:transparent;border:1px solid var(--border2);
+  color:var(--text3);cursor:pointer;border-radius:2px;transition:all .15s;white-space:nowrap}
+.equip-char-btn:hover{border-color:var(--gold3);color:var(--gold)}
+.equip-char-btn.equipped{border-color:var(--blue2);color:var(--blue2);background:rgba(46,159,216,.08)}
+/* Level-up notification */
+.lvup-toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(6,5,16,.97);border:1px solid var(--gold);border-radius:6px;
+  padding:1rem 1.5rem;z-index:99;text-align:center;pointer-events:none;
+  animation:lvupAnim 2.5s ease forwards}
+@keyframes lvupAnim{0%{opacity:0;transform:translate(-50%,-60%)}15%{opacity:1;transform:translate(-50%,-50%)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-45%)}}
 
 /* ===== BGM 浮動音樂播放器 ===== */
 #bgm-widget{
@@ -446,6 +495,11 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
       <div class="t-hico" style="border-color:#f39c12;background:rgba(243,156,18,.1)">✨</div>
       <div class="t-hico" style="border-color:#9b59b6;background:rgba(155,89,182,.1)">🗡️</div>
       <div class="t-hico" style="border-color:#e74c3c;background:rgba(231,76,60,.1)">🔮</div>
+      <div class="t-hico" style="border-color:#e91e8c;background:rgba(233,30,140,.1)">🎵</div>
+      <div class="t-hico" style="border-color:#7c4dff;background:rgba(124,77,255,.1)">💀</div>
+      <div class="t-hico" style="border-color:#00bfa5;background:rgba(0,191,165,.1)">⚗️</div>
+      <div class="t-hico" style="border-color:#ff5722;background:rgba(255,87,34,.1)">🪓</div>
+      <div class="t-hico" style="border-color:#ff8f00;background:rgba(255,143,0,.1)">🐲</div>
     </div>
     <button class="btn-gold" onclick="W.startSelect()">踏上征途 ✦</button>
   </div>
@@ -481,10 +535,13 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
     <div class="tgt-hint" id="tgt-hint">點選敵人卡片選擇目標</div>
     <button class="bag-btn" id="bag-btn" onclick="W.toggleBag()">🎒 背包</button>
     <div class="bag-panel" id="bag-panel"></div>
+    <button class="equip-btn" id="equip-btn" onclick="W.toggleEquip()">⚔ 裝備</button>
+    <div class="equip-panel" id="equip-panel"></div>
     <div id="sprites-container"></div>
   </div>
   <!-- Battle UI -->
   <div class="bui">
+    <div class="portrait-bar" id="portrait-bar"></div>
     <div class="party-bar" id="party-bar"></div>
     <div class="bui-top">
       <div class="actor-tag" id="actor-tag">
@@ -640,6 +697,76 @@ const CHARS = {
       {name:'寒冰風暴',type:'aoe_slow',base:28,mp:15,desc:'範圍攻擊+減速'},
       {name:'治癒魔法',type:'comp_heal',base:30,mp:14,desc:'治療夥伴'},
     ]},
+  bard:{id:'bard',name:'艾莉絲',title:'吟遊詩人',icon:'🎵',color:'#e91e8c',
+    maxHp:80,maxMp:90,baseAtk:14,baseDef:10,atk:14,def:10,
+    baseHp:72,baseMp:80,baseAtk:12,baseDef:8,recruitCost:90,
+    heroSkills:[
+      {name:'琴弦刺擊',type:'dmg',base:20,mp:0,desc:'以旋律為刃，基本攻擊'},
+      {name:'英雄讚歌',type:'buff_atk',base:0,mp:10,desc:'為全體存活隊友提升攻擊力+12，持續3回合'},
+      {name:'守護樂章',type:'buff_def',base:0,mp:10,desc:'為全體存活隊友提升防禦力+10，持續3回合'},
+      {name:'激昂戰歌',type:'buff_atk_all',base:0,mp:18,desc:'強力戰歌！全體隊友攻擊+20，持續2回合'},
+    ],
+    compSkills:[
+      {name:'琴弦刺擊',type:'dmg',base:18,mp:0,desc:'基本攻擊'},
+      {name:'英雄讚歌',type:'buff_atk',base:0,mp:10,desc:'全體隊友攻擊+12，持續3回合'},
+      {name:'守護樂章',type:'buff_def',base:0,mp:10,desc:'全體隊友防禦+10，持續3回合'},
+    ]},
+  necromancer:{id:'necromancer',name:'薩魯斯',title:'死靈術士',icon:'💀',color:'#7c4dff',
+    maxHp:72,maxMp:85,baseAtk:20,baseDef:7,atk:20,def:7,
+    baseHp:65,baseMp:75,baseAtk:18,baseDef:5,recruitCost:95,
+    heroSkills:[
+      {name:'死靈彈',type:'dmg',base:26,mp:0,desc:'黑暗能量攻擊（免費）'},
+      {name:'詛咒凋零',type:'curse',base:0,mp:12,desc:'詛咒目標，每回合流失HP，持續4回合'},
+      {name:'亡靈衝擊',type:'aoe',base:34,mp:18,desc:'範圍黑暗攻擊所有敵人'},
+      {name:'死亡汲取',type:'drain',base:40,mp:14,desc:'吸取目標生命值，恢復自身HP'},
+    ],
+    compSkills:[
+      {name:'死靈彈',type:'dmg',base:24,mp:0,desc:'黑暗攻擊（免費）'},
+      {name:'詛咒凋零',type:'curse',base:0,mp:12,desc:'詛咒目標流血'},
+      {name:'死亡汲取',type:'drain',base:36,mp:14,desc:'吸取生命'},
+    ]},
+  alchemist:{id:'alchemist',name:'葛雷斯',title:'煉金術師',icon:'⚗️',color:'#00bfa5',
+    maxHp:88,maxMp:75,baseAtk:16,baseDef:13,atk:16,def:13,
+    baseHp:80,baseMp:65,baseAtk:14,baseDef:11,recruitCost:100,
+    heroSkills:[
+      {name:'酸液投擲',type:'dmg',base:22,mp:0,desc:'投擲腐蝕性酸液攻擊'},
+      {name:'強化藥劑',type:'buff_atk',base:0,mp:12,desc:'為HP最低的隊友注入力量藥劑，攻擊+15，持續3回合'},
+      {name:'護盾靈藥',type:'buff_def',base:0,mp:12,desc:'為HP最低的隊友塗抹防護靈藥，防禦+14，持續3回合'},
+      {name:'萬能藥水',type:'healall_buff',base:18,mp:20,desc:'為全體隊友恢復HP並提升攻擊+8，持續2回合'},
+    ],
+    compSkills:[
+      {name:'酸液投擲',type:'dmg',base:20,mp:0,desc:'酸液攻擊'},
+      {name:'強化藥劑',type:'buff_atk',base:0,mp:12,desc:'為HP最低隊友攻擊+15，持續3回合'},
+      {name:'護盾靈藥',type:'buff_def',base:0,mp:12,desc:'為HP最低隊友防禦+14，持續3回合'},
+    ]},
+  berserker:{id:'berserker',name:'托爾克',title:'狂戰士',icon:'🪓',color:'#ff5722',
+    maxHp:150,maxMp:20,baseAtk:48,baseDef:12,atk:48,def:12,
+    baseHp:140,baseMp:18,baseAtk:44,baseDef:10,recruitCost:95,
+    heroSkills:[
+      {name:'狂暴斬',type:'dmg',base:44,mp:0,desc:'狂怒近戰重擊'},
+      {name:'血怒衝鋒',type:'crit',base:80,mp:5,desc:'消耗生命力發動必殺，暴擊且無視防禦'},
+      {name:'旋風斬',type:'aoe',base:38,mp:8,desc:'旋轉揮刀傷害全體敵人'},
+      {name:'狂戰咆哮',type:'taunt_dmg',base:50,mp:6,desc:'攻擊並嘲諷所有敵人'},
+    ],
+    compSkills:[
+      {name:'狂暴斬',type:'dmg',base:42,mp:0,desc:'狂怒攻擊'},
+      {name:'血怒衝鋒',type:'crit',base:76,mp:5,desc:'暴擊必殺'},
+      {name:'旋風斬',type:'aoe',base:34,mp:8,desc:'範圍傷害'},
+    ]},
+  dragonknight:{id:'dragonknight',name:'雷歐斯',title:'龍騎士',icon:'🐲',color:'#ff8f00',
+    maxHp:120,maxMp:50,baseAtk:36,baseDef:18,atk:36,def:18,
+    baseHp:110,baseMp:44,baseAtk:32,baseDef:16,recruitCost:110,
+    heroSkills:[
+      {name:'龍矛突刺',type:'dmg',base:34,mp:0,desc:'以龍能量貫穿目標'},
+      {name:'龍焰噴射',type:'aoe',base:42,mp:14,desc:'噴射龍焰傷害全體敵人'},
+      {name:'龍鱗護盾',type:'defend',base:0,mp:8,desc:'龍鱗化身，本回合傷害-70%'},
+      {name:'龍魂爆發',type:'pierce',base:75,mp:18,desc:'龍能量灌注，無視防禦的強力刺擊'},
+    ],
+    compSkills:[
+      {name:'龍矛突刺',type:'dmg',base:32,mp:0,desc:'龍矛攻擊'},
+      {name:'龍焰噴射',type:'aoe',base:38,mp:14,desc:'火焰範圍攻擊'},
+      {name:'龍鱗護盾',type:'defend',base:0,mp:8,desc:'龍鱗防禦'},
+    ]},
 };
 // 從 CHARS 衍生 HD(主角) 和 CD(夥伴)，向下相容
 const HD = Object.fromEntries(Object.entries(CHARS).map(([k,v])=>[k,{...v,skills:v.heroSkills}]));
@@ -673,6 +800,26 @@ const HERO_IMGS = {
   cleric: BASE_IMG+'cleric.png',
   rogue:  BASE_IMG+'rogue.png',
   witch:  BASE_IMG+'witch.png',
+  bard:         'https://raw.githubusercontent.com/language2816/rpg-assets/1e9387e21821638c8a09ee2744dd41fe5af58c22/%E8%81%B7%E6%A5%AD/%E5%90%9F%E9%81%8A%E8%A9%A9%E4%BA%BA.png',
+  necromancer:  'https://raw.githubusercontent.com/language2816/rpg-assets/1e9387e21821638c8a09ee2744dd41fe5af58c22/%E8%81%B7%E6%A5%AD/%E6%AD%BB%E9%9D%88%E6%B3%95%E5%B8%AB.png',
+  alchemist:    'https://raw.githubusercontent.com/language2816/rpg-assets/1e9387e21821638c8a09ee2744dd41fe5af58c22/%E8%81%B7%E6%A5%AD/%E7%85%89%E9%87%91%E8%A1%93%E5%B8%AB.png',
+  berserker:    'https://raw.githubusercontent.com/language2816/rpg-assets/1e9387e21821638c8a09ee2744dd41fe5af58c22/%E8%81%B7%E6%A5%AD/%E7%8B%82%E6%88%B0%E5%A3%AB.png',
+  dragonknight: 'https://raw.githubusercontent.com/language2816/rpg-assets/1e9387e21821638c8a09ee2744dd41fe5af58c22/%E8%81%B7%E6%A5%AD/%E9%BE%8D%E9%A8%8E%E5%A3%AB.png',
+};
+
+// Portrait images (the uploaded character art - row1: knight,archer,cleric,rogue,witch  row2: berserker,necromancer,bard,alchemist,dragonknight)
+const PORTRAIT_IMG_BASE = 'https://raw.githubusercontent.com/language2816/rpg-assets/1e9387e21821638c8a09ee2744dd41fe5af58c22/%E8%81%B7%E6%A5%AD/';
+const PORTRAIT_IMGS = {
+  knight:      PORTRAIT_IMG_BASE + '%E9%A8%8E%E5%A3%AB.png',
+  archer:      PORTRAIT_IMG_BASE + '%E5%BC%93%E6%89%8B.png',
+  cleric:      PORTRAIT_IMG_BASE + '%E7%A5%AD%E5%8F%B8.png',
+  rogue:       PORTRAIT_IMG_BASE + '%E5%88%BA%E5%AE%A2.png',
+  witch:       PORTRAIT_IMG_BASE + '%E5%B7%AB%E5%A5%B3.png',
+  bard:        PORTRAIT_IMG_BASE + '%E5%90%9F%E9%81%8A%E8%A9%A9%E4%BA%BA.png',
+  necromancer: PORTRAIT_IMG_BASE + '%E6%AD%BB%E9%9D%88%E6%B3%95%E5%B8%AB.png',
+  alchemist:   PORTRAIT_IMG_BASE + '%E7%85%89%E9%87%91%E8%A1%93%E5%B8%AB.png',
+  berserker:   PORTRAIT_IMG_BASE + '%E7%8B%82%E6%88%B0%E5%A3%AB.png',
+  dragonknight:PORTRAIT_IMG_BASE + '%E9%BE%8D%E9%A8%8E%E5%A3%AB.png',
 };
 const ENEMY_IMGS = {
   goblin:          BASE_IMG+'goblin.png',
@@ -872,12 +1019,35 @@ const BGM = (() => {
 })();
 
 const ITEMS = {
-  potion_hp:{id:'potion_hp',name:'生命藥水',icon:'🧪',type:'consumable',healHp:70,price:30,desc:'回復70 HP'},
-  potion_mp:{id:'potion_mp',name:'法力藥水',icon:'💧',type:'consumable',healMp:45,price:25,desc:'回復45 MP'},
-  elixir:{id:'elixir',name:'精靈藥劑',icon:'✨',type:'consumable',healHp:40,healMp:30,price:50,desc:'HP+40, MP+30'},
-  sword_iron:{id:'sword_iron',name:'鐵劍',icon:'⚔️',type:'weapon',atkBonus:8,price:55,desc:'攻擊+8'},
-  sword_steel:{id:'sword_steel',name:'鋼劍',icon:'🗡️',type:'weapon',atkBonus:16,price:130,desc:'攻擊+16'},
-  shield_iron:{id:'shield_iron',name:'鐵盾',icon:'🛡️',type:'armor',defBonus:9,price:105,desc:'防禦+9'},
+  // ── 消耗品 ──
+  potion_hp:   {id:'potion_hp',   name:'生命藥水',   icon:'🧪', type:'consumable', healHp:70,  price:30,  desc:'立即回復 70 HP'},
+  potion_hp2:  {id:'potion_hp2',  name:'高級生命藥水',icon:'🍶', type:'consumable', healHp:150, price:65,  desc:'立即回復 150 HP'},
+  potion_mp:   {id:'potion_mp',   name:'法力藥水',   icon:'💧', type:'consumable', healMp:45,  price:25,  desc:'立即回復 45 MP'},
+  potion_mp2:  {id:'potion_mp2',  name:'高級法力藥水',icon:'💎', type:'consumable', healMp:100, price:55,  desc:'立即回復 100 MP'},
+  elixir:      {id:'elixir',      name:'精靈藥劑',   icon:'✨', type:'consumable', healHp:40, healMp:30, price:50, desc:'HP+40，MP+30'},
+  elixir_full: {id:'elixir_full', name:'萬靈仙藥',   icon:'🌟', type:'consumable', healHp:200,healMp:100,price:150,desc:'HP+200，MP+100'},
+  antidote:    {id:'antidote',    name:'解毒劑',     icon:'🍵', type:'consumable', curePoison:true, price:20, desc:'解除中毒與詛咒狀態'},
+  // ── 武器 ──
+  sword_iron:  {id:'sword_iron',  name:'鐵劍',       icon:'⚔️', type:'weapon', slot:'weapon', atkBonus:8,  price:55,  desc:'攻擊 +8'},
+  sword_steel: {id:'sword_steel', name:'鋼劍',       icon:'🗡️', type:'weapon', slot:'weapon', atkBonus:16, price:130, desc:'攻擊 +16'},
+  sword_flame: {id:'sword_flame', name:'炎龍劍',     icon:'🔥', type:'weapon', slot:'weapon', atkBonus:26, price:240, desc:'攻擊 +26，蘊含火焰之力'},
+  bow_short:   {id:'bow_short',   name:'短弓',       icon:'🏹', type:'weapon', slot:'weapon', atkBonus:10, price:60,  desc:'攻擊 +10'},
+  bow_elven:   {id:'bow_elven',   name:'精靈長弓',   icon:'🌿', type:'weapon', slot:'weapon', atkBonus:20, price:160, desc:'攻擊 +20，精靈工藝打造'},
+  staff_oak:   {id:'staff_oak',   name:'橡木法杖',   icon:'🪄', type:'weapon', slot:'weapon', atkBonus:6, mpBonus:20, price:70, desc:'攻擊 +6，MP +20'},
+  staff_arcane:{id:'staff_arcane',name:'奧術杖',     icon:'🔮', type:'weapon', slot:'weapon', atkBonus:14,mpBonus:40, price:180,desc:'攻擊 +14，MP +40'},
+  dagger_dark: {id:'dagger_dark', name:'暗夜匕首',   icon:'🌙', type:'weapon', slot:'weapon', atkBonus:22, price:200, desc:'攻擊 +22，暗殺專用'},
+  // ── 防具 ──
+  armor_leather:{id:'armor_leather',name:'皮甲',     icon:'🥋', type:'armor', slot:'armor', defBonus:6,  hpBonus:15, price:75,  desc:'防禦 +6，HP +15'},
+  shield_iron: {id:'shield_iron', name:'鐵盾',       icon:'🛡️', type:'armor', slot:'armor', defBonus:9,  price:105, desc:'防禦 +9'},
+  armor_chain: {id:'armor_chain', name:'鎖甲',       icon:'⛓️', type:'armor', slot:'armor', defBonus:14, hpBonus:25, price:190, desc:'防禦 +14，HP +25'},
+  armor_plate: {id:'armor_plate', name:'板甲',       icon:'🦺', type:'armor', slot:'armor', defBonus:22, hpBonus:40, price:300, desc:'防禦 +22，HP +40'},
+  cloak_shadow:{id:'cloak_shadow',name:'暗影斗篷',   icon:'🌑', type:'armor', slot:'armor', defBonus:8,  mpBonus:25, price:155, desc:'防禦 +8，MP +25'},
+  // ── 飾品 ──
+  ring_atk:    {id:'ring_atk',    name:'力量戒指',   icon:'💍', type:'accessory', slot:'accessory', atkBonus:5,  price:80,  desc:'攻擊 +5'},
+  ring_atk2:   {id:'ring_atk2',   name:'戰神戒指',   icon:'👑', type:'accessory', slot:'accessory', atkBonus:12, price:200, desc:'攻擊 +12'},
+  amulet_hp:   {id:'amulet_hp',   name:'生命護符',   icon:'📿', type:'accessory', slot:'accessory', hpBonus:30,  price:85,  desc:'最大 HP +30'},
+  amulet_mp:   {id:'amulet_mp',   name:'法力護符',   icon:'🔵', type:'accessory', slot:'accessory', mpBonus:35,  price:90,  desc:'最大 MP +35'},
+  boots_swift: {id:'boots_swift', name:'迅捷靴',     icon:'👢', type:'accessory', slot:'accessory', defBonus:4, atkBonus:4, price:120, desc:'攻擊 +4，防禦 +4'},
 };
 
 // ══════════════════════════════════════════════
@@ -886,8 +1056,8 @@ const ITEMS = {
 let G = {
   screen:'title',
   heroId:null,
-  party:null,       // {hp,mp,eff,atkBonus,defBonus}
-  companions:[],    // [{id,hp,mp,maxHp,maxMp,atk,def,eff}]
+  party:null,       // {hp,mp,eff,atkBonus,defBonus,buffAtk,buffDef,buffAtkTurns,buffDefTurns}
+  companions:[],    // [{id,hp,mp,maxHp,maxMp,atk,def,eff,buffAtk,buffDef,buffAtkTurns,buffDefTurns}]
   waveIdx:0,
   enemies:[],       // active battle enemies [{...baseData, curHp, eff}]
   turnQueue:[],     // ['hero','comp0','comp1']
@@ -899,6 +1069,7 @@ let G = {
   loading:false,
   level:1,exp:0,expToLevel:100,attributePoints:0,
   inventory:[],gold:0,
+  equipment:{},  // {itemId: 'hero'|'comp0'|'comp1'...} tracks who wears what
   _prev:null,
   round:1,
   pendingSkillIdx:null,  // selected skill waiting for confirm
@@ -1047,6 +1218,78 @@ function applySkill(actorData, actorState, sk){
       floatDmg('中毒!-'+d,true);animAttack(actorData.id===G.heroId,true);
       G.stats.dmg+=d;break;
     }
+    case 'buff_atk':{
+      // 攻擊buff：為HP最低隊友（或全體）加攻
+      const al=livingAllies();if(!al.length)break;
+      const tgtA=al.reduce((a,b)=>a.state.hp<b.state.hp?a:b);
+      const buffAmt=12;const turns=3;
+      tgtA.state.buffAtk=(tgtA.state.buffAtk||0)+buffAmt;
+      tgtA.state.buffAtkTurns=Math.max(tgtA.state.buffAtkTurns||0,turns);
+      if(!tgtA.state.atkBonus)tgtA.state.atkBonus=0;
+      tgtA.state.atkBonus+=buffAmt;
+      addLog('🎵 '+actorData.name+'【'+sk.name+'】→'+tgtA.data.name+' ⚔+'+buffAmt+' ('+turns+'回)','ll-buff');
+      floatDmg('⚔+'+buffAmt,false,false,true);break;
+    }
+    case 'buff_def':{
+      // 防禦buff：為HP最低隊友加防
+      const al2=livingAllies();if(!al2.length)break;
+      const tgtB=al2.reduce((a,b)=>a.state.hp<b.state.hp?a:b);
+      const bDefAmt=12;const bTurns=3;
+      tgtB.state.buffDef=(tgtB.state.buffDef||0)+bDefAmt;
+      tgtB.state.buffDefTurns=Math.max(tgtB.state.buffDefTurns||0,bTurns);
+      if(!tgtB.state.defBonus)tgtB.state.defBonus=0;
+      tgtB.state.defBonus+=bDefAmt;
+      addLog('🛡 '+actorData.name+'【'+sk.name+'】→'+tgtB.data.name+' 🛡+'+bDefAmt+' ('+bTurns+'回)','ll-buff');
+      floatDmg('🛡+'+bDefAmt,false,false,true);break;
+    }
+    case 'buff_atk_all':{
+      // 強力攻擊buff：全體
+      const al3=livingAllies();if(!al3.length)break;
+      const bigBuff=20;const bigTurns=2;
+      al3.forEach(a=>{
+        a.state.buffAtk=(a.state.buffAtk||0)+bigBuff;
+        a.state.buffAtkTurns=Math.max(a.state.buffAtkTurns||0,bigTurns);
+        if(!a.state.atkBonus)a.state.atkBonus=0;
+        a.state.atkBonus+=bigBuff;
+      });
+      addLog('🎶 '+actorData.name+'【'+sk.name+'】全體 ⚔+'+bigBuff+' ('+bigTurns+'回)！','ll-buff');
+      floatDmg('全體⚔+'+bigBuff,false,false,true);break;
+    }
+    case 'healall_buff':{
+      // 萬能藥水：治療全體+攻擊buff
+      const al4=livingAllies();if(!al4.length)break;
+      const healAmt=Math.round(sk.base+actorData.atk*0.3);
+      const hbBuff=8;const hbTurns=2;
+      al4.forEach(a=>{
+        const maxH=a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;
+        a.state.hp=Math.min(maxH,a.state.hp+healAmt);
+        a.state.buffAtk=(a.state.buffAtk||0)+hbBuff;
+        a.state.buffAtkTurns=Math.max(a.state.buffAtkTurns||0,hbTurns);
+        if(!a.state.atkBonus)a.state.atkBonus=0;
+        a.state.atkBonus+=hbBuff;
+      });
+      addLog('⚗️ '+actorData.name+'【'+sk.name+'】全體 +'+healAmt+'HP ⚔+'+hbBuff,'ll-heal');
+      floatDmg('全體+'+healAmt,false,false,true);G.stats.heal+=healAmt*al4.length;break;
+    }
+    case 'curse':{
+      // 死靈詛咒
+      if(!tgt)break;
+      tgt.eff.curse=(tgt.eff.curse||0)+4;
+      addLog('💀 '+actorData.name+'【'+sk.name+'】→【'+tgt.name+'】詛咒4回合！','ll-buff');
+      floatDmg('詛咒!',true);break;
+    }
+    case 'drain':{
+      // 吸取生命
+      if(!tgt)break;
+      const dd=calcDmg(atkTotal,tgt.def*0.3,sk.base);
+      tgt.curHp=Math.max(0,tgt.curHp-dd);
+      const healBack=Math.round(dd*0.5);
+      const drainMax=actorData.maxHp||actorData.baseHp||100;
+      actorState.hp=Math.min(drainMax,actorState.hp+healBack);
+      addLog('🌑 '+actorData.name+'【'+sk.name+'】→【'+tgt.name+'】 -'+dd+' 吸血+'+healBack,'ll-dmg');
+      floatDmg('吸血!-'+dd,true,true);animAttack(actorData.id===G.heroId,true);
+      G.stats.dmg+=dd;G.stats.heal+=healBack;break;
+    }
   }
   return true;
 }
@@ -1063,6 +1306,11 @@ function doEnemyTurn(){
     if(e.eff.poison>0){
       const pd=rnd(10,20);e.curHp=Math.max(0,e.curHp-pd);e.eff.poison--;
       addLog('☠ 毒素！【'+e.name+'】受 -'+pd,'ll-buff');
+    }
+    // Curse tick
+    if(e.eff.curse>0){
+      const cd=rnd(15,25);e.curHp=Math.max(0,e.curHp-cd);e.eff.curse--;
+      addLog('💀 詛咒！【'+e.name+'】受 -'+cd,'ll-buff');
     }
     if(e.curHp<=0)return;
     if(e.eff.stun>0){e.eff.stun--;addLog('😵 【'+e.name+'】被眩暈！','ll-buff');return;}
@@ -1146,6 +1394,10 @@ function renderSelectScreen(){
       <div class="hcard-name" style="${sel?'color:'+h.color:''}"> ${h.name}</div>
       <div class="hcard-cls">${h.title}</div>
       <div class="hcard-sk">${h.skills.map(s=>s.name).join('·')}</div>
+      <div class="hcard-sk-detail" style="font-size:.55rem;color:var(--text3);line-height:1.6;text-align:left;margin-top:.3rem;display:none">
+        ${h.skills.map(s=>`<span style="color:var(--gold3)">・${s.name}</span>：${s.desc}${s.mp>0?' <span style="color:#2e9fd8">[MP${s.mp}]</span>':' <span style="color:#2ecc71">[免費]</span>'}`).join('<br>')}
+      </div>
+      <button class="hcard-toggle" onclick="event.stopPropagation();(function(b){var d=b.parentNode.querySelector('.hcard-sk-detail'),s=b.parentNode.querySelector('.hcard-sk');if(d.style.display==='none'){d.style.display='block';s.style.display='none';b.textContent='▲ 收起'}else{d.style.display='none';s.style.display='block';b.textContent='▼ 詳細'}})(this)" style="font-size:.5rem;color:var(--text3);background:transparent;border:1px solid var(--border);padding:2px 6px;cursor:pointer;margin-top:.3rem;width:100%">▼ 詳細</button>
       <div class="stat-row">
         <div class="stat-p">❤${h.maxHp}</div><div class="stat-p">💙${h.maxMp}</div><div class="stat-p">⚔${h.atk}</div>
       </div>
@@ -1198,6 +1450,7 @@ function renderStoryScreen(){
 function renderCombat(){
   renderEnemyOverlay();
   renderSprites();
+  renderPortraitBar();
   renderPartyBar();
   renderActionPanel();
   renderLog();
@@ -1220,6 +1473,7 @@ function renderEnemyOverlay(){
     if(e.eff.blind>0)effs.push('💨致盲'+e.eff.blind);
     if(e.eff.slow>0)effs.push('❄減速'+e.eff.slow);
     if(e.eff.poison>0)effs.push('☠中毒'+e.eff.poison);
+    if(e.eff.curse>0)effs.push('💀詛咒'+e.eff.curse);
     const lvIdx=lv.indexOf(e);
     return`<div class="ecard ${dead?'dead':''} ${isTgt?'tgt':''}" onclick="${dead?'':'W.selectTarget('+lvIdx+')'}" style="${isTgt?`border-color:var(--gold);`:''}">
       <div class="ec-row">
@@ -1238,9 +1492,11 @@ function renderEnemyOverlay(){
 
 // Sprite positions
 const ALLY_POS = [
-  {left:'10%',bottom:'13%'},
-  {left:'22%',bottom:'15%'},
-  {left:'34%',bottom:'12%'},
+  {left:'5%',bottom:'13%'},
+  {left:'16%',bottom:'15%'},
+  {left:'27%',bottom:'12%'},
+  {left:'38%',bottom:'14%'},
+  {left:'49%',bottom:'11%'},
 ];
 const ENEMY_POS_1 = [{right:'12%',bottom:'30%'}];
 const ENEMY_POS_2 = [{right:'20%',bottom:'32%'},{right:'6%',bottom:'28%'}];
@@ -1260,7 +1516,7 @@ function renderSprites(){
 
   let html='';
   allies.forEach((a,i)=>{
-    if(i>=3)return;
+    if(i>=5)return;
     const p=ALLY_POS[i];
     const isActor=actor&&actor.type==='hero'&&a.key==='hero'||actor&&actor.type==='comp'&&a.key===actor.key;
     const hpP=pct(a.hp,a.maxHp);
@@ -1294,14 +1550,38 @@ function renderSprites(){
   sc.innerHTML=html;
 }
 
+function renderPortraitBar(){
+  const bar=document.getElementById('portrait-bar');if(!bar)return;
+  const actor=getActor();
+  const slots=[
+    {key:'hero', id:G.heroId, name:HD[G.heroId].name, color:HD[G.heroId].color, dead:G.party.hp<=0},
+    ...G.companions.map((c,i)=>({key:'comp'+i, id:c.id, name:CD[c.id].name, color:CD[c.id].color, dead:c.hp<=0}))
+  ];
+  bar.innerHTML=slots.map(s=>{
+    const isA=actor&&((actor.type==='hero'&&s.key==='hero')||(actor.type==='comp'&&s.key===('comp'+actor.idx)));
+    const isPlayerTurn=isA&&G.phase==='player';
+    const portraitSrc=PORTRAIT_IMGS[s.id]||HERO_IMGS[s.id]||'';
+    const imgHtml=portraitSrc
+      ?`<img src="${portraitSrc}" alt="${s.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+       +`<span class="portrait-fb" style="display:none">${CHARS[s.id]?.icon||'👤'}</span>`
+      :`<span class="portrait-fb">${CHARS[s.id]?.icon||'👤'}</span>`;
+    return`<div class="portrait-slot">
+      <div class="portrait-av${s.dead?' dead':''}${isPlayerTurn?' active':''}" title="${s.name}" style="${isPlayerTurn?'border-color:'+s.color:''}">
+        ${imgHtml}
+        ${isPlayerTurn?'<div class="portrait-turn-ring"></div>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function renderPartyBar(){
   const bar=document.getElementById('party-bar');if(!bar)return;
   const actor=getActor();
   const slots=[
     {key:'hero',name:HD[G.heroId].name,icon:HD[G.heroId].icon,color:HD[G.heroId].color,
-     hp:G.party.hp,maxHp:HD[G.heroId].maxHp,mp:G.party.mp,maxMp:HD[G.heroId].maxMp,dead:G.party.hp<=0},
+     hp:G.party.hp,maxHp:HD[G.heroId].maxHp,mp:G.party.mp,maxMp:HD[G.heroId].maxMp,dead:G.party.hp<=0,buffAtk:G.party.buffAtk||0,buffDef:G.party.buffDef||0},
     ...G.companions.map((c,i)=>({key:'comp'+i,name:CD[c.id].name,icon:CD[c.id].icon,color:CD[c.id].color,
-     hp:c.hp,maxHp:c.maxHp,mp:c.mp,maxMp:c.maxMp,dead:c.hp<=0}))
+     hp:c.hp,maxHp:c.maxHp,mp:c.mp,maxMp:c.maxMp,dead:c.hp<=0,buffAtk:c.buffAtk||0,buffDef:c.buffDef||0}))
   ];
   bar.innerHTML=slots.map(s=>{
     const isA=actor&&((actor.type==='hero'&&s.key==='hero')||(actor.type==='comp'&&s.key===('comp'+actor.idx)));
@@ -1311,7 +1591,7 @@ function renderPartyBar(){
         <span class="ps-ico">${s.icon}</span>
         <span class="ps-name" style="${isA&&G.phase==='player'?`color:${s.color}`:''}"> ${s.name}</span>
       </div>
-      <div class="ps-val">${s.dead?'💀':'❤'+s.hp+' 💙'+s.mp}</div>
+      <div class="ps-val">${s.dead?'💀':'❤'+s.hp+' 💙'+s.mp+(s.buffAtk>0?' ⚔↑'+s.buffAtk:'')+(s.buffDef>0?' 🛡↑'+s.buffDef:'')}</div>
       <div class="mini-bar"><div class="mini-fill" style="width:${hpP}%;background:${hpColor(hpP)}"></div></div>
       <div class="mini-bar"><div class="mini-fill" style="width:${mpP}%;background:#2e9fd8"></div></div>
     </div>`;
@@ -1344,16 +1624,21 @@ function renderActionPanel(){
   sa.innerHTML=`<div class="skills-grid">${skills.map((sk,i)=>{
     const isPending=G.pendingSkillIdx===i;
     const noMp=mp<sk.mp;
-    return `<button class="sk-btn${isPending?' selected':''}" onclick="W.selectSkill(${i})" ${noMp?'disabled':''}>
+    const mpLabel=sk.mp===0?'無耗魔':'MP '+sk.mp;
+    const titleDetail=sk.name+(sk.mp>0?'（MP'+sk.mp+'）':'（免費）')+' — '+sk.desc;
+    return `<button class="sk-btn${isPending?' selected':''}" onclick="W.selectSkill(${i})" ${noMp?'disabled':''} title="${titleDetail}">
       <span class="sk-btn-name">${sk.name}</span>
-      <span class="sk-btn-mp">${sk.mp===0?'無耗魔':'MP '+sk.mp}</span>
+      <span class="sk-btn-mp">${mpLabel}</span>
+      <span class="sk-btn-brief" style="font-size:.5rem;color:var(--text3);display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">${sk.desc}</span>
     </button>`;
   }).join('')}</div>`;
 
   // Skill description panel (shown when a skill is selected)
   const SKILL_TYPE_LABELS={dmg:'攻擊',taunt_dmg:'攻擊·嘲諷',dmg_stun:'攻擊+眩暈',multi:'連擊',
     pierce:'穿甲',crit:'暴擊',aoe:'範圍攻擊',aoe_slow:'範圍+減速',heal:'治療夥伴',
-    comp_heal:'治療夥伴',healall:'全體治療',defend:'防禦',blind:'致盲',poison:'毒攻擊'};
+    comp_heal:'治療夥伴',healall:'全體治療',defend:'防禦',blind:'致盲',poison:'毒攻擊',
+    buff_atk:'攻擊增益',buff_def:'防禦增益',buff_atk_all:'全體攻擊增益',
+    healall_buff:'治療+增益',curse:'詛咒',drain:'吸取生命'};
   let descHTML='';
   if(G.pendingSkillIdx!==null&&skills[G.pendingSkillIdx]){
     const psk=skills[G.pendingSkillIdx];
@@ -1375,7 +1660,7 @@ function renderActionPanel(){
 
   // Ally target picker (when skill targets ally and multiple allies alive)
   const al=livingAllies();
-  const allyTargetTypes=['heal','comp_heal'];
+  const allyTargetTypes=['heal','comp_heal','healall'];
   let allyPickHTML='';
   if(G.pendingSkillIdx!==null&&skills[G.pendingSkillIdx]){
     const psk=skills[G.pendingSkillIdx];
@@ -1443,7 +1728,7 @@ const W = {
     const h=HD[G.heroId];
     const atkB=G.inventory.filter(i=>i.type==='weapon').reduce((s,i)=>s+(i.atkBonus||0),0);
     const defB=G.inventory.filter(i=>i.type==='armor').reduce((s,i)=>s+(i.defBonus||0),0);
-    G.party={hp:h.maxHp,mp:h.maxMp,eff:{},atkBonus:atkB,defBonus:defB};
+    G.party={hp:h.maxHp,mp:h.maxMp,eff:{},atkBonus:atkB,defBonus:defB,buffAtk:0,buffDef:0,buffAtkTurns:0,buffDefTurns:0};
     G.waveIdx=0;G.gold=0;G.inventory=[];G.companions=[];G.level=1;G.exp=0;G.expToLevel=100;
     G.stats={dmg:0,heal:0,kills:0};
     this.showStory();
@@ -1457,7 +1742,7 @@ const W = {
     const w=WAVES[G.waveIdx];
     G.enemies=w.enemies.map(eid=>{
       const e=ENEMIES[eid];
-      return{...e,curHp:e.hp,eff:{stun:0,slow:0,blind:0,poison:0}};
+      return{...e,curHp:e.hp,eff:{stun:0,slow:0,blind:0,poison:0,curse:0}};
     });
     G.targetIdx=0;
     G.turnQueue=buildTurnQueue();
@@ -1567,6 +1852,25 @@ const W = {
     G.companions.forEach(c=>{if(c.hp>0)c.mp=Math.min(c.maxMp,c.mp+8);});
     // Slight MP regen for hero
     G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+8);
+    // Buff tick-down for all allies
+    function tickBuff(st){
+      if(st.buffAtkTurns>0){
+        st.buffAtkTurns--;
+        if(st.buffAtkTurns<=0&&st.buffAtk>0){
+          st.atkBonus=Math.max(0,(st.atkBonus||0)-st.buffAtk);
+          addLog('⬇ 攻擊增益消退','ll-buff');st.buffAtk=0;
+        }
+      }
+      if(st.buffDefTurns>0){
+        st.buffDefTurns--;
+        if(st.buffDefTurns<=0&&st.buffDef>0){
+          st.defBonus=Math.max(0,(st.defBonus||0)-st.buffDef);
+          addLog('⬇ 防禦增益消退','ll-buff');st.buffDef=0;
+        }
+      }
+    }
+    tickBuff(G.party);
+    G.companions.forEach(c=>{if(c.hp>0)tickBuff(c);});
     // Check if all allies dead
     if(G.party.hp<=0&&G.companions.every(c=>c.hp<=0)){
       renderCombat();setTimeout(function(){W._gameOver();},800);return;
@@ -1590,6 +1894,42 @@ const W = {
       G.exp-=G.expToLevel;G.level++;G.expToLevel=Math.round(G.expToLevel*1.4);
       G.attributePoints=(G.attributePoints||0)+2;
       lvTxt=' 【等級提升 Lv.'+G.level+'！】';
+      // ── Class-based stat growth for hero ──
+      const growthMap={
+        knight:{hp:8,mp:2,atk:2,def:3},
+        archer: {hp:4,mp:3,atk:4,def:1},
+        cleric: {hp:5,mp:6,atk:1,def:2},
+        rogue:  {hp:3,mp:2,atk:5,def:1},
+        witch:  {hp:3,mp:7,atk:2,def:1},
+        bard:   {hp:4,mp:6,atk:1,def:2},
+        necromancer:{hp:3,mp:6,atk:2,def:1},
+        alchemist:  {hp:5,mp:5,atk:2,def:2},
+        berserker:  {hp:9,mp:1,atk:5,def:2},
+        dragonknight:{hp:7,mp:3,atk:3,def:3},
+      };
+      const hg=growthMap[G.heroId]||{hp:5,mp:3,atk:2,def:2};
+      HD[G.heroId].maxHp+=hg.hp; G.party.hp+=hg.hp;
+      HD[G.heroId].maxMp+=hg.mp; G.party.mp+=hg.mp;
+      HD[G.heroId].atk+=hg.atk;
+      HD[G.heroId].def+=hg.def;
+      // Companion growth (smaller)
+      G.companions.forEach(comp=>{
+        const cg=growthMap[comp.id]||{hp:4,mp:2,atk:2,def:1};
+        comp.maxHp+=Math.ceil(cg.hp*0.7);comp.hp+=Math.ceil(cg.hp*0.5);
+        comp.maxMp+=Math.ceil(cg.mp*0.7);comp.mp+=Math.ceil(cg.mp*0.5);
+        comp.atk+=Math.ceil(cg.atk*0.7);
+        comp.def+=Math.ceil(cg.def*0.7);
+      });
+      // Show level-up toast in bscene
+      const sc=document.getElementById('bscene');
+      if(sc){
+        const t=document.createElement('div');t.className='lvup-toast';
+        t.innerHTML=`<div style="font-family:Cinzel,serif;font-size:1rem;color:var(--gold);margin-bottom:.3rem">⬆ LEVEL UP!</div>`
+          +`<div style="font-size:.75rem;color:var(--gold2)">Lv.${G.level}</div>`
+          +`<div style="font-size:.6rem;color:var(--text2);margin-top:.3rem">`
+          +`❤+${hg.hp} 💙+${hg.mp} ⚔+${hg.atk} 🛡+${hg.def}</div>`;
+        sc.appendChild(t);setTimeout(()=>t.remove(),2600);
+      }
     }
     // 記錄剛打完的那關
     const justFinished = WAVES[G.waveIdx];
@@ -1635,29 +1975,41 @@ const W = {
   closeRecruit(){show(G._prev||'wclear');},
   _renderRecruit(){
     const rg=document.getElementById('recruit-gold');
-    if(rg)rg.textContent=`金幣：${G.gold} | 最多招募 2 位夥伴（目前 ${G.companions.length}/2）`;
+    if(rg)rg.textContent=`金幣：${G.gold} | 最多招募 4 位夥伴（目前 ${G.companions.length}/4）`;
     const rl=document.getElementById('recruit-list');if(!rl)return;
     const avail=Object.keys(CD).filter(id=>id!==G.heroId);
     rl.innerHTML=avail.map(id=>{
       const c=CD[id];
       const already=G.companions.find(co=>co.id===id);
-      const full=G.companions.length>=2;
-      return`<div class="item-card">
-        <span style="font-size:1.5rem">${c.icon}</span>
+      const full=G.companions.length>=4;
+      return`<div class="item-card" style="${already?'border-color:rgba(46,204,113,.25);background:rgba(46,204,113,.04)':''}">
+        <div style="width:46px;height:46px;border-radius:4px;overflow:hidden;border:1px solid var(--border2);flex-shrink:0;background:transparent;display:flex;align-items:center;justify-content:center">
+          ${PORTRAIT_IMGS[id]
+            ?`<img src="${PORTRAIT_IMGS[id]}" alt="${c.name}" style="width:100%;height:100%;object-fit:cover;object-position:center top" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;font-size:1.5rem">${c.icon}</span>`
+            :`<span style="font-size:1.5rem">${c.icon}</span>`}
+        </div>
         <div style="flex:1">
           <div style="font-family:Cinzel,serif;font-size:.8rem;color:var(--gold)">${c.name} <span style="font-size:.65rem;color:var(--text2)">${c.title}</span></div>
-          <div style="font-size:.65rem;color:var(--text2)">❤${c.baseHp} ⚔${c.baseAtk} 🛡${c.baseDef} | ${c.skills.map(s=>s.name).join('·')}</div>
+          <div style="font-size:.65rem;color:var(--text2)">❤${c.baseHp} ⚔${c.baseAtk} 🛡${c.baseDef}</div>
+          <div style="font-size:.6rem;color:var(--text3);margin-top:2px">${c.skills.map(s=>s.name).join('·')}</div>
+          <div class="comp-sk-detail" style="display:none;font-size:.58rem;color:var(--text3);line-height:1.6;margin-top:2px">${c.skills.map(s=>`<span style="color:var(--gold3)">・${s.name}</span>：${s.desc}${s.mp>0?` [MP${s.mp}]`:' [免費]'}`).join('<br>')}</div>
+          <button onclick="(function(b){var d=b.previousSibling.previousSibling,s=d.previousSibling;if(d.style.display==='none'){d.style.display='block';b.textContent='▲ 收起技能'}else{d.style.display='none';b.textContent='▼ 查看技能詳情'}})(this)" style="font-size:.52rem;color:var(--text3);background:transparent;border:1px solid var(--border);padding:2px 6px;cursor:pointer;margin-top:3px">▼ 查看技能詳情</button>
         </div>
-        ${already?`<button class="item-btn" style="color:var(--red2);border-color:rgba(192,57,43,.4)" onclick="W.dismissComp('${id}')">解散</button>`:
-          `<button class="item-btn" onclick="W.recruitComp('${id}')" ${full||G.gold<c.recruitCost?'disabled':''}>
-            ${c.recruitCost}💰 招募</button>`}
+        ${already
+          ?`<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <span style="font-size:.6rem;color:#2ecc71;border:1px solid rgba(46,204,113,.4);padding:2px 8px;border-radius:2px;white-space:nowrap">✓ 已招募</span>
+              <button class="item-btn" style="font-size:.55rem;color:var(--red2);border-color:rgba(192,57,43,.35);padding:2px 8px" onclick="W.dismissComp('${id}')">解散</button>
+            </div>`
+          :`<button class="item-btn" onclick="W.recruitComp('${id}')" ${full||G.gold<c.recruitCost?'disabled':''}>
+              ${c.recruitCost}💰 招募</button>`
+        }
       </div>`;
     }).join('');
   },
   recruitComp(id){
-    const c=CD[id];if(!c||G.gold<c.recruitCost||G.companions.length>=2)return;
+    const c=CD[id];if(!c||G.gold<c.recruitCost||G.companions.length>=4)return;
     G.gold-=c.recruitCost;
-    G.companions.push({id,hp:c.baseHp,mp:c.baseMp,maxHp:c.baseHp,maxMp:c.baseMp,atk:c.baseAtk,def:c.baseDef,eff:{}});
+    G.companions.push({id,hp:c.baseHp,mp:c.baseMp,maxHp:c.baseHp,maxMp:c.baseMp,atk:c.baseAtk,def:c.baseDef,eff:{},atkBonus:0,defBonus:0,buffAtk:0,buffDef:0,buffAtkTurns:0,buffDefTurns:0});
     addLog('🤝 '+c.name+' 加入隊伍！','ll-heal');
     this._renderRecruit();
   },
@@ -1669,32 +2021,55 @@ const W = {
     const sg=document.getElementById('shop-gold');
     if(sg)sg.textContent=`金幣：${G.gold}`;
     const sl=document.getElementById('shop-list');if(!sl)return;
-    sl.innerHTML=Object.values(ITEMS).map(it=>{
-      const owned=it.type!=='consumable'&&G.inventory.some(i=>i.id===it.id);
-      const btnTxt=owned?'已購 ✓':(it.price+'💰 購買');
-      return`<div class="item-card">
-        <span style="font-size:1.4rem">${it.icon}</span>
-        <div style="flex:1">
-          <div style="font-family:Cinzel,serif;font-size:.8rem;color:var(--gold)">${it.name}</div>
-          <div style="font-size:.65rem;color:var(--text2)">${it.desc}</div>
-        </div>
-        <button class="item-btn" onclick="W.buyItem('${it.id}')" ${owned||G.gold<it.price?'disabled':''}>
-          ${btnTxt}</button>
-      </div>`;
-    }).join('');
+    const categories=[
+      {label:'🧪 消耗品',types:['consumable']},
+      {label:'⚔ 武器',  types:['weapon']},
+      {label:'🛡 防具',  types:['armor']},
+      {label:'💍 飾品',  types:['accessory']},
+    ];
+    let html='';
+    categories.forEach(cat=>{
+      const items=Object.values(ITEMS).filter(it=>cat.types.includes(it.type));
+      if(!items.length)return;
+      html+=`<div style="font-family:Cinzel,serif;font-size:.65rem;color:var(--gold3);letter-spacing:2px;padding:5px 0 4px;margin-top:6px;border-bottom:1px solid var(--border)">${cat.label}</div>`;
+      items.forEach(it=>{
+        const owned=it.type!=='consumable'&&G.inventory.some(i=>i.id===it.id);
+        const canBuy=!owned&&G.gold>=it.price;
+        const equippedTo=(G.equipment||{})[it.id];
+        let badge='';
+        if(owned){
+          const eName=equippedTo?(equippedTo==='hero'?HD[G.heroId]?.name:CD[G.companions[parseInt(equippedTo.replace('comp',''))]?.id]?.name):'';
+          badge=equippedTo?`<span style="font-size:.5rem;color:var(--blue2)">▸${eName||'?'}</span>`:`<span style="font-size:.5rem;color:var(--text3)">未裝備</span>`;
+        }
+        html+=`<div class="item-card" style="${owned?'border-color:rgba(46,159,216,.2);background:rgba(46,159,216,.04)':''}">
+          <span style="font-size:1.4rem">${it.icon}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+              <span style="font-family:Cinzel,serif;font-size:.78rem;color:var(--gold)">${it.name}</span>
+              ${owned?badge:''}
+            </div>
+            <div style="font-size:.62rem;color:var(--text2);margin-top:1px">${it.desc}</div>
+          </div>
+          <button class="item-btn" onclick="W.buyItem('${it.id}')" ${!canBuy?'disabled':''} style="${owned?'color:var(--blue2);border-color:rgba(46,159,216,.4)':''}">
+            ${owned?'已購 ✓':it.price+'💰'}</button>
+        </div>`;
+      });
+    });
+    sl.innerHTML=html;
   },
   buyItem(id){
     const it=ITEMS[id];if(!it||G.gold<it.price)return;
     if(it.type!=='consumable'&&G.inventory.some(i=>i.id===id))return;
     G.gold-=it.price;
     G.inventory.push({...it});
-    if(it.type==='weapon'){G.party.atkBonus=(G.party.atkBonus||0)+(it.atkBonus||0);}
-    if(it.type==='armor'){G.party.defBonus=(G.party.defBonus||0)+(it.defBonus||0);}
+    // consumables go straight to bag; equipment must be manually assigned
     this._renderShop();
   },
 
   toggleBag(){
     const p=document.getElementById('bag-panel');if(!p)return;
+    // Close equip panel if open
+    const ep=document.getElementById('equip-panel');if(ep)ep.style.display='none';
     const vis=p.style.display==='block';
     if(vis){p.style.display='none';}else{p.style.display='block';this._renderBagPanel();}
   },
@@ -1722,11 +2097,119 @@ const W = {
     renderCombat();
   },
 
+  // ── Equipment helpers ──
+  _getEquipBonus(charKey){
+    // Returns {atkBonus,defBonus,hpBonus,mpBonus} from all items equipped on charKey
+    const b={atkBonus:0,defBonus:0,hpBonus:0,mpBonus:0};
+    G.inventory.forEach(it=>{
+      if(it.type==='consumable')return;
+      if((G.equipment||{})[it.id]===charKey){
+        b.atkBonus+=(it.atkBonus||0);
+        b.defBonus+=(it.defBonus||0);
+        b.hpBonus+=(it.hpBonus||0);
+        b.mpBonus+=(it.mpBonus||0);
+      }
+    });
+    return b;
+  },
+  _applyEquipToChar(it, charKey){
+    if(!G.equipment)G.equipment={};
+    const old=G.equipment[it.id];
+    // Remove from old wearer first
+    if(old) this._removeEquipFromChar(it, old);
+    G.equipment[it.id]=charKey;
+    // Apply bonuses
+    if(charKey==='hero'){
+      G.party.atkBonus=(G.party.atkBonus||0)+(it.atkBonus||0);
+      G.party.defBonus=(G.party.defBonus||0)+(it.defBonus||0);
+      if(it.hpBonus){HD[G.heroId].maxHp+=it.hpBonus;G.party.hp=Math.min(HD[G.heroId].maxHp,G.party.hp+it.hpBonus);}
+      if(it.mpBonus){HD[G.heroId].maxMp+=it.mpBonus;G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+it.mpBonus);}
+    } else {
+      const ci=parseInt(charKey.replace('comp',''));
+      const c=G.companions[ci];if(!c)return;
+      c.atkBonus=(c.atkBonus||0)+(it.atkBonus||0);
+      c.defBonus=(c.defBonus||0)+(it.defBonus||0);
+      if(it.hpBonus){c.maxHp+=it.hpBonus;c.hp=Math.min(c.maxHp,c.hp+it.hpBonus);}
+      if(it.mpBonus){c.maxMp+=it.mpBonus;c.mp=Math.min(c.maxMp,c.mp+it.mpBonus);}
+    }
+    addLog((charKey==='hero'?HD[G.heroId].name:CD[G.companions[parseInt(charKey.replace('comp',''))].id].name)+'裝備了【'+it.name+'】','ll-buff');
+  },
+  _removeEquipFromChar(it, charKey){
+    if(charKey==='hero'){
+      G.party.atkBonus=Math.max(0,(G.party.atkBonus||0)-(it.atkBonus||0));
+      G.party.defBonus=Math.max(0,(G.party.defBonus||0)-(it.defBonus||0));
+      if(it.hpBonus){HD[G.heroId].maxHp=Math.max(1,HD[G.heroId].maxHp-it.hpBonus);G.party.hp=Math.min(HD[G.heroId].maxHp,G.party.hp);}
+      if(it.mpBonus){HD[G.heroId].maxMp=Math.max(1,HD[G.heroId].maxMp-it.mpBonus);G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp);}
+    } else {
+      const ci=parseInt(charKey.replace('comp',''));
+      const c=G.companions[ci];if(!c)return;
+      c.atkBonus=Math.max(0,(c.atkBonus||0)-(it.atkBonus||0));
+      c.defBonus=Math.max(0,(c.defBonus||0)-(it.defBonus||0));
+      if(it.hpBonus){c.maxHp=Math.max(1,c.maxHp-it.hpBonus);c.hp=Math.min(c.maxHp,c.hp);}
+      if(it.mpBonus){c.maxMp=Math.max(1,c.maxMp-it.mpBonus);c.mp=Math.min(c.maxMp,c.mp);}
+    }
+    delete G.equipment[it.id];
+  },
+  equipItem(itemId, charKey){
+    const it=G.inventory.find(i=>i.id===itemId);if(!it)return;
+    // If already equipped on same char → unequip
+    if((G.equipment||{})[itemId]===charKey){
+      this._removeEquipFromChar(it, charKey);
+      addLog('卸下了【'+it.name+'】','ll-buff');
+    } else {
+      this._applyEquipToChar(it, charKey);
+    }
+    this._renderEquipPanel();
+    renderCombat();
+  },
+
+  toggleEquip(){
+    const ep=document.getElementById('equip-panel');if(!ep)return;
+    // Close bag if open
+    const bp=document.getElementById('bag-panel');if(bp)bp.style.display='none';
+    const vis=ep.style.display==='block';
+    if(vis){ep.style.display='none';}else{ep.style.display='block';this._renderEquipPanel();}
+  },
+  _renderEquipPanel(){
+    const ep=document.getElementById('equip-panel');if(!ep)return;
+    if(!G.equipment)G.equipment={};
+    const equips=G.inventory.filter(i=>i.type!=='consumable');
+    // Build character list
+    const chars=[{key:'hero',name:HD[G.heroId].name,icon:HD[G.heroId].icon}];
+    G.companions.forEach((c,i)=>chars.push({key:'comp'+i,name:CD[c.id].name,icon:CD[c.id].icon}));
+
+    if(!equips.length){
+      ep.innerHTML='<div style="font-family:Cinzel,serif;font-size:.65rem;color:var(--blue2);margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--border)">⚔ 裝備管理</div>'
+        +'<div style="font-size:.62rem;color:var(--text3);text-align:center;padding:6px 0">尚無裝備道具</div>';
+      return;
+    }
+    const typeLabel={weapon:'武器',armor:'防具',accessory:'飾品'};
+    let html='<div style="font-family:Cinzel,serif;font-size:.65rem;color:var(--blue2);margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--border)">⚔ 裝備管理</div>';
+    equips.forEach(it=>{
+      const wearer=G.equipment[it.id];
+      const wearerName=wearer?(wearer==='hero'?HD[G.heroId].name:CD[G.companions[parseInt(wearer.replace('comp',''))].id].name):'';
+      html+=`<div class="equip-item-row">
+        <div class="equip-item-header">
+          <span style="font-size:.95rem">${it.icon}</span>
+          <div style="flex:1">
+            <div style="font-size:.62rem;color:var(--gold)">${it.name} <span style="font-size:.52rem;color:var(--text3)">[${typeLabel[it.type]||it.type}]</span></div>
+            <div style="font-size:.52rem;color:var(--text2)">${it.desc}${wearer?` <span style="color:var(--blue2)">▸${wearerName}</span>`:' <span style="color:var(--text3)">未裝備</span>'}</div>
+          </div>
+        </div>
+        <div class="equip-char-row">
+          ${chars.map(ch=>`<button class="equip-char-btn${G.equipment[it.id]===ch.key?' equipped':''}" onclick="W.equipItem('${it.id}','${ch.key}')">${ch.icon}${ch.name}</button>`).join('')}
+        </div>
+      </div>`;
+    });
+    ep.innerHTML=html;
+  },
+
   restart(){
-    Object.values(HD).forEach(h=>{h.atk=h.baseAtk;h.def=h.baseDef;});
+    Object.values(HD).forEach(h=>{h.atk=h.baseAtk;h.def=h.baseDef;h.maxHp=CHARS[h.id].maxHp;h.maxMp=CHARS[h.id].maxMp;});
     G={screen:'title',heroId:null,party:null,companions:[],waveIdx:0,enemies:[],
       turnQueue:[],turnIdx:0,targetIdx:0,phase:'player',log:[],story:'',loading:false,
       level:1,exp:0,expToLevel:100,attributePoints:0,inventory:[],gold:0,round:1,
+      equipment:{},
       _prev:null,pendingSkillIdx:null,skillDescIdx:null,stats:{dmg:0,heal:0,kills:0}};
     try{BGM.stop();}catch(e){} show('title');
   }
