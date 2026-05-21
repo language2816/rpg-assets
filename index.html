@@ -23,23 +23,114 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 
 /* ===== TITLE ===== */
 #s-title{
-  align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;
-  background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,.08),transparent 60%);
+  align-items:center;justify-content:center;text-align:center;
+  position:relative;overflow:hidden;padding:0;
 }
-.t-kicker{font-size:.65rem;letter-spacing:6px;color:var(--gold3);margin-bottom:1.5rem}
-.t-main{font-family:'Cinzel',serif;font-size:clamp(2.8rem,10vw,4.5rem);font-weight:700;
-  background:linear-gradient(180deg,#f0d060 0%,#c9a84c 50%,#8a6a20 100%);
+/* Video background */
+#title-video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  z-index:0;opacity:.85;
+}
+/* Dark overlay layers */
+#title-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:
+    radial-gradient(ellipse at 50% 60%,rgba(8,6,18,.35) 0%,rgba(8,6,18,.75) 70%),
+    linear-gradient(180deg,rgba(8,6,18,.6) 0%,rgba(8,6,18,.1) 30%,rgba(8,6,18,.15) 60%,rgba(8,6,18,.9) 100%);
+}
+/* Animated scanline effect */
+#title-overlay::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);
+  pointer-events:none;
+}
+/* Content sits above video */
+.t-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:100vh;
+  padding:2rem 1.5rem;
+  width:100%;
+}
+.t-kicker{
+  font-size:.6rem;letter-spacing:7px;color:var(--gold3);margin-bottom:1.8rem;
+  text-shadow:0 0 20px rgba(201,168,76,.6);
+  animation:fadeUp .8s ease both .2s;
+}
+.t-main{
+  font-family:'Cinzel',serif;font-size:clamp(3rem,11vw,5rem);font-weight:700;
+  background:linear-gradient(180deg,#fff8dc 0%,#f0d060 30%,#c9a84c 65%,#8a6a20 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 30px rgba(201,168,76,.4));line-height:1;margin-bottom:.5rem}
-.t-en{font-family:'Cinzel',serif;font-size:.75rem;color:var(--gold3);letter-spacing:4px;margin-bottom:2rem}
-.t-div{width:160px;height:1px;margin:.8rem auto;background:linear-gradient(90deg,transparent,var(--gold3),transparent)}
-.t-desc{max-width:400px;font-size:.9rem;line-height:2;color:var(--text2);margin:0 auto 2.5rem;font-style:italic}
-.t-heroes{display:flex;gap:1.5rem;justify-content:center;margin-bottom:2.5rem}
-.t-hico{width:48px;height:48px;border-radius:50%;border:1px solid;display:flex;align-items:center;justify-content:center;font-size:1.4rem;opacity:.7;transition:opacity .2s}
-.t-hico:hover{opacity:1}
-.btn-gold{font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:3px;padding:.9rem 2.5rem;
-  background:transparent;border:1px solid var(--gold3);color:var(--gold);cursor:pointer;transition:all .25s}
-.btn-gold:hover{border-color:var(--gold);color:var(--gold2);background:rgba(201,168,76,.06)}
+  filter:drop-shadow(0 0 40px rgba(201,168,76,.7)) drop-shadow(0 2px 8px rgba(0,0,0,.8));
+  line-height:1;margin-bottom:.4rem;
+  animation:fadeUp .8s ease both .4s;
+}
+.t-en{
+  font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold3);letter-spacing:5px;margin-bottom:1.5rem;
+  text-shadow:0 0 15px rgba(201,168,76,.4);
+  animation:fadeUp .8s ease both .5s;
+}
+.t-div{
+  width:200px;height:1px;margin:.6rem auto 1.2rem;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:fadeIn .8s ease both .6s;
+}
+.t-desc{
+  max-width:380px;font-size:.88rem;line-height:2;
+  color:rgba(232,223,200,.8);margin:0 auto 2rem;font-style:italic;
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+  animation:fadeUp .8s ease both .7s;
+}
+.t-heroes{
+  display:flex;gap:1.2rem;justify-content:center;margin-bottom:2.5rem;
+  animation:fadeUp .8s ease both .8s;
+}
+.t-hico{
+  width:50px;height:50px;border-radius:50%;border:1px solid;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+  opacity:.65;transition:all .3s;backdrop-filter:blur(4px);
+  background:rgba(0,0,0,.3);
+}
+.t-hico:hover{opacity:1;transform:scale(1.1);box-shadow:0 0 20px currentColor}
+.btn-gold{
+  font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:3px;padding:.9rem 2.8rem;
+  background:rgba(0,0,0,.45);border:1px solid var(--gold3);color:var(--gold);
+  cursor:pointer;transition:all .3s;backdrop-filter:blur(8px);
+  text-shadow:0 0 10px rgba(201,168,76,.5);
+  box-shadow:0 0 0 transparent;
+  animation:fadeUp .8s ease both .9s;
+}
+.btn-gold:hover{
+  border-color:var(--gold);color:var(--gold2);
+  background:rgba(201,168,76,.12);
+  box-shadow:0 0 30px rgba(201,168,76,.25),inset 0 0 20px rgba(201,168,76,.05);
+}
+/* Corner decorations */
+.t-corner{
+  position:absolute;z-index:2;width:40px;height:40px;opacity:.5;
+}
+.t-corner-tl{top:16px;left:16px;border-top:1px solid var(--gold3);border-left:1px solid var(--gold3)}
+.t-corner-tr{top:16px;right:16px;border-top:1px solid var(--gold3);border-right:1px solid var(--gold3)}
+.t-corner-bl{bottom:16px;left:16px;border-bottom:1px solid var(--gold3);border-left:1px solid var(--gold3)}
+.t-corner-br{bottom:16px;right:16px;border-bottom:1px solid var(--gold3);border-right:1px solid var(--gold3)}
+/* Particle shimmer */
+.t-particles{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.t-spark{
+  position:absolute;width:2px;height:2px;border-radius:50%;background:var(--gold);
+  opacity:0;animation:sparkle 4s infinite;
+}
+@keyframes sparkle{
+  0%{opacity:0;transform:translateY(0) scale(0)}
+  50%{opacity:.8;transform:translateY(-30px) scale(1)}
+  100%{opacity:0;transform:translateY(-60px) scale(0)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}to{opacity:1}
+}
 
 /* ===== SELECT ===== */
 #s-select{padding:1.25rem;background:linear-gradient(180deg,#0c0a1c,var(--bg))}
@@ -66,17 +157,17 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 .btn-confirm:hover{border-color:var(--gold);background:rgba(201,168,76,.08)}
 
 /* ===== STORY ===== */
-#s-story{align-items:stretch;padding:1.25rem}
+#s-story{align-items:stretch;padding:.8rem 1rem}
 .story-loc{font-size:.65rem;letter-spacing:3px;color:var(--gold3);margin-bottom:1rem}
-.story-enemies-row{display:flex;gap:.75rem;justify-content:center;margin-bottom:1.25rem;flex-wrap:wrap}
-.story-ecard{background:var(--bg2);border:1px solid var(--border2);padding:.75rem;
-  display:flex;flex-direction:column;align-items:center;gap:.35rem;min-width:90px;flex:1;max-width:130px}
-.story-eico{font-size:2.2rem}
+.story-enemies-row{display:flex;gap:.5rem;justify-content:center;margin-bottom:.4rem;flex-wrap:wrap}
+.story-ecard{background:var(--bg2);border:1px solid var(--border2);padding:.45rem;
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:76px;flex:1;max-width:108px}
+.story-eico{width:56px;height:56px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:4px;background:rgba(0,0,0,.3)}
 .story-ename{font-family:'Cinzel',serif;font-size:.7rem;color:var(--gold);text-align:center}
 .story-ebadge{font-size:.6rem;padding:2px 7px;border-radius:2px;border:1px solid;text-align:center}
-.story-text{font-size:.88rem;line-height:2;color:var(--text2);font-style:italic;flex:1;
-  border-left:3px solid var(--gold3);padding-left:1rem;margin-bottom:1.25rem;min-height:60px}
-.progress-row{display:flex;gap:.5rem;margin-bottom:1.25rem;justify-content:center}
+.story-text{font-size:.88rem;line-height:1.8;color:var(--text2);font-style:italic;
+  border-left:3px solid var(--gold3);padding-left:1rem;margin-bottom:.6rem;min-height:0}
+.progress-row{display:flex;gap:.5rem;margin-bottom:.4rem;justify-content:center}
 .pdot{width:9px;height:9px;border-radius:50%;background:var(--border2);transition:background .3s}
 .pdot.done{background:var(--gold3)}
 .pdot.cur{background:var(--gold);box-shadow:0 0 8px var(--gold)}
@@ -97,6 +188,14 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 }
 .bscene::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
   background:linear-gradient(transparent,rgba(5,4,15,.95));pointer-events:none}
+
+/* Map name label */
+.map-label{
+  position:absolute;bottom:88px;right:10px;z-index:25;
+  font-family:'Cinzel',serif;font-size:.6rem;color:var(--gold3);
+  letter-spacing:2px;text-shadow:0 1px 4px rgba(0,0,0,.9);
+  opacity:.75;
+}
 
 /* Enemy info overlay — top left */
 .enemy-overlay{position:absolute;top:8px;left:8px;z-index:20;display:flex;flex-direction:column;gap:5px;max-width:170px}
@@ -216,11 +315,104 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 .item-btn:disabled{opacity:.35;cursor:not-allowed}
 .item-btn:hover:not(:disabled){border-color:var(--gold);background:rgba(201,168,76,.08)}
 
+/* Bag Button */
+.bag-btn{position:absolute;bottom:90px;left:8px;z-index:22;background:rgba(8,6,18,.88);
+  border:1px solid rgba(201,168,76,.45);color:var(--gold);font-size:.62rem;padding:5px 11px;
+  cursor:pointer;border-radius:4px;letter-spacing:1px;backdrop-filter:blur(4px);transition:border-color .2s}
+.bag-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.bag-panel{position:absolute;bottom:122px;left:8px;z-index:31;background:rgba(6,5,16,.96);
+  border:1px solid rgba(201,168,76,.45);border-radius:5px;padding:8px 9px;width:178px;
+  backdrop-filter:blur(8px);display:none;box-shadow:0 4px 20px rgba(0,0,0,.7)}
+.bag-item-row{display:flex;align-items:center;gap:5px;margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.05)}
+.bag-item-row:last-child{border-bottom:none;margin-bottom:0}
+.bag-use-btn{font-size:.52rem;padding:2px 7px;background:transparent;border:1px solid var(--gold3);color:var(--gold);cursor:pointer;border-radius:2px;white-space:nowrap;transition:all .15s}
+.bag-use-btn:hover{background:rgba(201,168,76,.1);border-color:var(--gold)}
+
+/* ===== BGM 浮動音樂播放器 ===== */
+#bgm-widget{
+  position:fixed;bottom:14px;right:14px;z-index:999;
+  display:flex;align-items:center;gap:7px;
+  background:rgba(8,6,18,.88);
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:20px;padding:6px 12px 6px 9px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  transition:border-color .2s;
+  font-family:'Noto Serif TC',serif;
+}
+#bgm-widget:hover{border-color:var(--gold);}
+#bgm-toggle{
+  background:none;border:none;cursor:pointer;
+  font-size:1rem;line-height:1;color:var(--gold);
+  width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  transition:transform .2s;flex-shrink:0;
+}
+#bgm-toggle:hover{transform:scale(1.2);}
+.bgm-meta{display:flex;flex-direction:column;gap:1px;min-width:60px;}
+.bgm-label{font-size:.48rem;color:var(--gold3);letter-spacing:1.5px;}
+#bgm-track-name{font-size:.55rem;color:var(--text2);letter-spacing:.5px;white-space:nowrap;}
+#bgm-vol{
+  width:52px;height:3px;-webkit-appearance:none;appearance:none;
+  background:var(--border2);border-radius:2px;cursor:pointer;outline:none;
+}
+#bgm-vol::-webkit-slider-thumb{
+  -webkit-appearance:none;width:9px;height:9px;
+  border-radius:50%;background:var(--gold3);cursor:pointer;
+}
+#bgm-vol::-webkit-slider-thumb:hover{background:var(--gold);}
+
 @media(max-width:480px){
   .hero-grid{grid-template-columns:repeat(3,1fr)}
   .bscene{height:360px}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ===== BGM MUSIC PLAYER ===== */
+#bgm-player{
+  position:fixed;bottom:16px;right:16px;z-index:999;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(8,6,18,.88);border:1px solid rgba(201,168,76,.4);
+  border-radius:24px;padding:6px 12px 6px 8px;
+  backdrop-filter:blur(8px);transition:all .3s;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+#bgm-player:hover{border-color:var(--gold);}
+.bgm-btn{background:none;border:none;cursor:pointer;padding:2px;
+  font-size:1rem;line-height:1;color:var(--gold);transition:transform .2s;
+  display:flex;align-items:center;justify-content:center;width:24px;height:24px;}
+.bgm-btn:hover{transform:scale(1.2)}
+.bgm-info{font-family:'Cinzel',serif;font-size:.55rem;color:var(--gold3);
+  letter-spacing:1px;max-width:110px;overflow:hidden;white-space:nowrap;
+  text-overflow:ellipsis;line-height:1.3}
+.bgm-track{font-size:.5rem;color:var(--text3);letter-spacing:.5px}
+.bgm-vol{width:56px;height:3px;-webkit-appearance:none;appearance:none;
+  background:var(--border2);border-radius:2px;cursor:pointer;outline:none;}
+.bgm-vol::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;
+  border-radius:50%;background:var(--gold3);cursor:pointer;}
+.bgm-vol::-webkit-slider-thumb:hover{background:var(--gold);}
+
+/* ── Skill Select & Confirm ── */
+.sk-btn{position:relative;transition:all .15s}
+.sk-btn.selected{border-color:var(--gold)!important;background:rgba(201,168,76,.13)!important;box-shadow:0 0 8px rgba(201,168,76,.3)}
+.sk-btn.selected .sk-btn-name{color:var(--gold)}
+.sk-confirm-row{display:flex;gap:6px;margin-bottom:6px;align-items:stretch}
+.sk-confirm-btn{flex:1;padding:.55rem;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:1px;
+  background:rgba(201,168,76,.1);border:1px solid var(--gold3);color:var(--gold);cursor:pointer;
+  transition:all .15s}
+.sk-confirm-btn:hover{background:rgba(201,168,76,.2);border-color:var(--gold)}
+.sk-confirm-btn:disabled{opacity:.3;cursor:not-allowed}
+.sk-cancel-btn{padding:.55rem .8rem;font-size:.72rem;background:transparent;
+  border:1px solid var(--border2);color:var(--text3);cursor:pointer;transition:all .15s}
+.sk-cancel-btn:hover{border-color:var(--border);color:var(--text2)}
+/* Skill tooltip / description panel */
+.sk-desc-panel{background:rgba(8,6,18,.92);border:1px solid var(--border2);
+  padding:.5rem .7rem;margin-bottom:6px;border-left:2px solid var(--gold3);
+  animation:fadeIn .15s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.sk-desc-name{font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold);margin-bottom:3px}
+.sk-desc-body{font-size:.62rem;color:var(--text2);line-height:1.6}
+.sk-desc-mp{color:var(--blue2);margin-left:8px}
+
 </style>
 </head>
 <body>
@@ -228,19 +420,35 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 
 <!-- TITLE -->
 <div id="s-title" class="screen">
-  <div class="t-kicker">✦ &nbsp; FANTASY RPG &nbsp; ✦</div>
-  <div class="t-main">命運之旅</div>
-  <div class="t-en">CHRONICLES OF DESTINY</div>
-  <div class="t-div"></div>
-  <div class="t-desc">深淵暗龍沙卡索甦醒了，邪惡之氣蔓延至大地每個角落。<br>命運的齒輪開始轉動——只有你們，才能阻止這場浩劫。</div>
-  <div class="t-heroes">
-    <div class="t-hico" style="border-color:#2e9fd8;background:rgba(46,159,216,.1)">⚔️</div>
-    <div class="t-hico" style="border-color:#2ecc71;background:rgba(46,204,113,.1)">🏹</div>
-    <div class="t-hico" style="border-color:#f39c12;background:rgba(243,156,18,.1)">✨</div>
-    <div class="t-hico" style="border-color:#9b59b6;background:rgba(155,89,182,.1)">🗡️</div>
-    <div class="t-hico" style="border-color:#e74c3c;background:rgba(231,76,60,.1)">🔮</div>
+  <!-- Video Background -->
+  <video id="title-video" autoplay muted loop playsinline preload="auto"
+    src="https://raw.githubusercontent.com/language2816/rpg-assets/ede72930049aae276bc0c135895a96896d69c76a/start.mp4">
+  </video>
+  <!-- Overlay -->
+  <div id="title-overlay"></div>
+  <!-- Corner Decorations -->
+  <div class="t-corner t-corner-tl"></div>
+  <div class="t-corner t-corner-tr"></div>
+  <div class="t-corner t-corner-bl"></div>
+  <div class="t-corner t-corner-br"></div>
+  <!-- Sparkling particles -->
+  <div class="t-particles" id="t-particles"></div>
+  <!-- Main Content -->
+  <div class="t-content">
+    <div class="t-kicker">✦ &nbsp; FANTASY RPG &nbsp; ✦</div>
+    <div class="t-main">命運之旅</div>
+    <div class="t-en">CHRONICLES OF DESTINY</div>
+    <div class="t-div"></div>
+    <div class="t-desc">深淵暗龍沙卡索甦醒了，邪惡之氣蔓延至大地每個角落。<br>命運的齒輪開始轉動——只有你們，才能阻止這場浩劫。</div>
+    <div class="t-heroes">
+      <div class="t-hico" style="border-color:#2e9fd8;background:rgba(46,159,216,.1)">⚔️</div>
+      <div class="t-hico" style="border-color:#2ecc71;background:rgba(46,204,113,.1)">🏹</div>
+      <div class="t-hico" style="border-color:#f39c12;background:rgba(243,156,18,.1)">✨</div>
+      <div class="t-hico" style="border-color:#9b59b6;background:rgba(155,89,182,.1)">🗡️</div>
+      <div class="t-hico" style="border-color:#e74c3c;background:rgba(231,76,60,.1)">🔮</div>
+    </div>
+    <button class="btn-gold" onclick="W.startSelect()">踏上征途 ✦</button>
   </div>
-  <button class="btn-gold" onclick="W.startSelect()">踏上征途 ✦</button>
 </div>
 
 <!-- SELECT -->
@@ -261,16 +469,18 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
   <div class="story-loc" id="story-loc">第一章</div>
   <div class="story-enemies-row" id="story-enemies-row"></div>
   <div class="progress-row" id="progress-row"></div>
-  <div class="story-text" id="story-text">✦ 旁白生成中...</div>
+  <div class="story-text" id="story-text"></div>
   <button class="btn-fight" id="btn-fight" onclick="W.startFight()">⚔ 進入戰鬥</button>
 </div>
 
 <!-- COMBAT -->
 <div id="s-combat" class="screen">
   <!-- Battle Scene -->
-  <div class="bscene" id="bscene">
+  <div class="bscene" id="bscene"><div class="map-label" id="map-label"></div>
     <div class="enemy-overlay" id="enemy-overlay"></div>
     <div class="tgt-hint" id="tgt-hint">點選敵人卡片選擇目標</div>
+    <button class="bag-btn" id="bag-btn" onclick="W.toggleBag()">🎒 背包</button>
+    <div class="bag-panel" id="bag-panel"></div>
     <div id="sprites-container"></div>
   </div>
   <!-- Battle UI -->
@@ -293,10 +503,10 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 <div id="s-wclear" class="screen">
   <div class="wc-title">✦ 波次清除！</div>
   <div style="font-size:.85rem;color:var(--text2);margin:.5rem 0 1.5rem;line-height:2" id="wc-text"></div>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center">
+  <div id="wc-btns" style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center">
     <button class="btn-gold" onclick="W.gNextWave()">繼續前進 →</button>
-    <button class="btn-gold" style="border-color:rgba(46,204,113,.5);color:#2ecc71" onclick="W.openRecruit()">🤝 招募夥伴</button>
-    <button class="btn-gold" style="border-color:rgba(201,168,76,.5)" onclick="W.openShop()">🏪 商店</button>
+    <button class="btn-gold area-only" style="border-color:rgba(46,204,113,.5);color:#2ecc71" onclick="W.openRecruit()">🤝 招募夥伴</button>
+    <button class="btn-gold area-only" style="border-color:rgba(201,168,76,.5)" onclick="W.openShop()">🏪 商店</button>
   </div>
 </div>
 
@@ -337,99 +547,110 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
   <button class="btn-gold" onclick="W.restart()">再次冒險 ✦</button>
 </div>
 
+
+<!-- BGM 音樂播放器 -->
+<div id="bgm-widget">
+  <button id="bgm-toggle" onclick="BGM.toggleMute()" title="靜音/開聲">🎵</button>
+  <div class="bgm-meta">
+    <div class="bgm-label">♪ 區域音樂</div>
+    <div id="bgm-track-name">—</div>
+  </div>
+  <input id="bgm-vol" type="range" min="0" max="1" step="0.05" value="0.35"
+    oninput="BGM.setVol(parseFloat(this.value))" title="音量">
+</div>
+
 </div><!-- #root -->
 
 <script>
 // ══════════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════════
-const HD = { // Heroes Data
+// CHARS 合併英雄(HD)與夥伴(CD)資料，減少重複
+// hero.*  = 主角用欄位；comp.* = 夥伴用欄位
+const CHARS = {
   knight:{id:'knight',name:'阿德里克',title:'鐵壁騎士',icon:'⚔️',color:'#2e9fd8',
     maxHp:130,maxMp:25,baseAtk:24,baseDef:20,atk:24,def:20,
-    skills:[
+    baseHp:120,baseMp:25,baseAtk:22,baseDef:18,recruitCost:80,
+    heroSkills:[
       {name:'劍擊',type:'dmg',base:28,mp:0,desc:'基本近戰攻擊'},
       {name:'盾牌衝撞',type:'dmg_stun',base:18,mp:5,desc:'攻擊+眩暈目標1回合'},
       {name:'鐵壁防禦',type:'defend',base:0,mp:6,desc:'本回合受傷害-65%'},
       {name:'戰吼',type:'taunt_dmg',base:14,mp:4,desc:'攻擊並嘲諷敵人'},
-    ]},
-  archer:{id:'archer',name:'希薇拉',title:'精靈遊俠',icon:'🏹',color:'#2ecc71',
-    maxHp:85,maxMp:35,baseAtk:34,baseDef:10,atk:34,def:10,
-    skills:[
-      {name:'箭矢射擊',type:'dmg',base:33,mp:0,desc:'精準弓箭攻擊'},
-      {name:'連射',type:'multi',base:17,hits:2,mp:8,desc:'連射2支箭矢'},
-      {name:'穿甲箭',type:'pierce',base:52,mp:12,desc:'無視目標防禦'},
-      {name:'毒箭',type:'poison',base:20,mp:10,desc:'攻擊+中毒3回合'},
-    ]},
-  cleric:{id:'cleric',name:'莉莉亞',title:'聖光祭司',icon:'✨',color:'#f39c12',
-    maxHp:95,maxMp:70,baseAtk:16,baseDef:14,atk:16,def:14,
-    skills:[
-      {name:'聖光衝擊',type:'dmg',base:20,mp:0,desc:'神聖能量攻擊'},
-      {name:'治癒術',type:'heal',base:50,mp:15,desc:'為HP最低的夥伴治療'},
-      {name:'聖域爆發',type:'aoe',base:26,mp:20,desc:'對所有敵人造成神聖傷害'},
-      {name:'祝福之光',type:'healall',base:22,mp:12,desc:'為所有存活夥伴治療'},
-    ]},
-  rogue:{id:'rogue',name:'凱爾',title:'暗影刺客',icon:'🗡️',color:'#9b59b6',
-    maxHp:78,maxMp:30,baseAtk:42,baseDef:8,atk:42,def:8,
-    skills:[
-      {name:'快速刺擊',type:'dmg',base:38,mp:0,desc:'快速近身攻擊'},
-      {name:'背刺',type:'crit',base:70,mp:10,desc:'致命一擊，無視部分防禦'},
-      {name:'煙霧彈',type:'blind',base:0,mp:8,desc:'使目標致盲3回合'},
-      {name:'暗影爆裂',type:'dmg',base:60,mp:15,desc:'強力暗影能量攻擊'},
-    ]},
-  witch:{id:'witch',name:'皮普',title:'奧術巫女',icon:'🔮',color:'#e74c3c',
-    maxHp:68,maxMp:80,baseAtk:22,baseDef:8,atk:22,def:8,
-    skills:[
-      {name:'火焰箭',type:'dmg',base:48,mp:8,desc:'精準火系魔法攻擊'},
-      {name:'寒冰風暴',type:'aoe_slow',base:30,mp:15,desc:'範圍冰系攻擊+減速3回合'},
-      {name:'隕石術',type:'aoe',base:62,mp:28,desc:'毀滅性大範圍魔法'},
-      {name:'閃電鏈',type:'dmg',base:55,mp:18,desc:'穿透性雷電攻擊'},
-    ]},
-};
-
-const CD = { // Companions Data
-  knight:{id:'knight',name:'阿德里克',title:'鐵壁騎士',icon:'⚔️',color:'#2e9fd8',
-    baseHp:120,baseMp:25,baseAtk:22,baseDef:18,recruitCost:80,
-    skills:[
+    ],
+    compSkills:[
       {name:'劍擊',type:'dmg',base:26,mp:0,desc:'基本攻擊'},
       {name:'盾牌衝撞',type:'dmg_stun',base:18,mp:5,desc:'攻擊+眩暈'},
       {name:'鐵壁防禦',type:'defend',base:0,mp:6,desc:'降低受傷害'},
     ]},
   archer:{id:'archer',name:'希薇拉',title:'精靈遊俠',icon:'🏹',color:'#2ecc71',
+    maxHp:85,maxMp:35,baseAtk:34,baseDef:10,atk:34,def:10,
     baseHp:75,baseMp:30,baseAtk:30,baseDef:8,recruitCost:90,
-    skills:[
+    heroSkills:[
+      {name:'箭矢射擊',type:'dmg',base:33,mp:0,desc:'精準弓箭攻擊'},
+      {name:'連射',type:'multi',base:17,hits:2,mp:8,desc:'連射2支箭矢'},
+      {name:'穿甲箭',type:'pierce',base:52,mp:12,desc:'無視目標防禦'},
+      {name:'毒箭',type:'poison',base:20,mp:10,desc:'攻擊+中毒3回合'},
+    ],
+    compSkills:[
       {name:'箭矢射擊',type:'dmg',base:30,mp:0,desc:'精準射擊'},
       {name:'穿甲箭',type:'pierce',base:48,mp:12,desc:'無視防禦'},
       {name:'連射',type:'multi',base:17,hits:2,mp:8,desc:'連射2箭'},
     ]},
   cleric:{id:'cleric',name:'莉莉亞',title:'聖光祭司',icon:'✨',color:'#f39c12',
+    maxHp:95,maxMp:70,baseAtk:16,baseDef:14,atk:16,def:14,
     baseHp:85,baseMp:65,baseAtk:14,baseDef:12,recruitCost:100,
-    skills:[
+    heroSkills:[
+      {name:'聖光衝擊',type:'dmg',base:20,mp:0,desc:'神聖能量攻擊'},
+      {name:'治癒術',type:'heal',base:50,mp:15,desc:'為HP最低的夥伴治療'},
+      {name:'聖域爆發',type:'aoe',base:26,mp:20,desc:'對所有敵人造成神聖傷害'},
+      {name:'祝福之光',type:'healall',base:22,mp:12,desc:'為所有存活夥伴治療'},
+    ],
+    compSkills:[
       {name:'聖光衝擊',type:'dmg',base:18,mp:0,desc:'神聖攻擊'},
       {name:'治癒術',type:'comp_heal',base:42,mp:15,desc:'治療HP最低夥伴'},
       {name:'祝福之光',type:'healall',base:20,mp:12,desc:'治療所有夥伴'},
     ]},
   rogue:{id:'rogue',name:'凱爾',title:'暗影刺客',icon:'🗡️',color:'#9b59b6',
+    maxHp:78,maxMp:30,baseAtk:42,baseDef:8,atk:42,def:8,
     baseHp:70,baseMp:25,baseAtk:38,baseDef:6,recruitCost:85,
-    skills:[
+    heroSkills:[
+      {name:'快速刺擊',type:'dmg',base:38,mp:0,desc:'快速近身攻擊'},
+      {name:'背刺',type:'crit',base:70,mp:10,desc:'致命一擊，無視部分防禦'},
+      {name:'煙霧彈',type:'blind',base:0,mp:8,desc:'使目標致盲3回合'},
+      {name:'暗影爆裂',type:'dmg',base:60,mp:15,desc:'強力暗影能量攻擊'},
+    ],
+    compSkills:[
       {name:'快速刺擊',type:'dmg',base:36,mp:0,desc:'快速攻擊'},
       {name:'背刺',type:'crit',base:68,mp:10,desc:'致命一擊'},
       {name:'煙霧彈',type:'blind',base:0,mp:8,desc:'致盲目標'},
     ]},
   witch:{id:'witch',name:'皮普',title:'奧術巫女',icon:'🔮',color:'#e74c3c',
+    maxHp:68,maxMp:80,baseAtk:22,baseDef:8,atk:22,def:8,
     baseHp:60,baseMp:70,baseAtk:20,baseDef:6,recruitCost:95,
-    skills:[
+    heroSkills:[
+      {name:'魔法彈',type:'dmg',base:28,mp:0,desc:'基本魔法攻擊（免費）'},
+      {name:'火焰箭',type:'dmg',base:48,mp:8,desc:'精準火系魔法攻擊'},
+      {name:'寒冰風暴',type:'aoe_slow',base:30,mp:15,desc:'範圍冰系攻擊+減速3回合'},
+      {name:'隕石術',type:'aoe',base:62,mp:28,desc:'毀滅性大範圍魔法'},
+      {name:'閃電鏈',type:'dmg',base:55,mp:18,desc:'穿透性雷電攻擊'},
+    ],
+    compSkills:[
+      {name:'魔法彈',type:'dmg',base:24,mp:0,desc:'基本魔法攻擊（免費）'},
       {name:'火焰箭',type:'dmg',base:44,mp:8,desc:'火系魔法'},
       {name:'寒冰風暴',type:'aoe_slow',base:28,mp:15,desc:'範圍攻擊+減速'},
       {name:'治癒魔法',type:'comp_heal',base:30,mp:14,desc:'治療夥伴'},
     ]},
 };
+// 從 CHARS 衍生 HD(主角) 和 CD(夥伴)，向下相容
+const HD = Object.fromEntries(Object.entries(CHARS).map(([k,v])=>[k,{...v,skills:v.heroSkills}]));
+const CD = Object.fromEntries(Object.entries(CHARS).map(([k,v])=>[k,{...v,skills:v.compSkills}]));
 
 const ENEMIES = {
-  goblin:{id:'goblin',name:'哥布林',icon:'👺',hp:90,atk:14,def:2,rarity:'common',gold:15,exp:20},
-  imp:{id:'imp',name:'魔族小鬼',icon:'😈',hp:70,atk:18,def:1,rarity:'common',gold:12,exp:18},
-  shadow_assassin:{id:'shadow_assassin',name:'暗影殺手',icon:'🕷️',hp:80,atk:24,def:4,rarity:'uncommon',gold:22,exp:35},
-  werewolf:{id:'werewolf',name:'狼人',icon:'🐺',hp:150,atk:26,def:8,rarity:'uncommon',gold:32,exp:48},
-  bandit:{id:'bandit',name:'惡意盜賊',icon:'🗡️',hp:100,atk:20,def:5,rarity:'common',gold:20,exp:28},
+  goblin:{id:'goblin',name:'哥布林',icon:'👺',hp:68,atk:11,def:2,rarity:'common',gold:15,exp:20},
+  imp:{id:'imp',name:'魔族小鬼',icon:'😈',hp:52,atk:14,def:1,rarity:'common',gold:12,exp:18},
+  shadow_assassin:{id:'shadow_assassin',name:'暗影殺手',icon:'🕷️',hp:70,atk:19,def:4,rarity:'uncommon',gold:22,exp:35},
+  werewolf:{id:'werewolf',name:'狼人',icon:'🐺',hp:120,atk:22,def:8,rarity:'uncommon',gold:32,exp:48},
+  bandit:{id:'bandit',name:'惡意盜賊',icon:'🗡️',hp:78,atk:16,def:5,rarity:'common',gold:20,exp:28},
   ancient_mummy:{id:'ancient_mummy',name:'古代木乃伊',icon:'💀',hp:120,atk:17,def:12,rarity:'elite',gold:38,exp:58},
   troll:{id:'troll',name:'山嶺巨魔',icon:'👹',hp:210,atk:29,def:13,rarity:'elite',gold:42,exp:68},
   flame_elemental:{id:'flame_elemental',name:'火焰元素',icon:'🔥',hp:130,atk:31,def:6,rarity:'uncommon',gold:36,exp:55},
@@ -465,24 +686,190 @@ const ENEMY_IMGS = {
   sorcerer:        BASE_IMG+'necromancer.png',
   dragon_sakaso:   BASE_IMG+'abyss_dragon.png',
 };
-function heroImg(id){return `<img src="${HERO_IMGS[id]}" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.8))" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;font-size:2.4rem;align-items:center;justify-content:center;width:100%;height:100%">${HD[id].icon}</span>`;}
-function enemyImg(id){const src=ENEMY_IMGS[id]||'';if(!src)return `<span style="font-size:2.4rem">${ENEMIES[id]?.icon||'👹'}</span>`;return `<img src="${src}" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.8))" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;font-size:2.4rem;align-items:center;justify-content:center;width:100%;height:100%">${ENEMIES[id]?.icon||'👹'}</span>`;}
+const IMG_SRCS = {...HERO_IMGS, ...ENEMY_IMGS};
+function charImg(id, size='100%', extra=''){
+  const src=IMG_SRCS[id]||'';
+  const fb=(CHARS[id]||ENEMIES[id])?.icon||'❓';
+  return src
+    ? `<img src="${src}" style="width:${size};height:${size};object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.8))${extra?' '+extra:''}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;font-size:2.4rem;align-items:center;justify-content:center;width:100%;height:100%">${fb}</span>`
+    : `<span style="font-size:2.4rem">${fb}</span>`;
+}
+function heroImg(id){return charImg(id);}
+function enemyImg(id){return charImg(id);}
 
 
-const WAVES = [
-  {loc:'幽暗森林入口',  enemies:['goblin','goblin'],
-   intro:'踏入森林的瞬間，兩個紅眼哥布林嗥叫著從樹叢中衝出，爪牙閃著寒光！'},
-  {loc:'廢棄村莊廢墟', enemies:['bandit','shadow_assassin'],
-   intro:'廢棄村莊的陰影中，盜賊集團和暗影殺手設下了致命埋伏！'},
-  {loc:'古代遺跡', enemies:['ancient_mummy','werewolf'],
-   intro:'月光照耀下，古老詛咒喚醒了木乃伊，潛伏的狼人也從黑暗中撲出！'},
-  {loc:'火山溶洞', enemies:['troll','flame_elemental','goblin'],
-   intro:'熾熱岩漿的光芒映照出三個身影——山嶺巨魔、火焰元素、還有一個哥布林！'},
-  {loc:'黑暗法師之塔', enemies:['sorcerer'],
-   intro:'邪氣瀰漫的高塔頂端，黑暗法師莫拉斯雙眸閃著詭異紫光，古老的邪術已蓄勢待發！'},
-  {loc:'深淵龍穴',     enemies:['dragon_sakaso'],
-   intro:'大地顫抖，遮天巨翼帶來漫天黑暗——深淵暗龍沙卡索終於現身，命運的最終決戰即將開始！'},
+// 每個區域含 5 個關卡（battle），每個關卡有 enemies + intro
+const AREAS = [
+  {loc:'幽暗森林', bgIdx:0, battles:[
+    {enemies:['goblin','goblin'],           intro:'兩個哥布林從樹叢中嗥叫著衝出！'},
+    {enemies:['goblin','imp'],              intro:'又一波小怪從陰影中竄出，眼神兇狠！'},
+    {enemies:['imp','bandit'],              intro:'森林深處的盜賊與惡鬼聯手堵截！'},
+    {enemies:['shadow_assassin'],           intro:'一道黑影閃過——暗影殺手已鎖定你！'},
+    {enemies:['bandit','goblin'],           intro:'森林守關，頭目盜賊帶著哥布林衝出！'},
+  ]},
+  {loc:'廢棄村莊', bgIdx:1, battles:[
+    {enemies:['bandit','bandit'],           intro:'兩個惡意盜賊從廢墟裡跳出來！'},
+    {enemies:['shadow_assassin','goblin'],  intro:'殺手帶著小嘍囉設下埋伏！'},
+    {enemies:['imp','imp','imp'],           intro:'三隻惡鬼同時從地底冒出！'},
+    {enemies:['bandit','shadow_assassin'],  intro:'盜賊頭目與暗影殺手聯手出擊！'},
+    {enemies:['werewolf'],                  intro:'滿月之夜，一聲長嚎——狼人現身！'},
+  ]},
+  {loc:'古代遺跡', bgIdx:2, battles:[
+    {enemies:['ancient_mummy'],             intro:'古老詛咒喚醒了木乃伊，它緩緩向你走來！'},
+    {enemies:['goblin','ancient_mummy'],    intro:'哥布林與木乃伊同時逼近！'},
+    {enemies:['werewolf'],                  intro:'狼人從遺跡陰影中猛然撲出！'},
+    {enemies:['ancient_mummy','imp'],       intro:'兩個不死生物聯合守衛遺跡！'},
+    {enemies:['werewolf','shadow_assassin'],intro:'遺跡守衛——狼人與殺手的雙重威脅！'},
+  ]},
+  {loc:'火山溶洞', bgIdx:3, battles:[
+    {enemies:['flame_elemental'],           intro:'熔岩中誕生的火焰元素擋住去路！'},
+    {enemies:['troll'],                     intro:'山嶺巨魔抄起石塊砸向你！'},
+    {enemies:['flame_elemental','goblin'],  intro:'火焰元素帶著哥布林前來阻攔！'},
+    {enemies:['troll','imp'],               intro:'巨魔與惡鬼守衛洞穴深處！'},
+    {enemies:['troll','flame_elemental'],   intro:'終極熔岩衛兵——巨魔與火焰元素同時出現！'},
+  ]},
+  {loc:'黑暗法師之塔', bgIdx:4, battles:[
+    {enemies:['sorcerer'],                  intro:'法師塔一層，黑暗法師的弟子出現了！'},
+    {enemies:['werewolf','ancient_mummy'],  intro:'法師召喚出兩個守衛！'},
+    {enemies:['flame_elemental','troll'],   intro:'強力守衛：火焰元素與山嶺巨魔！'},
+    {enemies:['sorcerer'],                  intro:'終於，黑暗法師莫拉斯親自出手！'},
+    {enemies:['sorcerer'],                  intro:'莫拉斯怒吼：還有下一個！再度發動猛攻！'},
+  ]},
+  {loc:'深淵龍穴', bgIdx:5, battles:[
+    {enemies:['troll','flame_elemental'],   intro:'龍穴入口守衛——雙敵嚴陣以待！'},
+    {enemies:['werewolf','sorcerer'],       intro:'龍僕狼人與黑暗法師聯手阻擊！'},
+    {enemies:['troll','troll'],             intro:'兩個山嶺巨魔把守龍穴深處！'},
+    {enemies:['sorcerer'],                  intro:'深淵法師傾盡全力發動最後魔法！'},
+    {enemies:['dragon_sakaso'],             intro:'大地顫抖，遮天巨翼——深淵暗龍沙卡索終於現身！'},
+  ]},
 ];
+// 展開為 WAVES（向下相容，每個 battle = 一個 wave）
+const WAVES = AREAS.flatMap((area, ai) =>
+  area.battles.map((b, bi) => ({
+    loc: area.loc + (bi===0?'':' '+'①②③④⑤'[bi]),
+    enemies: b.enemies,
+    intro: b.intro,
+    areaIdx: ai,
+    battleIdx: bi,
+    bgIdx: area.bgIdx,
+    isLastBattle: bi === area.battles.length - 1,
+  }))
+);
+
+
+
+// Wave background images (GitHub raw URLs + fallback to embedded CSS for wave 5+)
+const REPO = 'https://raw.githubusercontent.com/language2816/rpg-assets/ede72930049aae276bc0c135895a96896d69c76a/cave/';
+const WAVE_BGS = [
+  REPO + 'bg_forest.png',    // wave 1: 幽暗森林
+  REPO + 'bg_mountain.png',  // wave 2: 廢棄村莊
+  REPO + 'bg_cave.png',      // wave 3: 古代遺跡
+  REPO + 'bg_ruins.png',     // wave 4: 火山溶洞
+  null,                       // wave 5+: CSS default (castle)
+  null,
+];
+
+// Add CSS for background transition
+(function(){
+  const s=document.createElement('style');
+  s.textContent='.bscene{transition:background-image .6s ease!important}.bg-fade-out{opacity:0!important;transition:opacity .3s ease!important}.bg-fade-in{opacity:1!important;transition:opacity .3s ease .3s!important}';
+  document.head.appendChild(s);
+})();
+
+function updateBattleBg(waveIdx){
+  // Use bgIdx from WAVES entry if available
+  const w = WAVES[waveIdx]; if(w && w.bgIdx!==undefined) waveIdx = w.bgIdx;
+  const el=document.getElementById('bscene');
+  if(!el)return;
+  const url=WAVE_BGS[waveIdx];
+  // 淡入淡出換背景
+  el.style.transition='opacity .25s ease';
+  el.style.opacity='0';
+  setTimeout(()=>{
+    if(url){
+      el.style.backgroundImage='url('+JSON.stringify(url)+')';
+      el.style.backgroundSize='cover';
+      el.style.backgroundPosition='center 50%';
+    }else{
+      // 恢復 CSS 預設（城堡背景）
+      el.style.backgroundImage='';
+      el.style.backgroundSize='';
+      el.style.backgroundPosition='';
+    }
+    el.style.opacity='1';
+  },250);
+}
+
+
+// ══════════════════════════════════════════════
+// BGM 音樂系統 — 每個地圖區域對應一首歌（循環播放）
+// ══════════════════════════════════════════════
+const MUSIC_BASE = 'https://raw.githubusercontent.com/language2816/rpg-assets/ede72930049aae276bc0c135895a96896d69c76a/cave/';
+const WAVE_MUSIC = [
+  MUSIC_BASE + 'magnific-ay-ay.mp3',                // wave 1: 幽暗森林
+  MUSIC_BASE + 'magnific-monsoon-of-the-heart.mp3', // wave 2: 廢棄村莊
+  MUSIC_BASE + 'magnific-quartz-calm.mp3',           // wave 3: 古代遺跡
+  MUSIC_BASE + 'magnific-electronic-ole.mp3',        // wave 4: 火山溶洞
+  MUSIC_BASE + 'magnific-warrior-spirit.mp3',        // wave 5+: 終章城堡
+  MUSIC_BASE + 'magnific-warrior-spirit.mp3',        // wave 6: 深淵龍穴（同上）
+];
+
+// 音樂播放器
+const BGM = (() => {
+  let audio = null;
+  let currentIdx = -1;
+  let userMuted = false;
+  let vol = 0.35;
+
+  function _create(url) {
+    if (audio) { audio.pause(); audio.src = ''; }
+    audio = new Audio();
+    audio.loop = true;
+    audio.volume = userMuted ? 0 : vol;
+    audio.src = url;
+    audio.play().catch(() => {});
+  }
+
+  return {
+    play(idx) {
+      // Map wave index to bgIdx for music
+      const _wv = typeof WAVES!=='undefined' && WAVES[idx];
+      if(_wv && _wv.bgIdx!==undefined) idx = _wv.bgIdx;
+      const url = WAVE_MUSIC[Math.min(idx, WAVE_MUSIC.length - 1)];
+      if (currentIdx === idx && audio && !audio.paused) return; // 同一首不重新播
+      currentIdx = idx;
+      _create(url);
+      _updateUI();
+    },
+    stop() {
+      if (audio) { audio.pause(); audio.currentTime = 0; }
+      currentIdx = -1;
+      _updateUI();
+    },
+    toggleMute() {
+      userMuted = !userMuted;
+      if (audio) audio.volume = userMuted ? 0 : vol;
+      _updateUI();
+    },
+    setVol(v) {
+      vol = v;
+      if (!userMuted && audio) audio.volume = v;
+    },
+    isMuted() { return userMuted; },
+    isPlaying() { return audio && !audio.paused; },
+    _updateUI() {
+      const btn = document.getElementById('bgm-toggle');
+      if (btn) btn.textContent = userMuted ? '🔇' : '🎵';
+      const trk = document.getElementById('bgm-track-name');
+      if (trk && currentIdx >= 0) {
+        const names = ['幽暗森林','廢棄村莊','古代遺跡','火山溶洞','終章決戰','深淵龍穴'];
+        trk.textContent = names[Math.min(currentIdx, names.length-1)];
+      } else if (trk) {
+        trk.textContent = '—';
+      }
+    }
+  };
+})();
 
 const ITEMS = {
   potion_hp:{id:'potion_hp',name:'生命藥水',icon:'🧪',type:'consumable',healHp:70,price:30,desc:'回復70 HP'},
@@ -514,6 +901,8 @@ let G = {
   inventory:[],gold:0,
   _prev:null,
   round:1,
+  pendingSkillIdx:null,  // selected skill waiting for confirm
+  skillDescIdx:null,    // skill whose desc panel is open
   stats:{dmg:0,heal:0,kills:0},
 };
 
@@ -623,34 +1012,14 @@ function applySkill(actorData, actorState, sk){
       floatDmg('-'+Math.round(tot/lv.length),true);animAttack(actorData.id===G.heroId,true);
       G.stats.dmg+=tot;break;
     }
-    case 'heal':{
-      const al=livingAllies();
-      if(!al.length)break;
-      const tgtA=al.reduce((a,b)=>{const aMax=a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;const bMax=b.type==='hero'?HD[G.heroId].maxHp:b.data.baseHp;return(a.state.hp/aMax<b.state.hp/bMax)?a:b;});
-      const amt=Math.round(sk.base+actorData.atk*0.4);
-      const maxH=tgtA.type==='hero'?HD[G.heroId].maxHp:tgtA.data.baseHp;
-      tgtA.state.hp=Math.min(maxH,tgtA.state.hp+amt);
-      addLog('💚 '+actorData.name+'【治癒術】→'+tgtA.data.name+' +'+amt,'ll-heal');
-      floatDmg('+'+amt,false,false,true);
-      G.stats.heal+=amt;break;
-    }
-    case 'healall':{
-      const amt=Math.round(sk.base+actorData.atk*0.3);
-      livingAllies().forEach(a=>{const mh=a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;a.state.hp=Math.min(mh,a.state.hp+amt);});
-      addLog('💚 '+actorData.name+'【祝福之光】全體 +'+amt,'ll-heal');
-      floatDmg('+'+amt,false,false,true);
-      G.stats.heal+=amt;break;
-    }
-    case 'comp_heal':{
-      const al2=livingAllies();
-      if(!al2.length)break;
-      const tgtA2=al2.reduce((a,b)=>(a.state.hp/(a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp)<b.state.hp/(b.type==='hero'?HD[G.heroId].maxHp:b.data.baseHp))?a:b);
-      const amt2=Math.round(sk.base+actorData.atk*0.5);
-      const maxH2=tgtA2.type==='hero'?HD[G.heroId].maxHp:tgtA2.data.baseHp;
-      tgtA2.state.hp=Math.min(maxH2,tgtA2.state.hp+amt2);
-      addLog('💚 '+actorData.name+'【治癒術】→'+tgtA2.data.name+' +'+amt2,'ll-heal');
-      floatDmg('+'+amt2,false,false,true);
-      G.stats.heal+=amt2;break;
+    case 'heal':case 'comp_heal':{
+      const al=livingAllies();if(!al.length)break;
+      const maxHp=a=>a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;
+      const tgtA=al.reduce((a,b)=>a.state.hp/maxHp(a)<b.state.hp/maxHp(b)?a:b);
+      const amt=Math.round(sk.base+actorData.atk*(sk.type==='comp_heal'?0.5:0.4));
+      tgtA.state.hp=Math.min(maxHp(tgtA),tgtA.state.hp+amt);
+      addLog('💚 '+actorData.name+'【'+sk.name+'】→'+tgtA.data.name+' +'+amt,'ll-heal');
+      floatDmg('+'+amt,false,false,true);G.stats.heal+=amt;break;
     }
     case 'defend':{
       if(!actorState.eff)actorState.eff={};actorState.eff.defending=1;
@@ -795,21 +1164,32 @@ function renderSelectScreen(){
 
 function renderStoryScreen(){
   const w=WAVES[G.waveIdx];
-  document.getElementById('story-loc').textContent=`第 ${G.waveIdx+1} 關 · ${w.loc}`;
+  const areaNum = (w.areaIdx||0)+1;
+  const battleNum = (w.battleIdx||0)+1;
+  document.getElementById('story-loc').textContent=`區域 ${areaNum}/6 · 關卡 ${battleNum}/5 · ${AREAS[w.areaIdx||0]?.loc||w.loc}`;
   // Enemy cards
   const erow=document.getElementById('story-enemies-row');
   erow.innerHTML=w.enemies.map(eid=>{
     const e=ENEMIES[eid];const r=RARITY_STYLE[e.rarity]||RARITY_STYLE.common;
     return`<div class="story-ecard">
-      <div class="story-eico">${e.icon}</div>
+      <div class="story-eico"><img src="${ENEMY_IMGS[eid]||''}" style="width:52px;height:52px;object-fit:contain;display:${ENEMY_IMGS[eid]?'block':'none'}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:${ENEMY_IMGS[eid]?'none':'flex'};font-size:2rem;align-items:center;justify-content:center">${e.icon}</span></div>
       <div class="story-ename">${e.name}</div>
       <div class="story-ebadge" style="color:${r.color};border-color:${r.border}">${r.label}</div>
       <div style="font-size:.6rem;color:var(--text3)">❤${e.hp} ⚔${e.atk}</div>
     </div>`;
   }).join('');
+  // Story text — set directly from intro (no API needed)
+  const stEl=document.getElementById('story-text');
+  if(stEl) stEl.textContent=w.intro||'';
+
   // Progress
   const pr=document.getElementById('progress-row');
-  pr.innerHTML=WAVES.map((_,i)=>`<div class="pdot ${i<G.waveIdx?'done':i===G.waveIdx?'cur':''}"></div>`).join('');
+  // Show area-level dots (6 areas), then battle-level dots within current area
+  const curArea = WAVES[G.waveIdx]?.areaIdx||0;
+  const curBattle = WAVES[G.waveIdx]?.battleIdx||0;
+  const areaDots = AREAS.map((_,ai)=>`<div class="pdot ${ai<curArea?'done':ai===curArea?'cur':''}"></div>`).join('');
+  const battleDots = Array.from({length:5},(_,bi)=>`<div class="pdot ${bi<curBattle?'done':bi===curBattle?'cur':''}"></div>`).join('');
+  pr.innerHTML = `<span style="font-size:.55rem;color:var(--text3);letter-spacing:1px;margin-right:4px">區域</span>${areaDots}<span style="font-size:.55rem;color:var(--text3);letter-spacing:1px;margin:0 4px">關卡</span>${battleDots}`;
 }
 
 // ══════════════════════════════════════════════
@@ -904,7 +1284,7 @@ function renderSprites(){
     html+=`<div class="sprite sp-enemy ${e.curHp<=0?'sp-dead':''}" id="sp-e${i}"
       style="${stylePos}">
       <div class="sp-ico" style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;${isTgt?'filter:drop-shadow(0 0 14px '+(RARITY_STYLE[e.rarity]?.color||'#fff')+')':''}">
-        ${enemyImg(e.id)}${isTgt?'<span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:.5rem;color:var(--gold)">▼目標</span>':''}
+        ${enemyImg(e.id)}${isTgt?'<span style="position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:1.4rem;color:#e74c3c;text-shadow:0 0 10px rgba(231,76,60,.9)">▼</span>':''}
       </div>
       <div class="sp-shadow"></div>
       <div class="sp-hpbar"><div class="sp-hpfill" style="width:${hpP}%;background:${hpColor(hpP)}"></div></div>
@@ -960,24 +1340,90 @@ function renderActionPanel(){
 
   at.innerHTML=`<span class="actor-ico">${actor.data.icon}</span><span class="actor-name" style="color:${color}">${actor.data.name}</span><span style="font-size:.58rem;color:var(--text3);margin-left:4px">的回合</span>`;
 
-  sa.innerHTML=`<div class="skills-grid">${skills.map((sk,i)=>`
-    <button class="sk-btn" onclick="W.useSkill(${i})" ${mp<sk.mp?'disabled':''}>
+  // Skill buttons (click to select, not immediate fire)
+  sa.innerHTML=`<div class="skills-grid">${skills.map((sk,i)=>{
+    const isPending=G.pendingSkillIdx===i;
+    const noMp=mp<sk.mp;
+    return `<button class="sk-btn${isPending?' selected':''}" onclick="W.selectSkill(${i})" ${noMp?'disabled':''}>
       <span class="sk-btn-name">${sk.name}</span>
       <span class="sk-btn-mp">${sk.mp===0?'無耗魔':'MP '+sk.mp}</span>
-    </button>`).join('')}</div>`;
+    </button>`;
+  }).join('')}</div>`;
 
-  // Target row (only for attack-type skills when multiple enemies)
-  const lv=livingEnemies();
-  if(lv.length>1){
-    ta.innerHTML=`<div class="target-row">
-      <span class="target-lbl">目標 ▸</span>
-      ${lv.map((e,i)=>`<button class="tgt-btn ${i===G.targetIdx?'sel':''}" onclick="W.selectTarget(${i})" ${e.curHp<=0?'disabled':''}>
-        ${e.icon}${e.name}
-      </button>`).join('')}
+  // Skill description panel (shown when a skill is selected)
+  const SKILL_TYPE_LABELS={dmg:'攻擊',taunt_dmg:'攻擊·嘲諷',dmg_stun:'攻擊+眩暈',multi:'連擊',
+    pierce:'穿甲',crit:'暴擊',aoe:'範圍攻擊',aoe_slow:'範圍+減速',heal:'治療夥伴',
+    comp_heal:'治療夥伴',healall:'全體治療',defend:'防禦',blind:'致盲',poison:'毒攻擊'};
+  let descHTML='';
+  if(G.pendingSkillIdx!==null&&skills[G.pendingSkillIdx]){
+    const psk=skills[G.pendingSkillIdx];
+    const typeLabel=SKILL_TYPE_LABELS[psk.type]||psk.type;
+    descHTML+=`<div class="sk-desc-panel">
+      <div class="sk-desc-name">${psk.name} <span style="font-size:.6rem;color:var(--text3)">[${typeLabel}]</span></div>
+      <div class="sk-desc-body">${psk.desc||'—'}<span class="sk-desc-mp">${psk.mp>0?'消耗 '+psk.mp+' MP':''}</span></div>
     </div>`;
-  }else{
-    ta.innerHTML='';
   }
+
+  // Confirm / cancel row (only when a skill is selected)
+  let confirmHTML='';
+  if(G.pendingSkillIdx!==null){
+    confirmHTML=`<div class="sk-confirm-row">
+      <button class="sk-confirm-btn" onclick="W.confirmSkill()">⚡ 確認行動</button>
+      <button class="sk-cancel-btn" onclick="W.cancelSkill()">✕</button>
+    </div>`;
+  }
+
+  // Ally target picker (when skill targets ally and multiple allies alive)
+  const al=livingAllies();
+  const allyTargetTypes=['heal','comp_heal'];
+  let allyPickHTML='';
+  if(G.pendingSkillIdx!==null&&skills[G.pendingSkillIdx]){
+    const psk=skills[G.pendingSkillIdx];
+    if(allyTargetTypes.includes(psk.type)&&al.length>1){
+      const label='💚 選擇治療目標';
+      allyPickHTML=`<div class="ally-pick-row">
+        <span class="ally-pick-label">${label}</span>
+        ${al.map(a=>{
+          const maxHp=a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;
+          const hpPct=Math.round(a.state.hp/maxHp*100);
+          const isSel=G.allyTarget===a.key;
+          return `<button class="ally-pick-btn${isSel?' sel':''}" onclick="W.selectAllyTarget('${a.key}')">
+            ${a.data.icon} ${a.data.name}
+            <span class="apb-hp">❤ ${a.state.hp|0}/${maxHp} (${hpPct}%)</span>
+          </button>`;
+        }).join('')}
+      </div>`;
+    }
+  }
+  // Item ally picker (pendingItem)
+  let itemAllyPickHTML='';
+  if(G.pendingItem!=null&&al.length>1){
+    itemAllyPickHTML=`<div class="ally-pick-row">
+      <span class="ally-pick-label">🧪 選擇使用對象</span>
+      ${al.map(a=>{
+        const maxHp=a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;
+        const hpPct=Math.round(a.state.hp/maxHp*100);
+        const isSel=G.allyTarget===a.key;
+        return `<button class="ally-pick-btn${isSel?' sel':''}" onclick="W.selectAllyTarget('${a.key}')">
+          ${a.data.icon} ${a.data.name}
+          <span class="apb-hp">❤ ${a.state.hp|0}/${maxHp} (${hpPct}%)</span>
+        </button>`;
+      }).join('')}
+      <button class="cancel-ally-btn" onclick="W.cancelAllyPick()">✕ 取消</button>
+    </div>`;
+  }
+
+  // Enemy target row (multiple enemies)
+  const lv=livingEnemies();
+  let enemyTargetHTML='';
+  if(lv.length>1){
+    enemyTargetHTML=`<div class="target-row">
+      <span class="target-lbl">目標 ▸</span>
+      ${lv.map((e,i)=>`<button class="tgt-btn ${i===G.targetIdx?'sel':''}" onclick="W.selectTarget(${i})" ${e.curHp<=0?'disabled':''}>${e.icon}${e.name}</button>`).join('')}
+    </div>`;
+  }
+
+  ta.innerHTML=descHTML+confirmHTML+allyPickHTML+itemAllyPickHTML+enemyTargetHTML;
 }
 
 function renderLog(){
@@ -1000,16 +1446,11 @@ const W = {
     G.party={hp:h.maxHp,mp:h.maxMp,eff:{},atkBonus:atkB,defBonus:defB};
     G.waveIdx=0;G.gold=0;G.inventory=[];G.companions=[];G.level=1;G.exp=0;G.expToLevel=100;
     G.stats={dmg:0,heal:0,kills:0};
-    await this.showStory();
+    this.showStory();
   },
 
-  async showStory(){
-    show('story');renderStoryScreen();
-    const w=WAVES[G.waveIdx];
-    const stEl=document.getElementById('story-text');
-    stEl.textContent='✦ 旁白生成中...';
-    stEl.textContent=w.intro;
-
+  showStory(){
+    show('story');renderStoryScreen();BGM.play(G.waveIdx);
   },
 
   startFight(){
@@ -1022,13 +1463,72 @@ const W = {
     G.turnQueue=buildTurnQueue();
     G.turnIdx=0;G.phase='player';G.round=1;G.log=[];
     addLog('⚔ 波次 '+(G.waveIdx+1)+' 開始！遭遇 '+G.enemies.map(e=>e.name).join('、'),'ll-turn');
-    show('combat');renderCombat();
+    show('combat');updateBattleBg(G.waveIdx);BGM.play(G.waveIdx);
+    const ml=document.getElementById('map-label');
+    if(ml)ml.textContent='📍 '+WAVES[G.waveIdx].loc;
+    renderCombat();
   },
 
   selectTarget(lvIdx){
     G.targetIdx=lvIdx;renderCombat();
   },
 
+  selectSkill(skillIdx){
+    if(G.phase!=='player')return;
+    // Toggle: click same skill again to deselect
+    if(G.pendingSkillIdx===skillIdx){
+      G.pendingSkillIdx=null;
+      renderCombat();return;
+    }
+    G.pendingSkillIdx=skillIdx;
+    G.allyTarget=null; // reset ally target when switching skill
+    renderCombat();
+  },
+
+  confirmSkill(){
+    if(G.phase!=='player'||G.pendingSkillIdx===null)return;
+    const actor=getActor();
+    if(!actor){G.phase='enemy';renderCombat();setTimeout(()=>W._doEnemyTurn(),700);return;}
+    const skillIdx=G.pendingSkillIdx;
+    const sk=actor.data.skills[skillIdx];
+    // If heal-type and multi-ally but no target picked yet -> just show picker (already shown)
+    const allyTargetTypes=['heal','comp_heal'];
+    const al=livingAllies();
+    if(allyTargetTypes.includes(sk.type)&&al.length>1&&!G.allyTarget){
+      // Flash the ally picker to hint user must pick
+      const row=document.querySelector('.ally-pick-row');
+      if(row){row.style.animation='none';row.offsetHeight;row.style.animation='';}
+      return;
+    }
+    G.pendingSkillIdx=null;
+    ensureValidTarget();
+    applySkill(actor.data,actor.state,sk);
+    G.allyTarget=null;
+    this._afterPlayerAction();
+  },
+
+  cancelSkill(){
+    G.pendingSkillIdx=null;G.skillDescIdx=null;G.allyTarget=null;
+    renderCombat();
+  },
+
+  selectAllyTarget(key){
+    G.allyTarget=key;
+    if(G.pendingItem!=null){
+      const invIdx=G.pendingItem;
+      G.pendingItem=null;
+      this._applyBagItem(invIdx);
+      return;
+    }
+    renderCombat();
+  },
+
+  cancelAllyPick(){
+    G.allyTarget=null;G.pendingItem=null;
+    renderCombat();
+  },
+
+  // Legacy alias kept for bag/ally paths
   useSkill(skillIdx){
     if(G.phase!=='player')return;
     const actor=getActor();if(!actor){G.phase='enemy';renderCombat();setTimeout(()=>W._doEnemyTurn(),700);return;}
@@ -1042,13 +1542,13 @@ const W = {
     // Check if all enemies dead
     if(!livingEnemies().length){
       renderCombat();
-      setTimeout(()=>W._waveVictory(),800);return;
+      setTimeout(function(){W._waveVictory();},800);return;
     }
     // Advance turn
     G.turnIdx++;
     const newActor=getActor();
+    G.pendingSkillIdx=null;G.skillDescIdx=null;
     if(!newActor){
-      // Enemy turn
       G.phase='enemy';renderCombat();
       setTimeout(()=>W._doEnemyTurn(),700);
     }else{
@@ -1062,20 +1562,21 @@ const W = {
     G.phase='player';
     G.turnQueue=buildTurnQueue();
     G.turnIdx=0;
+    G.pendingSkillIdx=null;G.skillDescIdx=null;
     // MP regen for companions
-    G.companions.forEach(c=>{if(c.hp>0)c.mp=Math.min(c.maxMp,c.mp+4);});
+    G.companions.forEach(c=>{if(c.hp>0)c.mp=Math.min(c.maxMp,c.mp+8);});
     // Slight MP regen for hero
-    G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+3);
+    G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+8);
     // Check if all allies dead
     if(G.party.hp<=0&&G.companions.every(c=>c.hp<=0)){
-      renderCombat();setTimeout(()=>W._gameOver(),800);return;
+      renderCombat();setTimeout(function(){W._gameOver();},800);return;
     }
     // If hero dead but companions alive, remove hero from queue
     if(G.party.hp<=0){G.turnQueue=buildTurnQueue();}
     renderCombat();
   },
 
-  async _waveVictory(){
+  _waveVictory(){
     // Collect gold & exp
     let earnedGold=0,earnedExp=0;
     G.enemies.forEach(e=>{
@@ -1088,32 +1589,45 @@ const W = {
     while(G.exp>=G.expToLevel){
       G.exp-=G.expToLevel;G.level++;G.expToLevel=Math.round(G.expToLevel*1.4);
       G.attributePoints=(G.attributePoints||0)+2;
-      lvTxt=` 【等級提升 Lv.${G.level}！】`;
+      lvTxt=' 【等級提升 Lv.'+G.level+'！】';
     }
+    // 記錄剛打完的那關
+    const justFinished = WAVES[G.waveIdx];
+    const completedArea = justFinished && justFinished.isLastBattle;
     G.waveIdx++;
     if(G.waveIdx>=WAVES.length){
-      // Win!
+      // 全部通關！
       document.getElementById('win-text').textContent='英雄們的名字將永遠銘刻在傳說之中。';
       document.getElementById('win-party').innerHTML=[
         {name:HD[G.heroId].name,icon:HD[G.heroId].icon,alive:G.party.hp>0},
         ...G.companions.map(c=>({name:CD[c.id].name,icon:CD[c.id].icon,alive:c.hp>0}))
-      ].map(h=>`<div class="win-hero ${h.alive?'':'dead'}">
-        <div style="font-size:2rem">${h.icon}</div>
-        <div>${h.name}</div>
-        <div style="font-size:.6rem;color:var(--text3)">${h.alive?'存活':'陣亡'}</div>
-      </div>`).join('');
+      ].map(h=>'<div class="win-hero '+(h.alive?'':'dead')+'"><div style="font-size:2rem">'+h.icon+'</div><div>'+h.name+'</div><div style="font-size:.6rem;color:var(--text3)">'+(h.alive?'存活':'陣亡')+'</div></div>').join('');
       show('win');return;
     }
-    // Wave clear
-    const wc=document.getElementById('wc-text');
-    if(wc)wc.textContent=`獲得 💰${earnedGold} 金幣、${earnedExp} 經驗值！${lvTxt} 下一關：${WAVES[G.waveIdx]?.loc||''}`;
+    const nextW = WAVES[G.waveIdx];
+    const wc = document.getElementById('wc-text');
+    const wcTitle = document.querySelector('#s-wclear .wc-title');
+    // 顯示/隱藏商店與招募按鈕
+    document.querySelectorAll('.area-only').forEach(el=>{
+      el.style.display = 'inline-block';
+    });
+    if(completedArea){
+      const areaNum = (justFinished.areaIdx||0)+1;
+      if(wcTitle) wcTitle.textContent = '✦ 區域 '+areaNum+' 完全清除！';
+      if(wc) wc.textContent = '獲得 💰'+earnedGold+' 金幣、'+earnedExp+' 經驗值！'+lvTxt+' 下一區域：'+(nextW?nextW.loc:'');
+    } else {
+      const battleNum = (nextW?nextW.battleIdx:0)+1;
+      if(wcTitle) wcTitle.textContent = '✦ 關卡清除！';
+      if(wc) wc.textContent = '關卡 '+battleNum+'/5 · 獲得 💰'+earnedGold+' 金幣、'+earnedExp+' 經驗值！'+lvTxt;
+    }
     show('wclear');
   },
 
   gNextWave(){this.showStory();},
 
-  async _gameOver(){
-    document.getElementById('over-text').textContent='英雄雖然倒下，但他的勇氣將永遠被世人銘記...';
+  _gameOver(){
+    const overEl = document.getElementById('over-text');
+    if(overEl) overEl.textContent='英雄雖然倒下，但他的勇氣將永遠被世人銘記...';
     show('over');
   },
 
@@ -1179,18 +1693,185 @@ const W = {
     this._renderShop();
   },
 
+  toggleBag(){
+    const p=document.getElementById('bag-panel');if(!p)return;
+    const vis=p.style.display==='block';
+    if(vis){p.style.display='none';}else{p.style.display='block';this._renderBagPanel();}
+  },
+  _renderBagPanel(){
+    const p=document.getElementById('bag-panel');if(!p)return;
+    const cons=G.inventory.filter(i=>i.type==='consumable');
+    if(!cons.length){p.innerHTML='<div style="font-size:.62rem;color:var(--text3);text-align:center;padding:6px 0">背包空空如也</div>';return;}
+    let html='<div style="font-family:Cinzel,serif;font-size:.65rem;color:var(--gold);margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--border)">🎒 使用道具</div>';
+    cons.forEach(function(it,ci){
+      html+='<div class="bag-item-row"><span style="font-size:.9rem">'+it.icon+'</span><div style="flex:1;font-size:.58rem;color:var(--text2);line-height:1.4">'+it.name+'<br><span style="color:var(--text3)">'+it.desc+'</span></div><button class="bag-use-btn" onclick="W.useBagItem('+ci+')">使用</button></div>';
+    });
+    p.innerHTML=html;
+  },
+  useBagItem(ci){
+    let cnt=0,invIdx=-1;
+    for(let i=0;i<G.inventory.length;i++){
+      if(G.inventory[i].type==='consumable'){if(cnt===ci){invIdx=i;break;}cnt++;}
+    }
+    if(invIdx<0)return;
+    const it=G.inventory[invIdx];
+    if(it.healHp){G.party.hp=Math.min(HD[G.heroId].maxHp,G.party.hp+it.healHp);addLog('🧪 使用【'+it.name+'】→ HP+'+it.healHp,'ll-heal');floatDmg('+'+it.healHp,false,false,true);}
+    if(it.healMp){G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+it.healMp);addLog('💧 使用【'+it.name+'】→ MP+'+it.healMp,'ll-buff');}
+    G.inventory.splice(invIdx,1);
+    document.getElementById('bag-panel').style.display='none';
+    renderCombat();
+  },
+
   restart(){
     Object.values(HD).forEach(h=>{h.atk=h.baseAtk;h.def=h.baseDef;});
     G={screen:'title',heroId:null,party:null,companions:[],waveIdx:0,enemies:[],
       turnQueue:[],turnIdx:0,targetIdx:0,phase:'player',log:[],story:'',loading:false,
       level:1,exp:0,expToLevel:100,attributePoints:0,inventory:[],gold:0,round:1,
-      _prev:null,stats:{dmg:0,heal:0,kills:0}};
-    show('title');
+      _prev:null,pendingSkillIdx:null,skillDescIdx:null,stats:{dmg:0,heal:0,kills:0}};
+    try{BGM.stop();}catch(e){} show('title');
   }
 };
 
+// Title particles
+(function(){
+  var c=document.getElementById('t-particles');
+  if(!c)return;
+  var cols=['#c9a84c','#f0d060','#fff8dc','#e0c068'];
+  for(var i=0;i<18;i++){
+    var s=document.createElement('div');
+    s.className='t-spark';
+    s.style.left=Math.random()*100+'%';
+    s.style.bottom=Math.random()*40+'%';
+    s.style.background=cols[Math.floor(Math.random()*cols.length)];
+    s.style.animationDelay=(Math.random()*4)+'s';
+    s.style.animationDuration=(3+Math.random()*3)+'s';
+    s.style.width=s.style.height=(1+Math.random()*2)+'px';
+    c.appendChild(s);
+  }
+})();
+
 // Init
 show('title');
+</script>
+
+<!-- BGM PLAYER -->
+<div id="bgm-player" style="display:none">
+  <button class="bgm-btn" id="bgm-toggle" title="播放/暫停">🎵</button>
+  <button class="bgm-btn" id="bgm-next" title="下一首">⏭</button>
+  <div>
+    <div class="bgm-info" id="bgm-title">載入中...</div>
+    <div class="bgm-track" id="bgm-track">01 / 04</div>
+  </div>
+  <input type="range" class="bgm-vol" id="bgm-vol" min="0" max="100" value="40" title="音量">
+</div>
+<audio id="bgm-audio" preload="auto"></audio>
+
+<script>
+// ══════════════════════════════════════════════
+// BGM MUSIC SYSTEM
+// ══════════════════════════════════════════════
+(function(){
+  var BASE = 'https://raw.githubusercontent.com/language2816/rpg-assets/ede72930049aae276bc0c135895a96896d69c76a/';
+  var tracks = [
+    { file: 'magnific-ay-ay.mp3',              name: 'Ay Ay' },
+    { file: 'magnific-electronic-ole.mp3',     name: 'Electronic Olé' },
+    { file: 'magnific-monsoon-of-the-heart.mp3',name: 'Monsoon of Heart' },
+    { file: 'magnific-quartz-calm.mp3',        name: 'Quartz Calm' }
+  ];
+  var idx = 0;
+  var audio = document.getElementById('bgm-audio');
+  var player = document.getElementById('bgm-player');
+  var btnToggle = document.getElementById('bgm-toggle');
+  var btnNext = document.getElementById('bgm-next');
+  var titleEl = document.getElementById('bgm-title');
+  var trackEl = document.getElementById('bgm-track');
+  var volEl = document.getElementById('bgm-vol');
+  var playing = false;
+  var started = false;
+
+  // Shuffle once at start
+  tracks.sort(function(){ return Math.random()-.5; });
+
+  function loadTrack(i){
+    idx = ((i % tracks.length) + tracks.length) % tracks.length;
+    audio.src = BASE + tracks[idx].file;
+    titleEl.textContent = tracks[idx].name;
+    trackEl.textContent = (idx+1<10?'0'+(idx+1):idx+1) + ' / 0' + tracks.length;
+    if(playing){ audio.play().catch(function(){}); }
+  }
+
+  function startBGM(){
+    if(started) return;
+    started = true;
+    player.style.display = 'flex';
+    audio.volume = (volEl.value||40)/100;
+    loadTrack(idx);
+    audio.play().then(function(){
+      playing = true;
+      btnToggle.textContent = '🔊';
+    }).catch(function(){
+      // autoplay blocked - show muted icon
+      playing = false;
+      btnToggle.textContent = '🔇';
+    });
+  }
+
+  audio.addEventListener('ended', function(){
+    loadTrack(idx+1);
+  });
+
+  btnToggle.addEventListener('click', function(){
+    if(playing){
+      audio.pause();
+      playing = false;
+      btnToggle.textContent = '🔇';
+    } else {
+      audio.play().then(function(){
+        playing = true;
+        btnToggle.textContent = '🔊';
+      }).catch(function(){});
+    }
+  });
+
+  btnNext.addEventListener('click', function(){
+    loadTrack(idx+1);
+    if(!playing){
+      audio.play().then(function(){
+        playing = true;
+        btnToggle.textContent = '🔊';
+      }).catch(function(){});
+    }
+  });
+
+  volEl.addEventListener('input', function(){
+    audio.volume = this.value/100;
+  });
+
+  // Hook into game start - trigger BGM when entering game (after title screen)
+  var origConfirmSelect = null;
+  var origShow = window.show || null;
+
+  // Override show function to detect screen changes
+  var _origShow = null;
+  document.addEventListener('DOMContentLoaded', function(){
+    // Patch W.confirmSelect to start BGM
+    if(typeof W !== 'undefined' && W.confirmSelect){
+      var orig = W.confirmSelect.bind(W);
+      W.confirmSelect = function(){
+        startBGM();
+        return orig.apply(this, arguments);
+      };
+    }
+    // Also patch show() globally
+    var origShow = window.show;
+    if(typeof origShow === 'function'){
+      window.show = function(id){
+        if(id && id !== 'title' && !started) startBGM();
+        return origShow.apply(this, arguments);
+      };
+    }
+  });
+})();
 </script>
 </body>
 </html>
