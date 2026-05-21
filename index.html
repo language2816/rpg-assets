@@ -377,68 +377,142 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
   animation:lvupAnim 2.5s ease forwards}
 @keyframes lvupAnim{0%{opacity:0;transform:translate(-50%,-60%)}15%{opacity:1;transform:translate(-50%,-50%)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-45%)}}
 
-/* ===== BGM 浮動音樂播放器 ===== */
-#bgm-widget{
-  position:fixed;bottom:14px;right:14px;z-index:999;
-  display:flex;align-items:center;gap:7px;
-  background:rgba(8,6,18,.88);
-  border:1px solid rgba(201,168,76,.35);
-  border-radius:20px;padding:6px 12px 6px 9px;
-  backdrop-filter:blur(8px);
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-  transition:border-color .2s;
-  font-family:'Noto Serif TC',serif;
-}
-#bgm-widget:hover{border-color:var(--gold);}
-#bgm-toggle{
-  background:none;border:none;cursor:pointer;
-  font-size:1rem;line-height:1;color:var(--gold);
-  width:22px;height:22px;display:flex;align-items:center;justify-content:center;
-  transition:transform .2s;flex-shrink:0;
-}
-#bgm-toggle:hover{transform:scale(1.2);}
-.bgm-meta{display:flex;flex-direction:column;gap:1px;min-width:60px;}
-.bgm-label{font-size:.48rem;color:var(--gold3);letter-spacing:1.5px;}
-#bgm-track-name{font-size:.55rem;color:var(--text2);letter-spacing:.5px;white-space:nowrap;}
-#bgm-vol{
-  width:52px;height:3px;-webkit-appearance:none;appearance:none;
-  background:var(--border2);border-radius:2px;cursor:pointer;outline:none;
-}
-#bgm-vol::-webkit-slider-thumb{
-  -webkit-appearance:none;width:9px;height:9px;
-  border-radius:50%;background:var(--gold3);cursor:pointer;
-}
-#bgm-vol::-webkit-slider-thumb:hover{background:var(--gold);}
-
 @media(max-width:480px){
   .hero-grid{grid-template-columns:repeat(3,1fr)}
   .bscene{height:360px}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
 }
 
-/* ===== BGM MUSIC PLAYER ===== */
-#bgm-player{
-  position:fixed;bottom:16px;right:16px;z-index:999;
-  display:flex;align-items:center;gap:8px;
-  background:rgba(8,6,18,.88);border:1px solid rgba(201,168,76,.4);
-  border-radius:24px;padding:6px 12px 6px 8px;
-  backdrop-filter:blur(8px);transition:all .3s;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
+/* ===== SETTINGS BUTTON (fixed top-right) ===== */
+#settings-btn{
+  position:fixed;top:14px;right:14px;z-index:1200;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(8,6,18,.78);border:1px solid rgba(201,168,76,.45);
+  color:var(--gold);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+  transition:all .25s;
+  box-shadow:0 2px 12px rgba(0,0,0,.4);
 }
-#bgm-player:hover{border-color:var(--gold);}
-.bgm-btn{background:none;border:none;cursor:pointer;padding:2px;
-  font-size:1rem;line-height:1;color:var(--gold);transition:transform .2s;
-  display:flex;align-items:center;justify-content:center;width:24px;height:24px;}
-.bgm-btn:hover{transform:scale(1.2)}
-.bgm-info{font-family:'Cinzel',serif;font-size:.55rem;color:var(--gold3);
-  letter-spacing:1px;max-width:110px;overflow:hidden;white-space:nowrap;
-  text-overflow:ellipsis;line-height:1.3}
-.bgm-track{font-size:.5rem;color:var(--text3);letter-spacing:.5px}
-.bgm-vol{width:56px;height:3px;-webkit-appearance:none;appearance:none;
-  background:var(--border2);border-radius:2px;cursor:pointer;outline:none;}
-.bgm-vol::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;
-  border-radius:50%;background:var(--gold3);cursor:pointer;}
-.bgm-vol::-webkit-slider-thumb:hover{background:var(--gold);}
+#settings-btn:hover{
+  border-color:var(--gold);
+  box-shadow:0 0 18px rgba(201,168,76,.3);
+  transform:rotate(30deg);
+}
+
+/* ===== SETTINGS MODAL ===== */
+#settings-modal{
+  display:none;
+  position:fixed;inset:0;z-index:1300;
+  align-items:flex-start;justify-content:flex-end;
+  padding:60px 14px 0;
+}
+#settings-modal.open{ display:flex; }
+#settings-backdrop{
+  position:absolute;inset:0;background:rgba(0,0,0,.55);
+  backdrop-filter:blur(2px);
+}
+#settings-panel{
+  position:relative;z-index:1;
+  background:rgba(10,8,24,.97);
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:8px;
+  width:290px;
+  padding:0;
+  box-shadow:0 8px 40px rgba(0,0,0,.7);
+  overflow:hidden;
+  animation:slideDown .22s ease;
+}
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.sp-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1rem;
+  border-bottom:1px solid rgba(201,168,76,.2);
+  background:rgba(201,168,76,.06);
+}
+.sp-title{
+  font-family:'Cinzel',serif;font-size:.8rem;color:var(--gold);letter-spacing:2px;
+}
+.sp-close{
+  background:none;border:none;color:var(--text2);cursor:pointer;
+  font-size:1rem;line-height:1;padding:2px 4px;transition:color .2s;
+}
+.sp-close:hover{color:var(--gold);}
+.sp-section{padding:.6rem 1rem;}
+.sp-section+.sp-section{border-top:1px solid rgba(255,255,255,.05);}
+.sp-sec-label{
+  font-size:.52rem;letter-spacing:3px;color:var(--gold3);
+  margin-bottom:.55rem;text-transform:uppercase;
+}
+.sp-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.55rem;gap:.5rem;
+}
+.sp-row:last-child{margin-bottom:0;}
+.sp-label{font-size:.72rem;color:var(--text2);}
+.sp-val{font-size:.68rem;color:var(--gold);min-width:28px;text-align:right;}
+/* slider */
+.sp-slider{
+  flex:1;height:3px;-webkit-appearance:none;appearance:none;
+  background:var(--border2);border-radius:2px;cursor:pointer;outline:none;
+  max-width:130px;
+}
+.sp-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:12px;height:12px;
+  border-radius:50%;background:var(--gold3);cursor:pointer;transition:background .15s;
+}
+.sp-slider::-webkit-slider-thumb:hover{background:var(--gold);}
+/* toggle switch */
+.sp-toggle{
+  position:relative;width:36px;height:18px;flex-shrink:0;
+}
+.sp-toggle input{opacity:0;width:0;height:0;}
+.sp-toggle-track{
+  position:absolute;inset:0;background:var(--border2);border-radius:9px;
+  cursor:pointer;transition:background .25s;
+}
+.sp-toggle input:checked+.sp-toggle-track{background:var(--gold3);}
+.sp-toggle-thumb{
+  position:absolute;top:2px;left:2px;
+  width:14px;height:14px;border-radius:50%;
+  background:#fff;transition:transform .25s;pointer-events:none;
+}
+.sp-toggle input:checked~.sp-toggle-thumb{transform:translateX(18px);}
+/* select */
+.sp-select{
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  color:var(--text2);font-size:.68rem;padding:2px 6px;border-radius:3px;
+  cursor:pointer;outline:none;
+}
+.sp-select:focus{border-color:var(--gold3);}
+/* BGM sub-row */
+.sp-bgm-row{
+  display:flex;align-items:center;gap:6px;margin-bottom:.45rem;
+}
+.sp-bgm-btn{
+  background:none;border:1px solid var(--border2);color:var(--gold);
+  font-size:.75rem;padding:2px 7px;cursor:pointer;border-radius:3px;
+  transition:all .2s;flex-shrink:0;
+}
+.sp-bgm-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.1);}
+.sp-bgm-name{font-size:.6rem;color:var(--text2);overflow:hidden;
+  white-space:nowrap;text-overflow:ellipsis;flex:1;}
+.sp-footer{
+  padding:.5rem 1rem .65rem;border-top:1px solid rgba(255,255,255,.05);
+  display:flex;gap:.5rem;
+}
+.sp-footer-btn{
+  flex:1;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:1px;
+  padding:.4rem .5rem;background:transparent;
+  border:1px solid var(--border2);color:var(--text2);cursor:pointer;
+  border-radius:3px;transition:all .2s;
+}
+.sp-footer-btn:hover{border-color:var(--gold3);color:var(--gold);}
+.sp-footer-btn.danger{border-color:rgba(192,57,43,.4);color:var(--red2);}
+.sp-footer-btn.danger:hover{border-color:var(--red2);background:rgba(192,57,43,.1);}
 
 /* ── Skill Select & Confirm ── */
 .sk-btn{position:relative;transition:all .15s}
@@ -453,14 +527,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
 .sk-cancel-btn{padding:.55rem .8rem;font-size:.72rem;background:transparent;
   border:1px solid var(--border2);color:var(--text3);cursor:pointer;transition:all .15s}
 .sk-cancel-btn:hover{border-color:var(--border);color:var(--text2)}
-/* Skill tooltip / description panel */
-.sk-desc-panel{background:rgba(8,6,18,.92);border:1px solid var(--border2);
-  padding:.5rem .7rem;margin-bottom:6px;border-left:2px solid var(--gold3);
-  animation:fadeIn .15s ease-out}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.sk-desc-name{font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold);margin-bottom:3px}
-.sk-desc-body{font-size:.62rem;color:var(--text2);line-height:1.6}
-.sk-desc-mp{color:var(--blue2);margin-left:8px}
+
 
 </style>
 </head>
@@ -532,7 +599,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
   <!-- Battle Scene -->
   <div class="bscene" id="bscene"><div class="map-label" id="map-label"></div>
     <div class="enemy-overlay" id="enemy-overlay"></div>
-    <div class="tgt-hint" id="tgt-hint">點選敵人卡片選擇目標</div>
+
     <button class="bag-btn" id="bag-btn" onclick="W.toggleBag()">🎒 背包</button>
     <div class="bag-panel" id="bag-panel"></div>
     <button class="equip-btn" id="equip-btn" onclick="W.toggleEquip()">⚔ 裝備</button>
@@ -564,6 +631,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
     <button class="btn-gold" onclick="W.gNextWave()">繼續前進 →</button>
     <button class="btn-gold area-only" style="border-color:rgba(46,204,113,.5);color:#2ecc71" onclick="W.openRecruit()">🤝 招募夥伴</button>
     <button class="btn-gold area-only" style="border-color:rgba(201,168,76,.5)" onclick="W.openShop()">🏪 商店</button>
+    <button class="btn-gold" style="border-color:rgba(156,39,176,.5);color:#ce93d8" onclick="W.openEvent()">🎲 隨機事件</button>
   </div>
 </div>
 
@@ -587,6 +655,21 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
   </div>
 </div>
 
+<!-- RANDOM EVENT -->
+<div id="s-event" class="screen">
+  <div class="modal-panel" style="min-height:100vh;display:flex;flex-direction:column">
+    <button class="modal-close" onclick="W.closeEvent()">← 返回</button>
+    <div class="modal-title" id="ev-title">🎲 隨機事件</div>
+    <div class="modal-sub" id="ev-loc"></div>
+    <div id="ev-scene" style="margin:1rem 0;padding:1rem;background:rgba(201,168,76,.04);border:1px solid var(--border);border-radius:4px;font-size:.85rem;line-height:2;color:var(--text);font-style:italic" id="ev-desc"></div>
+    <div id="ev-result" style="display:none;padding:.8rem 1rem;border-radius:4px;margin:0 0 1rem;font-size:.85rem;line-height:1.8"></div>
+    <div id="ev-choices" style="display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem"></div>
+    <div id="ev-continue" style="display:none;margin-top:1.5rem;text-align:center">
+      <button class="btn-gold" id="ev-continue-btn" onclick="W.finishEvent()">繼續旅途 →</button>
+    </div>
+  </div>
+</div>
+
 <!-- OVER -->
 <div id="s-over" class="screen">
   <div class="res-ico">💀</div>
@@ -604,19 +687,114 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif TC',serif;mi
   <button class="btn-gold" onclick="W.restart()">再次冒險 ✦</button>
 </div>
 
-
-<!-- BGM 音樂播放器 -->
-<div id="bgm-widget">
-  <button id="bgm-toggle" onclick="BGM.toggleMute()" title="靜音/開聲">🎵</button>
-  <div class="bgm-meta">
-    <div class="bgm-label">♪ 區域音樂</div>
-    <div id="bgm-track-name">—</div>
-  </div>
-  <input id="bgm-vol" type="range" min="0" max="1" step="0.05" value="0.35"
-    oninput="BGM.setVol(parseFloat(this.value))" title="音量">
-</div>
+<!-- BGM audio element -->
+<audio id="bgm-audio" preload="auto"></audio>
 
 </div><!-- #root -->
+
+<!-- ⚙ 設定按鈕 (右上角) -->
+<button id="settings-btn" onclick="SettingsUI.open()" title="設定">⚙</button>
+
+<!-- ⚙ 設定面板 -->
+<div id="settings-modal">
+  <div id="settings-backdrop" onclick="SettingsUI.close()"></div>
+  <div id="settings-panel">
+    <div class="sp-head">
+      <div class="sp-title">⚙ 遊戲設定</div>
+      <button class="sp-close" onclick="SettingsUI.close()">✕</button>
+    </div>
+
+    <!-- 音樂 -->
+    <div class="sp-section">
+      <div class="sp-sec-label">♪ 背景音樂</div>
+      <div class="sp-bgm-row">
+        <button class="sp-bgm-btn" id="sp-bgm-toggle" onclick="SettingsUI.toggleBGM()">▶</button>
+        <div class="sp-bgm-name" id="sp-bgm-name">—</div>
+        <button class="sp-bgm-btn" onclick="SettingsUI.nextTrack()">⏭</button>
+      </div>
+      <div class="sp-row">
+        <span class="sp-label">音量</span>
+        <input class="sp-slider" id="sp-bgm-vol" type="range" min="0" max="1" step="0.05" value="0.8"
+          oninput="SettingsUI.setBGMVol(this.value)">
+        <span class="sp-val" id="sp-bgm-vol-val">80%</span>
+      </div>
+    </div>
+
+    <!-- 音效 -->
+    <div class="sp-section">
+      <div class="sp-sec-label">🔔 音效</div>
+      <div class="sp-row">
+        <span class="sp-label">戰鬥音效</span>
+        <label class="sp-toggle">
+          <input type="checkbox" id="sp-sfx" checked onchange="SettingsUI.saveSetting('sfx',this.checked)">
+          <div class="sp-toggle-track"></div>
+          <div class="sp-toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- 畫面 -->
+    <div class="sp-section">
+      <div class="sp-sec-label">🖥 畫面</div>
+      <div class="sp-row">
+        <span class="sp-label">亮度</span>
+        <input class="sp-slider" id="sp-brightness" type="range" min="60" max="130" step="5" value="100"
+          oninput="SettingsUI.setBrightness(this.value)">
+        <span class="sp-val" id="sp-brightness-val">100%</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-label">戰鬥動畫</span>
+        <label class="sp-toggle">
+          <input type="checkbox" id="sp-anim" checked onchange="SettingsUI.saveSetting('anim',this.checked)">
+          <div class="sp-toggle-track"></div>
+          <div class="sp-toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- 遊戲 -->
+    <div class="sp-section">
+      <div class="sp-sec-label">⚔ 遊戲</div>
+      <div class="sp-row">
+        <span class="sp-label">戰鬥速度</span>
+        <select class="sp-select" id="sp-speed" onchange="SettingsUI.setSpeed(this.value)">
+          <option value="1">一般</option>
+          <option value="1.5">快速</option>
+          <option value="2">極速</option>
+        </select>
+      </div>
+      <div class="sp-row">
+        <span class="sp-label">字體大小</span>
+        <select class="sp-select" id="sp-fontsize" onchange="SettingsUI.setFontSize(this.value)">
+          <option value="14">小</option>
+          <option value="16" selected>中</option>
+          <option value="18">大</option>
+        </select>
+      </div>
+      <div class="sp-row">
+        <span class="sp-label">戰鬥日誌</span>
+        <label class="sp-toggle">
+          <input type="checkbox" id="sp-log" checked onchange="SettingsUI.saveSetting('log',this.checked)">
+          <div class="sp-toggle-track"></div>
+          <div class="sp-toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="sp-footer">
+      <button class="sp-footer-btn" onclick="SettingsUI.resetSettings()">還原預設</button>
+      <button class="sp-footer-btn danger" id="sp-restart-btn" onclick="SettingsUI.askRestart()">重新開始</button>
+      <div id="sp-restart-confirm" style="display:none;margin-top:8px;background:rgba(192,57,43,.15);border:1px solid #c0392b;border-radius:4px;padding:8px;text-align:center">
+        <div style="font-size:.7rem;color:#e74c3c;margin-bottom:6px">⚠ 確定要重新開始？進度將全部清除</div>
+        <div style="display:flex;gap:8px;justify-content:center">
+          <button class="sp-footer-btn danger" onclick="SettingsUI.close();W.restart()">確定重置</button>
+          <button class="sp-footer-btn" onclick="SettingsUI.cancelRestart()">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════════════
@@ -654,17 +832,17 @@ const CHARS = {
       {name:'連射',type:'multi',base:17,hits:2,mp:8,desc:'連射2箭'},
     ]},
   cleric:{id:'cleric',name:'莉莉亞',title:'聖光祭司',icon:'✨',color:'#f39c12',
-    maxHp:95,maxMp:70,baseAtk:16,baseDef:14,atk:16,def:14,
-    baseHp:85,baseMp:65,baseAtk:14,baseDef:12,recruitCost:100,
+    maxHp:100,maxMp:70,baseAtk:20,baseDef:14,atk:20,def:14,
+    baseHp:90,baseMp:65,baseAtk:18,baseDef:12,recruitCost:100,
     heroSkills:[
-      {name:'聖光衝擊',type:'dmg',base:20,mp:0,desc:'神聖能量攻擊'},
-      {name:'治癒術',type:'heal',base:50,mp:15,desc:'為HP最低的夥伴治療'},
+      {name:'聖光衝擊',type:'dmg',base:26,mp:0,desc:'神聖能量攻擊'},
+      {name:'治癒術',type:'heal',base:58,mp:15,desc:'為選擇的夥伴治療'},
       {name:'聖域爆發',type:'aoe',base:26,mp:20,desc:'對所有敵人造成神聖傷害'},
       {name:'祝福之光',type:'healall',base:22,mp:12,desc:'為所有存活夥伴治療'},
     ],
     compSkills:[
-      {name:'聖光衝擊',type:'dmg',base:18,mp:0,desc:'神聖攻擊'},
-      {name:'治癒術',type:'comp_heal',base:42,mp:15,desc:'治療HP最低夥伴'},
+      {name:'聖光衝擊',type:'dmg',base:24,mp:0,desc:'神聖攻擊'},
+      {name:'治癒術',type:'comp_heal',base:50,mp:15,desc:'治療HP最低夥伴'},
       {name:'祝福之光',type:'healall',base:20,mp:12,desc:'治療所有夥伴'},
     ]},
   rogue:{id:'rogue',name:'凱爾',title:'暗影刺客',icon:'🗡️',color:'#9b59b6',
@@ -688,8 +866,8 @@ const CHARS = {
       {name:'魔法彈',type:'dmg',base:28,mp:0,desc:'基本魔法攻擊（免費）'},
       {name:'火焰箭',type:'dmg',base:48,mp:8,desc:'精準火系魔法攻擊'},
       {name:'寒冰風暴',type:'aoe_slow',base:30,mp:15,desc:'範圍冰系攻擊+減速3回合'},
-      {name:'隕石術',type:'aoe',base:62,mp:28,desc:'毀滅性大範圍魔法'},
-      {name:'閃電鏈',type:'dmg',base:55,mp:18,desc:'穿透性雷電攻擊'},
+      {name:'隕石術',type:'aoe',base:68,mp:28,desc:'毀滅性大範圍魔法'},
+      {name:'閃電鏈',type:'dmg',base:60,mp:18,desc:'穿透性雷電攻擊'},
     ],
     compSkills:[
       {name:'魔法彈',type:'dmg',base:24,mp:0,desc:'基本魔法攻擊（免費）'},
@@ -698,18 +876,18 @@ const CHARS = {
       {name:'治癒魔法',type:'comp_heal',base:30,mp:14,desc:'治療夥伴'},
     ]},
   bard:{id:'bard',name:'艾莉絲',title:'吟遊詩人',icon:'🎵',color:'#e91e8c',
-    maxHp:80,maxMp:90,baseAtk:14,baseDef:10,atk:14,def:10,
-    baseHp:72,baseMp:80,baseAtk:12,baseDef:8,recruitCost:90,
+    maxHp:85,maxMp:90,baseAtk:19,baseDef:10,atk:19,def:10,
+    baseHp:76,baseMp:80,baseAtk:16,baseDef:8,recruitCost:90,
     heroSkills:[
-      {name:'琴弦刺擊',type:'dmg',base:20,mp:0,desc:'以旋律為刃，基本攻擊'},
-      {name:'英雄讚歌',type:'buff_atk',base:0,mp:10,desc:'為全體存活隊友提升攻擊力+12，持續3回合'},
-      {name:'守護樂章',type:'buff_def',base:0,mp:10,desc:'為全體存活隊友提升防禦力+10，持續3回合'},
-      {name:'激昂戰歌',type:'buff_atk_all',base:0,mp:18,desc:'強力戰歌！全體隊友攻擊+20，持續2回合'},
+      {name:'琴弦刺擊',type:'dmg',base:28,mp:0,desc:'以旋律為刃，基本攻擊'},
+      {name:'英雄讚歌',type:'buff_atk',buffAmt:15,turns:3,base:0,mp:10,desc:'為選擇的隊友提升攻擊力+15，持續3回合'},
+      {name:'守護樂章',type:'buff_def',buffAmt:14,turns:3,base:0,mp:10,desc:'為選擇的隊友提升防禦力+14，持續3回合'},
+      {name:'激昂戰歌',type:'buff_atk_all',buffAmt:22,turns:2,base:0,mp:18,desc:'強力戰歌！全體隊友攻擊+22，持續2回合'},
     ],
     compSkills:[
-      {name:'琴弦刺擊',type:'dmg',base:18,mp:0,desc:'基本攻擊'},
-      {name:'英雄讚歌',type:'buff_atk',base:0,mp:10,desc:'全體隊友攻擊+12，持續3回合'},
-      {name:'守護樂章',type:'buff_def',base:0,mp:10,desc:'全體隊友防禦+10，持續3回合'},
+      {name:'琴弦刺擊',type:'dmg',base:24,mp:0,desc:'基本攻擊'},
+      {name:'英雄讚歌',type:'buff_atk',buffAmt:14,turns:3,base:0,mp:10,desc:'全體隊友攻擊+14，持續3回合'},
+      {name:'守護樂章',type:'buff_def',buffAmt:12,turns:3,base:0,mp:10,desc:'全體隊友防禦+12，持續3回合'},
     ]},
   necromancer:{id:'necromancer',name:'薩魯斯',title:'死靈術士',icon:'💀',color:'#7c4dff',
     maxHp:72,maxMp:85,baseAtk:20,baseDef:7,atk:20,def:7,
@@ -717,8 +895,8 @@ const CHARS = {
     heroSkills:[
       {name:'死靈彈',type:'dmg',base:26,mp:0,desc:'黑暗能量攻擊（免費）'},
       {name:'詛咒凋零',type:'curse',base:0,mp:12,desc:'詛咒目標，每回合流失HP，持續4回合'},
-      {name:'亡靈衝擊',type:'aoe',base:34,mp:18,desc:'範圍黑暗攻擊所有敵人'},
-      {name:'死亡汲取',type:'drain',base:40,mp:14,desc:'吸取目標生命值，恢復自身HP'},
+      {name:'亡靈衝擊',type:'aoe',base:40,mp:18,desc:'範圍黑暗攻擊所有敵人'},
+      {name:'死亡汲取',type:'drain',base:46,mp:14,desc:'吸取目標生命值，恢復自身HP'},
     ],
     compSkills:[
       {name:'死靈彈',type:'dmg',base:24,mp:0,desc:'黑暗攻擊（免費）'},
@@ -726,18 +904,18 @@ const CHARS = {
       {name:'死亡汲取',type:'drain',base:36,mp:14,desc:'吸取生命'},
     ]},
   alchemist:{id:'alchemist',name:'葛雷斯',title:'煉金術師',icon:'⚗️',color:'#00bfa5',
-    maxHp:88,maxMp:75,baseAtk:16,baseDef:13,atk:16,def:13,
-    baseHp:80,baseMp:65,baseAtk:14,baseDef:11,recruitCost:100,
+    maxHp:92,maxMp:75,baseAtk:20,baseDef:13,atk:20,def:13,
+    baseHp:84,baseMp:65,baseAtk:18,baseDef:11,recruitCost:100,
     heroSkills:[
-      {name:'酸液投擲',type:'dmg',base:22,mp:0,desc:'投擲腐蝕性酸液攻擊'},
-      {name:'強化藥劑',type:'buff_atk',base:0,mp:12,desc:'為HP最低的隊友注入力量藥劑，攻擊+15，持續3回合'},
-      {name:'護盾靈藥',type:'buff_def',base:0,mp:12,desc:'為HP最低的隊友塗抹防護靈藥，防禦+14，持續3回合'},
+      {name:'酸液投擲',type:'dmg',base:30,mp:0,desc:'投擲腐蝕性酸液攻擊'},
+      {name:'強化藥劑',type:'buff_atk',buffAmt:18,turns:3,base:0,mp:12,desc:'為選擇的隊友注入力量藥劑，攻擊+18，持續3回合'},
+      {name:'護盾靈藥',type:'buff_def',buffAmt:17,turns:3,base:0,mp:12,desc:'為選擇的隊友塗抹防護靈藥，防禦+17，持續3回合'},
       {name:'萬能藥水',type:'healall_buff',base:18,mp:20,desc:'為全體隊友恢復HP並提升攻擊+8，持續2回合'},
     ],
     compSkills:[
-      {name:'酸液投擲',type:'dmg',base:20,mp:0,desc:'酸液攻擊'},
-      {name:'強化藥劑',type:'buff_atk',base:0,mp:12,desc:'為HP最低隊友攻擊+15，持續3回合'},
-      {name:'護盾靈藥',type:'buff_def',base:0,mp:12,desc:'為HP最低隊友防禦+14，持續3回合'},
+      {name:'酸液投擲',type:'dmg',base:26,mp:0,desc:'酸液攻擊'},
+      {name:'強化藥劑',type:'buff_atk',buffAmt:16,turns:3,base:0,mp:12,desc:'為HP最低隊友攻擊+16，持續3回合'},
+      {name:'護盾靈藥',type:'buff_def',buffAmt:15,turns:3,base:0,mp:12,desc:'為HP最低隊友防禦+15，持續3回合'},
     ]},
   berserker:{id:'berserker',name:'托爾克',title:'狂戰士',icon:'🪓',color:'#ff5722',
     maxHp:150,maxMp:20,baseAtk:48,baseDef:12,atk:48,def:12,
@@ -844,7 +1022,6 @@ function charImg(id, size='100%', extra=''){
 function heroImg(id){return charImg(id);}
 function enemyImg(id){return charImg(id);}
 
-
 // 每個區域含 5 個關卡（battle），每個關卡有 enemies + intro
 const AREAS = [
   {loc:'幽暗森林', bgIdx:0, battles:[
@@ -903,8 +1080,6 @@ const WAVES = AREAS.flatMap((area, ai) =>
   }))
 );
 
-
-
 // Wave background images (GitHub raw URLs + fallback to embedded CSS for wave 5+)
 const REPO = 'https://raw.githubusercontent.com/language2816/rpg-assets/ede72930049aae276bc0c135895a96896d69c76a/cave/';
 const WAVE_BGS = [
@@ -947,7 +1122,6 @@ function updateBattleBg(waveIdx){
   },250);
 }
 
-
 // ══════════════════════════════════════════════
 // BGM 音樂系統 — 每個地圖區域對應一首歌（循環播放）
 // ══════════════════════════════════════════════
@@ -966,7 +1140,7 @@ const BGM = (() => {
   let audio = null;
   let currentIdx = -1;
   let userMuted = false;
-  let vol = 0.35;
+  let vol = 0.8;
 
   function _create(url) {
     if (audio) { audio.pause(); audio.src = ''; }
@@ -1049,6 +1223,63 @@ const ITEMS = {
   amulet_mp:   {id:'amulet_mp',   name:'法力護符',   icon:'🔵', type:'accessory', slot:'accessory', mpBonus:35,  price:90,  desc:'最大 MP +35'},
   boots_swift: {id:'boots_swift', name:'迅捷靴',     icon:'👢', type:'accessory', slot:'accessory', defBonus:4, atkBonus:4, price:120, desc:'攻擊 +4，防禦 +4'},
 };
+
+// ══════════════════════════════════════════════
+// RANDOM EVENTS
+// ══════════════════════════════════════════════
+const RANDOM_EVENTS = [
+  {id:'shrine', title:'⛩ 古老神殿', icon:'⛩',
+   desc:'路旁佇立一座苔蘚覆蓋的石頭神殿，殘舊的香爐中依然冒著裊裊青煙。神殿似乎感應到了旅人的到來，石縫間滲出柔和的神聖光芒。',
+   choices:[
+     {text:'🙏 虔誠祈禱（恢復全體 40% HP）', effect:'heal_pct', value:0.4},
+     {text:'💰 奉獻金幣（花費80金，ATK+8 本局有效）', effect:'bless_atk', gold:80},
+     {text:'🛡 祈求守護（花費60金，DEF+6 本局有效）', effect:'bless_def', gold:60},
+     {text:'繼續趕路', effect:'skip'},
+   ]},
+  {id:'treasure', title:'💰 神秘寶箱', icon:'📦',
+   desc:'廢墟角落裡，一只古老寶箱靜靜地躺著，鎖孔上鑲嵌著微微發光的寶石。是真正的寶藏，還是精心設置的陷阱？',
+   choices:[
+     {text:'🔓 直接打開（隨機獲得金幣或道具）', effect:'treasure'},
+     {text:'🎰 冒險開鎖（50%雙倍獎勵，50%觸發陷阱）', effect:'risky_treasure'},
+     {text:'繞道而行', effect:'skip'},
+   ]},
+  {id:'traveler', title:'🤕 受傷旅人', icon:'🧑',
+   desc:'一個受傷的旅行者倒在路邊，他顫抖著伸出手：「請...幫幫我...我能給你情報...」滿身是血，看起來剛剛歷經了一場惡戰。',
+   choices:[
+     {text:'💊 用藥水救治（消耗1個治療藥水）', effect:'help_heal', needPotion:true},
+     {text:'💰 給予金幣（30金換取情報，可能有意外收穫）', effect:'give_gold', gold:30},
+     {text:'無視繼續前行（...）', effect:'ignore'},
+   ]},
+  {id:'dark_altar', title:'🔮 黑暗祭壇', icon:'🔮',
+   desc:'前方矗立著一座漆黑的祭壇，四周散發著令人不安的紫色光芒。祭壇上的銘文低聲吟誦——那是一個古老的契約，以鮮血換取力量。',
+   choices:[
+     {text:'🩸 以血獻祭（損失 20% HP，全體 ATK+10）', effect:'blood_pact'},
+     {text:'💥 摧毀祭壇（隨機獲得道具+少量金幣）', effect:'destroy_altar'},
+     {text:'敬而遠之', effect:'skip'},
+   ]},
+  {id:'merchant', title:'🛒 神秘行商', icon:'🧙',
+   desc:'一個戴著大帽子的矮個子商人從草叢後鑽出：「嘿嘿，英雄！看看我的秘密貨物！只有今天有！」他攤開一個裝著奇怪藥瓶的包袱。',
+   choices:[
+     {text:'💊 買補給包（80金，獲得3個隨機藥水）', effect:'buy_bundle', gold:80},
+     {text:'🔮 以物換物（交出最舊道具，換取等值裝備）', effect:'trade', needItem:true},
+     {text:'不感興趣', effect:'skip'},
+   ]},
+  {id:'ghost', title:'👻 古戰場幽靈', icon:'👻',
+   desc:'月光映照下，一個古代戰士的幽靈從大地中緩緩升起。他的眼眸中既有悲傷又有期待：「旅人，在我消散之前，讓我再戰一次——或者聆聽我的故事。」',
+   choices:[
+     {text:'⚔ 接受決鬥（消耗30% HP，勝後獲豐厚獎勵）', effect:'ghost_duel'},
+     {text:'📜 聆聽故事（獲得一個隨機增益）', effect:'ghost_story'},
+     {text:'默默離開', effect:'skip'},
+   ]},
+  {id:'fountain', title:'✨ 許願噴泉', icon:'⛲',
+   desc:'森林深處，有一座水晶般清澈的小型噴泉。泉水在月光下閃閃發光，傳說這裡能實現旅人的一個小小願望。你口袋裡有金幣，心中有渴望。',
+   choices:[
+     {text:'❤ 許願恢復（投入50金，全體HP完全恢復）', effect:'wish_hp', gold:50},
+     {text:'⚡ 許願力量（投入80金，英雄ATK+12，持續本局）', effect:'wish_atk', gold:80},
+     {text:'💎 許願財富（投入30金，有機會翻倍返回）', effect:'wish_gold', gold:30},
+     {text:'不許願離去', effect:'skip'},
+   ]},
+];
 
 // ══════════════════════════════════════════════
 // STATE
@@ -1186,7 +1417,9 @@ function applySkill(actorData, actorState, sk){
     case 'heal':case 'comp_heal':{
       const al=livingAllies();if(!al.length)break;
       const maxHp=a=>a.type==='hero'?HD[G.heroId].maxHp:a.data.baseHp;
-      const tgtA=al.reduce((a,b)=>a.state.hp/maxHp(a)<b.state.hp/maxHp(b)?a:b);
+      // 玩家選擇了目標則優先用，否則 fallback 血量最低
+      let tgtA=G.allyTarget?al.find(a=>a.key===G.allyTarget):null;
+      if(!tgtA)tgtA=al.reduce((a,b)=>a.state.hp/maxHp(a)<b.state.hp/maxHp(b)?a:b);
       const amt=Math.round(sk.base+actorData.atk*(sk.type==='comp_heal'?0.5:0.4));
       tgtA.state.hp=Math.min(maxHp(tgtA),tgtA.state.hp+amt);
       addLog('💚 '+actorData.name+'【'+sk.name+'】→'+tgtA.data.name+' +'+amt,'ll-heal');
@@ -1219,22 +1452,24 @@ function applySkill(actorData, actorState, sk){
       G.stats.dmg+=d;break;
     }
     case 'buff_atk':{
-      // 攻擊buff：為HP最低隊友（或全體）加攻
       const al=livingAllies();if(!al.length)break;
-      const tgtA=al.reduce((a,b)=>a.state.hp<b.state.hp?a:b);
-      const buffAmt=12;const turns=3;
+      // 玩家選擇目標，fallback 攻擊力最高（不是血最低）
+      let tgtA=G.allyTarget?al.find(a=>a.key===G.allyTarget):null;
+      if(!tgtA)tgtA=al.reduce((a,b)=>(a.state.atk||a.data.atk)>(b.state.atk||b.data.atk)?a:b);
+      const buffAmt=sk.buffAmt||12;const turns=sk.turns||3;
       tgtA.state.buffAtk=(tgtA.state.buffAtk||0)+buffAmt;
       tgtA.state.buffAtkTurns=Math.max(tgtA.state.buffAtkTurns||0,turns);
       if(!tgtA.state.atkBonus)tgtA.state.atkBonus=0;
       tgtA.state.atkBonus+=buffAmt;
-      addLog('🎵 '+actorData.name+'【'+sk.name+'】→'+tgtA.data.name+' ⚔+'+buffAmt+' ('+turns+'回)','ll-buff');
+      addLog('⚔ '+actorData.name+'【'+sk.name+'】→'+tgtA.data.name+' ⚔+'+buffAmt+' ('+turns+'回)','ll-buff');
       floatDmg('⚔+'+buffAmt,false,false,true);break;
     }
     case 'buff_def':{
-      // 防禦buff：為HP最低隊友加防
       const al2=livingAllies();if(!al2.length)break;
-      const tgtB=al2.reduce((a,b)=>a.state.hp<b.state.hp?a:b);
-      const bDefAmt=12;const bTurns=3;
+      // 玩家選擇目標，fallback 防禦力最低（最需要保護的）
+      let tgtB=G.allyTarget?al2.find(a=>a.key===G.allyTarget):null;
+      if(!tgtB)tgtB=al2.reduce((a,b)=>(a.state.def||a.data.def)<(b.state.def||b.data.def)?a:b);
+      const bDefAmt=sk.buffAmt||12;const bTurns=sk.turns||3;
       tgtB.state.buffDef=(tgtB.state.buffDef||0)+bDefAmt;
       tgtB.state.buffDefTurns=Math.max(tgtB.state.buffDefTurns||0,bTurns);
       if(!tgtB.state.defBonus)tgtB.state.defBonus=0;
@@ -1245,7 +1480,7 @@ function applySkill(actorData, actorState, sk){
     case 'buff_atk_all':{
       // 強力攻擊buff：全體
       const al3=livingAllies();if(!al3.length)break;
-      const bigBuff=20;const bigTurns=2;
+      const bigBuff=sk.buffAmt||20;const bigTurns=sk.turns||2;
       al3.forEach(a=>{
         a.state.buffAtk=(a.state.buffAtk||0)+bigBuff;
         a.state.buffAtkTurns=Math.max(a.state.buffAtkTurns||0,bigTurns);
@@ -1295,6 +1530,26 @@ function applySkill(actorData, actorState, sk){
 }
 
 // ══════════════════════════════════════════════
+// BUFF TICK HELPER
+// ══════════════════════════════════════════════
+function tickBuffState(st){
+  if(st.buffAtkTurns>0){
+    st.buffAtkTurns--;
+    if(st.buffAtkTurns<=0&&st.buffAtk>0){
+      st.atkBonus=Math.max(0,(st.atkBonus||0)-st.buffAtk);
+      addLog('⬇ 攻擊增益消退','ll-buff');st.buffAtk=0;
+    }
+  }
+  if(st.buffDefTurns>0){
+    st.buffDefTurns--;
+    if(st.buffDefTurns<=0&&st.buffDef>0){
+      st.defBonus=Math.max(0,(st.defBonus||0)-st.buffDef);
+      addLog('⬇ 防禦增益消退','ll-buff');st.buffDef=0;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
 // ENEMY TURN
 // ══════════════════════════════════════════════
 function doEnemyTurn(){
@@ -1321,9 +1576,10 @@ function doEnemyTurn(){
 
     // Target selection - random ally
     const tgtA=al[rnd(0,al.length-1)];
-    const allyData=tgtA.type==='hero'?HD[G.heroId]:tgtA.data;
-    const defVal=tgtA.type==='hero'?HD[G.heroId].def+(tgtA.state.defBonus||0):tgtA.data.baseDef;
-    const d=calcDmg(atk,defVal+(tgtA.state.defBonus||0),6);
+    if(!tgtA)return;
+    const allyData=tgtA.type==='hero'?HD[G.heroId]:(tgtA.data||{name:'夥伴',def:0});
+    const defVal=tgtA.type==='hero'?HD[G.heroId].def+(tgtA.state.defBonus||0):(allyData.baseDef||allyData.def||0);
+    const d=calcDmg(atk,(defVal||0)+(tgtA.state.defBonus||0),6);
 
     if(tgtA.state.eff&&tgtA.state.eff.defending){
       const rd=Math.round(d*0.35);tgtA.state.eff.defending=0;
@@ -1455,7 +1711,7 @@ function renderCombat(){
   renderActionPanel();
   renderLog();
   const tgt=livingEnemies();
-  document.getElementById('tgt-hint').style.display=tgt.length>1?'block':'none';
+  const tgtHint=document.getElementById('tgt-hint');if(tgtHint)tgtHint.style.display=tgt.length>1?'block':'none';
   const rt=document.getElementById('round-tag');
   if(rt)rt.textContent=`第 ${G.round} 回合`;
 }
@@ -1633,21 +1889,7 @@ function renderActionPanel(){
     </button>`;
   }).join('')}</div>`;
 
-  // Skill description panel (shown when a skill is selected)
-  const SKILL_TYPE_LABELS={dmg:'攻擊',taunt_dmg:'攻擊·嘲諷',dmg_stun:'攻擊+眩暈',multi:'連擊',
-    pierce:'穿甲',crit:'暴擊',aoe:'範圍攻擊',aoe_slow:'範圍+減速',heal:'治療夥伴',
-    comp_heal:'治療夥伴',healall:'全體治療',defend:'防禦',blind:'致盲',poison:'毒攻擊',
-    buff_atk:'攻擊增益',buff_def:'防禦增益',buff_atk_all:'全體攻擊增益',
-    healall_buff:'治療+增益',curse:'詛咒',drain:'吸取生命'};
   let descHTML='';
-  if(G.pendingSkillIdx!==null&&skills[G.pendingSkillIdx]){
-    const psk=skills[G.pendingSkillIdx];
-    const typeLabel=SKILL_TYPE_LABELS[psk.type]||psk.type;
-    descHTML+=`<div class="sk-desc-panel">
-      <div class="sk-desc-name">${psk.name} <span style="font-size:.6rem;color:var(--text3)">[${typeLabel}]</span></div>
-      <div class="sk-desc-body">${psk.desc||'—'}<span class="sk-desc-mp">${psk.mp>0?'消耗 '+psk.mp+' MP':''}</span></div>
-    </div>`;
-  }
 
   // Confirm / cancel row (only when a skill is selected)
   let confirmHTML='';
@@ -1660,12 +1902,12 @@ function renderActionPanel(){
 
   // Ally target picker (when skill targets ally and multiple allies alive)
   const al=livingAllies();
-  const allyTargetTypes=['heal','comp_heal','healall'];
+  const allyTargetTypes=['heal','comp_heal','healall','buff_atk','buff_def'];
   let allyPickHTML='';
   if(G.pendingSkillIdx!==null&&skills[G.pendingSkillIdx]){
     const psk=skills[G.pendingSkillIdx];
     if(allyTargetTypes.includes(psk.type)&&al.length>1){
-      const label='💚 選擇治療目標';
+      const label=['buff_atk','buff_def'].includes(psk.type)?'⚔ 選擇增益目標':'💚 選擇治療目標';
       allyPickHTML=`<div class="ally-pick-row">
         <span class="ally-pick-label">${label}</span>
         ${al.map(a=>{
@@ -1777,7 +2019,7 @@ const W = {
     const skillIdx=G.pendingSkillIdx;
     const sk=actor.data.skills[skillIdx];
     // If heal-type and multi-ally but no target picked yet -> just show picker (already shown)
-    const allyTargetTypes=['heal','comp_heal'];
+    const allyTargetTypes=['heal','comp_heal','buff_atk','buff_def'];
     const al=livingAllies();
     if(allyTargetTypes.includes(sk.type)&&al.length>1&&!G.allyTarget){
       // Flash the ally picker to hint user must pick
@@ -1842,40 +2084,32 @@ const W = {
   },
 
   _doEnemyTurn(){
-    doEnemyTurn();
+    try {
+      doEnemyTurn();
+    } catch(err) {
+      console.error('[doEnemyTurn error]', err);
+    }
+    // ── 無論如何先恢復玩家回合，避免卡死 ──
     G.round++;
     G.phase='player';
     G.turnQueue=buildTurnQueue();
     G.turnIdx=0;
     G.pendingSkillIdx=null;G.skillDescIdx=null;
-    // MP regen for companions
-    G.companions.forEach(c=>{if(c.hp>0)c.mp=Math.min(c.maxMp,c.mp+8);});
-    // Slight MP regen for hero
-    G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+8);
-    // Buff tick-down for all allies
-    function tickBuff(st){
-      if(st.buffAtkTurns>0){
-        st.buffAtkTurns--;
-        if(st.buffAtkTurns<=0&&st.buffAtk>0){
-          st.atkBonus=Math.max(0,(st.atkBonus||0)-st.buffAtk);
-          addLog('⬇ 攻擊增益消退','ll-buff');st.buffAtk=0;
-        }
-      }
-      if(st.buffDefTurns>0){
-        st.buffDefTurns--;
-        if(st.buffDefTurns<=0&&st.buffDef>0){
-          st.defBonus=Math.max(0,(st.defBonus||0)-st.buffDef);
-          addLog('⬇ 防禦增益消退','ll-buff');st.buffDef=0;
-        }
-      }
+    // ── 檢查敵人是否全滅 ──
+    if(!livingEnemies().length){
+      renderCombat();
+      setTimeout(function(){W._waveVictory();},800);return;
     }
-    tickBuff(G.party);
-    G.companions.forEach(c=>{if(c.hp>0)tickBuff(c);});
+    // MP regen
+    G.companions.forEach(c=>{if(c.hp>0)c.mp=Math.min(c.maxMp,c.mp+8);});
+    G.party.mp=Math.min(HD[G.heroId].maxMp,G.party.mp+8);
+    // Buff tick-down
+    tickBuffState(G.party);
+    G.companions.forEach(c=>{if(c.hp>0)tickBuffState(c);});
     // Check if all allies dead
     if(G.party.hp<=0&&G.companions.every(c=>c.hp<=0)){
       renderCombat();setTimeout(function(){W._gameOver();},800);return;
     }
-    // If hero dead but companions alive, remove hero from queue
     if(G.party.hp<=0){G.turnQueue=buildTurnQueue();}
     renderCombat();
   },
@@ -1951,6 +2185,15 @@ const W = {
     document.querySelectorAll('.area-only').forEach(el=>{
       el.style.display = 'inline-block';
     });
+    // 隨機事件：30% 機率出現
+    const eventBtn = document.querySelector('#wc-btns button[onclick="W.openEvent()"]');
+    if(eventBtn){
+      const hasEvent = Math.random() < 0.30;
+      eventBtn.style.display = hasEvent ? 'inline-block' : 'none';
+      if(hasEvent){
+        eventBtn.textContent = '🎲 隨機事件（幸運降臨！）';
+      }
+    }
     if(completedArea){
       const areaNum = (justFinished.areaIdx||0)+1;
       if(wcTitle) wcTitle.textContent = '✦ 區域 '+areaNum+' 完全清除！';
@@ -2204,6 +2447,197 @@ const W = {
     ep.innerHTML=html;
   },
 
+  // ── Random Events ──
+  openEvent(){
+    G._prev = G.screen||'wclear';
+    G._eventFromWclear = (G.screen === 'wclear');
+    const pool = RANDOM_EVENTS;
+    G._currentEvent = pool[Math.floor(Math.random()*pool.length)];
+    G._eventDone = false;
+    // 重設返回鍵顯示
+    const backBtn = document.querySelector('#s-event .modal-close');
+    if(backBtn) backBtn.style.display = '';
+    show('event');
+    this._renderEvent();
+  },
+  closeEvent(){
+    show(G._prev||'wclear');
+  },
+  finishEvent(){
+    // 若事件是從 wclear 開啟（戰鬥勝利後），結束後直接進下一關
+    if(G._eventFromWclear){
+      G._eventFromWclear = false;
+      this.gNextWave();
+    } else {
+      this.closeEvent();
+    }
+  },
+  _renderEvent(){
+    const ev = G._currentEvent; if(!ev) return;
+    const w = WAVES[Math.max(0,G.waveIdx-1)];
+    document.getElementById('ev-title').textContent = ev.title;
+    document.getElementById('ev-loc').textContent = '📍 ' + (w?w.loc:'旅途中');
+    document.getElementById('ev-scene').textContent = ev.desc;
+    document.getElementById('ev-result').style.display = 'none';
+    document.getElementById('ev-continue').style.display = 'none';
+    const hasPotion = G.inventory.some(i=>i.type==='consumable'&&i.healHp);
+    const hasItem = G.inventory.some(i=>i.type!=='consumable');
+    const ch = document.getElementById('ev-choices');
+    if(!ch) return;
+    if(G._eventDone){ ch.innerHTML=''; return; }
+    ch.innerHTML = ev.choices.map((choice,i)=>{
+      const locked = (choice.needPotion&&!hasPotion)||(choice.needItem&&!hasItem)||(choice.gold&&G.gold<choice.gold);
+      const lockNote = choice.needPotion&&!hasPotion?' （需要治療藥水）':choice.needItem&&!hasItem?' （需要裝備道具）':choice.gold&&G.gold<choice.gold?' （金幣不足）':'';
+      return `<button class="item-btn" onclick="W.chooseEvent(${i})" ${locked?'disabled':''} style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.78rem;font-family:'Noto Serif TC',serif;color:${locked?'var(--text3)':'var(--text)'};border-color:${locked?'var(--border)':'var(--border2)'};line-height:1.6">
+        ${choice.text}${lockNote?`<br><span style="font-size:.6rem;color:var(--text3)">${lockNote}</span>`:''}
+      </button>`;
+    }).join('');
+  },
+  chooseEvent(idx){
+    const ev = G._currentEvent; if(!ev||G._eventDone) return;
+    const choice = ev.choices[idx]; if(!choice) return;
+    G._eventDone = true;
+    let result = {ok:true, title:'', desc:''};
+    const hero = HD[G.heroId];
+
+    function allAliveHP(){ return [G.party,...G.companions.filter(c=>c.hp>0)]; }
+    function allMaxHp(ally){ return ally===G.party?hero.maxHp:(ally.maxHp||100); }
+
+    switch(choice.effect){
+      case 'skip': result={ok:true,title:'繼續旅途',desc:'你選擇了不打擾這裡，穩步踏上旅途。也許下次會有新的機緣。'}; break;
+      case 'ignore': result={ok:false,title:'視若無睹',desc:'你選擇無視了他的求救，繼續向前走去。不知為何，心中升起了一絲莫名的沉重感...'}; break;
+      case 'heal_pct':{
+        let total=0;
+        allAliveHP().forEach(a=>{ const m=allMaxHp(a); const gain=Math.round(m*choice.value); const r=Math.min(gain,m-a.hp); a.hp+=r; total+=r; });
+        result={ok:true,title:'神靈庇佑！',desc:`神聖的光芒籠罩了整個隊伍！全體夥伴恢復了生命力。（總計 +${total} HP）`}; break;
+      }
+      case 'bless_atk':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'金幣不夠，無法完成獻祭。'};break;}
+        G.gold-=choice.gold;
+        G.party.atkBonus=(G.party.atkBonus||0)+8;
+        result={ok:true,title:'神靈賜力！',desc:`你獻上了 ${choice.gold} 金幣，神靈賜予你力量！英雄攻擊力提升 8 點（本局有效）。`}; break;
+      }
+      case 'bless_def':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'金幣不夠。'};break;}
+        G.gold-=choice.gold;
+        G.party.defBonus=(G.party.defBonus||0)+6;
+        result={ok:true,title:'神靈護盾！',desc:`你獻上了 ${choice.gold} 金幣，神靈賜予你防護！英雄防禦力提升 6 點（本局有效）。`}; break;
+      }
+      case 'treasure':{
+        const r=Math.random();
+        if(r<0.45){const g=rnd(50,120);G.gold+=g;result={ok:true,title:'金幣大豐收！',desc:`寶箱裡裝滿了閃閃發光的金幣！獲得 ${g} 💰 金幣！`};}
+        else if(r<0.75){
+          const cons=Object.values(ITEMS).filter(i=>i.type==='consumable');
+          const item=cons[Math.floor(Math.random()*cons.length)];
+          G.inventory.push({...item});
+          result={ok:true,title:'發現道具！',desc:`寶箱裡有一瓶藥水！獲得【${item.name}】！`};
+        }else{
+          const g=rnd(20,60);G.gold+=g;const m=Object.values(ITEMS).filter(i=>i.type==='weapon'||i.type==='armor');const eq=m[Math.floor(Math.random()*m.length)];
+          G.inventory.push({...eq});result={ok:true,title:'意外收穫！',desc:`獲得了 ${g} 金幣，還找到了【${eq.name}】！`};
+        }
+        break;
+      }
+      case 'risky_treasure':{
+        if(Math.random()<0.5){const g=rnd(100,220);G.gold+=g;result={ok:true,title:'大豐收！',desc:`成功開鎖！滿滿的寶藏！獲得 ${g} 💰 金幣！`};}
+        else{const dmg=Math.round(G.party.hp*0.25);G.party.hp=Math.max(1,G.party.hp-dmg);result={ok:false,title:'觸發陷阱！',desc:`毒針刺破了手指！英雄損失了 ${dmg} 點生命！（但也摸到了一點金幣）`};G.gold+=rnd(10,30);}
+        break;
+      }
+      case 'help_heal':{
+        const pidx=G.inventory.findIndex(i=>i.type==='consumable'&&i.healHp);
+        if(pidx<0){result={ok:false,title:'沒有藥水',desc:'你翻遍了背包卻找不到治療藥水。'};break;}
+        const pot=G.inventory[pidx]; G.inventory.splice(pidx,1);
+        const g=rnd(60,150); G.gold+=g;
+        result={ok:true,title:'善有善報！',desc:`你用【${pot.name}】救了那位旅人，他康復後感激地掏出了積蓄。獲得 ${g} 💰 金幣！`}; break;
+      }
+      case 'give_gold':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'你沒有足夠的金幣。'};break;}
+        G.gold-=choice.gold;
+        const back=Math.round(rnd(choice.gold*1.5,choice.gold*2.8));G.gold+=back;
+        result={ok:true,title:'情報有用！',desc:`旅人告訴你一個秘密藏寶點的位置！花費 ${choice.gold} 金，發現了 ${back} 💰 金幣！`}; break;
+      }
+      case 'blood_pact':{
+        const dmg=Math.round(G.party.hp*0.2); G.party.hp=Math.max(1,G.party.hp-dmg);
+        allAliveHP().forEach(a=>{ a.atkBonus=(a.atkBonus||0)+10; });
+        result={ok:true,title:'黑暗契約！',desc:`鮮血滴落在祭壇上……英雄損失了 ${dmg} 點生命，但全體獲得了黑暗力量！全員 ATK+10！`}; break;
+      }
+      case 'destroy_altar':{
+        const g=rnd(20,50); G.gold+=g;
+        const cons=Object.values(ITEMS).filter(i=>i.type==='consumable');
+        const item=cons[Math.floor(Math.random()*cons.length)];
+        G.inventory.push({...item});
+        result={ok:true,title:'祭壇碎裂！',desc:`邪惡的祭壇被砸碎，獲得了 ${g} 金幣和【${item.name}】！`}; break;
+      }
+      case 'buy_bundle':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'金幣不夠買這個補給包。'};break;}
+        G.gold-=choice.gold;
+        const potTypes=['potion_hp','potion_hp2','potion_mp','elixir'];
+        let added=[]; for(let i=0;i<3;i++){const id=potTypes[Math.floor(Math.random()*potTypes.length)];const it=ITEMS[id];if(it){G.inventory.push({...it});added.push(it.name);}}
+        result={ok:true,title:'購買成功！',desc:`商人遞過來三個藥瓶！獲得：${added.join('、')}！`}; break;
+      }
+      case 'trade':{
+        const equips=G.inventory.filter(i=>i.type!=='consumable');
+        if(!equips.length){result={ok:false,title:'沒有裝備',desc:'你沒有裝備道具可以交換。'};break;}
+        const old=equips[equips.length-1];
+        const idx=G.inventory.findIndex(i=>i.id===old.id); G.inventory.splice(idx,1);
+        const upgrades=Object.values(ITEMS).filter(i=>i.type!=='consumable'&&i.price>=(old.price||0)*0.8);
+        const got=upgrades.length?upgrades[Math.floor(Math.random()*upgrades.length)]:old;
+        G.inventory.push({...got});
+        result={ok:true,title:'交易完成！',desc:`你用【${old.name}】換到了【${got.name}】！商人滿意地離去了。`}; break;
+      }
+      case 'ghost_duel':{
+        const dmg=Math.round(G.party.hp*0.3); G.party.hp=Math.max(1,G.party.hp-dmg);
+        const g=rnd(80,160); G.gold+=g;
+        const cons=Object.values(ITEMS).filter(i=>i.type==='consumable');
+        const item=cons[Math.floor(Math.random()*cons.length)]; G.inventory.push({...item});
+        result={ok:true,title:'勝！幽靈安息！',desc:`一場酣暢的決鬥！英雄損失了 ${dmg} HP，但擊敗了幽靈，獲得了 ${g} 💰 和【${item.name}】！幽靈帶著微笑消散了。`}; break;
+      }
+      case 'ghost_story':{
+        const r=Math.random();
+        let buff;
+        if(r<0.4){G.party.atkBonus=(G.party.atkBonus||0)+6;buff='英雄 ATK +6';}
+        else if(r<0.7){G.party.defBonus=(G.party.defBonus||0)+6;buff='英雄 DEF +6';}
+        else{const heal=Math.round(HD[G.heroId].maxHp*0.25);G.party.hp=Math.min(HD[G.heroId].maxHp,G.party.hp+heal);buff='英雄 HP +'+heal;}
+        result={ok:true,title:'古老的智慧！',desc:`幽靈講述了一個關於古代英雄的傳說，讓你受益匪淺！獲得增益：${buff}！`}; break;
+      }
+      case 'wish_hp':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'金幣不夠許願。'};break;}
+        G.gold-=choice.gold;
+        allAliveHP().forEach(a=>{ a.hp=allMaxHp(a); });
+        result={ok:true,title:'願望實現！',desc:`清澈的泉水包裹了整個隊伍——全體生命值完全恢復！`}; break;
+      }
+      case 'wish_atk':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'金幣不夠許願。'};break;}
+        G.gold-=choice.gold;
+        G.party.atkBonus=(G.party.atkBonus||0)+12;
+        result={ok:true,title:'力量賜予！',desc:`泉水化為金色光芒注入你的雙臂！英雄 ATK +12（本局有效）！`}; break;
+      }
+      case 'wish_gold':{
+        if(G.gold<choice.gold){result={ok:false,title:'金幣不足',desc:'金幣不夠許願。'};break;}
+        G.gold-=choice.gold;
+        const back=Math.random()<0.6?rnd(60,90):rnd(100,180);
+        G.gold+=back;
+        result={ok:true,title:back>choice.gold?'財源滾滾！':'少許損失',desc:back>choice.gold?`泉水泛起金色漣漪，金幣翻倍而來！獲得 ${back} 💰！`:`願望只被半實現了，回收了 ${back} 💰。`}; break;
+      }
+      default: result={ok:true,title:'繼續前行',desc:'你繼續了旅途。'};
+    }
+
+    // Show result
+    const res = document.getElementById('ev-result');
+    res.style.display='block';
+    res.style.background = result.ok?'rgba(46,204,113,.08)':'rgba(192,57,43,.08)';
+    res.style.border = '1px solid '+(result.ok?'rgba(46,204,113,.2)':'rgba(192,57,43,.2)');
+    res.innerHTML = `<div style="font-family:Cinzel,serif;color:${result.ok?'#2ecc71':'var(--red2)'};margin-bottom:.4rem">${result.ok?'✦ ':'⚠ '}${result.title}</div>`
+      + `<div style="font-size:.8rem;color:var(--text2);line-height:1.9">${result.desc}</div>`;
+    document.getElementById('ev-choices').innerHTML='';
+    document.getElementById('ev-continue').style.display='block';
+    // 做完選擇後隱藏「返回」，避免跳回上一頁
+    const backBtn2 = document.querySelector('#s-event .modal-close');
+    if(backBtn2) backBtn2.style.display = 'none';
+    // 按鈕文字：若來自 wclear 則提示直接進下一關
+    const contBtn = document.getElementById('ev-continue-btn');
+    if(contBtn) contBtn.textContent = G._eventFromWclear ? '前往下一關 →' : '繼續旅途 →';
+  },
+
   restart(){
     Object.values(HD).forEach(h=>{h.atk=h.baseAtk;h.def=h.baseDef;h.maxHp=CHARS[h.id].maxHp;h.maxMp=CHARS[h.id].maxMp;});
     G={screen:'title',heroId:null,party:null,companions:[],waveIdx:0,enemies:[],
@@ -2235,126 +2669,169 @@ const W = {
 
 // Init
 show('title');
-</script>
 
-<!-- BGM PLAYER -->
-<div id="bgm-player" style="display:none">
-  <button class="bgm-btn" id="bgm-toggle" title="播放/暫停">🎵</button>
-  <button class="bgm-btn" id="bgm-next" title="下一首">⏭</button>
-  <div>
-    <div class="bgm-info" id="bgm-title">載入中...</div>
-    <div class="bgm-track" id="bgm-track">01 / 04</div>
-  </div>
-  <input type="range" class="bgm-vol" id="bgm-vol" min="0" max="100" value="40" title="音量">
-</div>
-<audio id="bgm-audio" preload="auto"></audio>
+// ══════════════════════════════════════════════
+// BGM + SETTINGS
+// ══════════════════════════════════════════════
 
-<script>
 // ══════════════════════════════════════════════
-// BGM MUSIC SYSTEM
+// BGM MUSIC SYSTEM (重構版)
 // ══════════════════════════════════════════════
-(function(){
+var BGMPL = (function(){
   var BASE = 'https://raw.githubusercontent.com/language2816/rpg-assets/ede72930049aae276bc0c135895a96896d69c76a/';
   var tracks = [
-    { file: 'magnific-ay-ay.mp3',              name: 'Ay Ay' },
-    { file: 'magnific-electronic-ole.mp3',     name: 'Electronic Olé' },
-    { file: 'magnific-monsoon-of-the-heart.mp3',name: 'Monsoon of Heart' },
-    { file: 'magnific-quartz-calm.mp3',        name: 'Quartz Calm' }
+    { file: 'magnific-ay-ay.mp3',               name: 'Ay Ay' },
+    { file: 'magnific-electronic-ole.mp3',      name: 'Electronic Olé' },
+    { file: 'magnific-monsoon-of-the-heart.mp3', name: 'Monsoon of Heart' },
+    { file: 'magnific-quartz-calm.mp3',         name: 'Quartz Calm' }
   ];
+  tracks.sort(function(){ return Math.random()-.5; });
+
   var idx = 0;
   var audio = document.getElementById('bgm-audio');
-  var player = document.getElementById('bgm-player');
-  var btnToggle = document.getElementById('bgm-toggle');
-  var btnNext = document.getElementById('bgm-next');
-  var titleEl = document.getElementById('bgm-title');
-  var trackEl = document.getElementById('bgm-track');
-  var volEl = document.getElementById('bgm-vol');
   var playing = false;
   var started = false;
+  var currentVol = 0.8; // 預設音量 80%
 
-  // Shuffle once at start
-  tracks.sort(function(){ return Math.random()-.5; });
+  function updateSettingsUI(){
+    var btn = document.getElementById('sp-bgm-toggle');
+    var nameEl = document.getElementById('sp-bgm-name');
+    if(btn) btn.textContent = playing ? '⏸' : '▶';
+    if(nameEl) nameEl.textContent = tracks[idx] ? tracks[idx].name : '—';
+  }
 
   function loadTrack(i){
     idx = ((i % tracks.length) + tracks.length) % tracks.length;
     audio.src = BASE + tracks[idx].file;
-    titleEl.textContent = tracks[idx].name;
-    trackEl.textContent = (idx+1<10?'0'+(idx+1):idx+1) + ' / 0' + tracks.length;
     if(playing){ audio.play().catch(function(){}); }
+    updateSettingsUI();
   }
 
-  function startBGM(){
+  function start(){
     if(started) return;
     started = true;
-    player.style.display = 'flex';
-    audio.volume = (volEl.value||40)/100;
+    audio.volume = currentVol;
     loadTrack(idx);
     audio.play().then(function(){
       playing = true;
-      btnToggle.textContent = '🔊';
+      updateSettingsUI();
     }).catch(function(){
-      // autoplay blocked - show muted icon
       playing = false;
-      btnToggle.textContent = '🔇';
+      updateSettingsUI();
     });
   }
 
-  audio.addEventListener('ended', function(){
-    loadTrack(idx+1);
-  });
+  audio.addEventListener('ended', function(){ loadTrack(idx+1); });
 
-  btnToggle.addEventListener('click', function(){
-    if(playing){
-      audio.pause();
-      playing = false;
-      btnToggle.textContent = '🔇';
-    } else {
-      audio.play().then(function(){
-        playing = true;
-        btnToggle.textContent = '🔊';
-      }).catch(function(){});
-    }
-  });
-
-  btnNext.addEventListener('click', function(){
-    loadTrack(idx+1);
-    if(!playing){
-      audio.play().then(function(){
-        playing = true;
-        btnToggle.textContent = '🔊';
-      }).catch(function(){});
-    }
-  });
-
-  volEl.addEventListener('input', function(){
-    audio.volume = this.value/100;
-  });
-
-  // Hook into game start - trigger BGM when entering game (after title screen)
-  var origConfirmSelect = null;
-  var origShow = window.show || null;
-
-  // Override show function to detect screen changes
-  var _origShow = null;
-  document.addEventListener('DOMContentLoaded', function(){
-    // Patch W.confirmSelect to start BGM
-    if(typeof W !== 'undefined' && W.confirmSelect){
-      var orig = W.confirmSelect.bind(W);
-      W.confirmSelect = function(){
-        startBGM();
-        return orig.apply(this, arguments);
-      };
-    }
-    // Also patch show() globally
-    var origShow = window.show;
-    if(typeof origShow === 'function'){
-      window.show = function(id){
-        if(id && id !== 'title' && !started) startBGM();
-        return origShow.apply(this, arguments);
-      };
-    }
-  });
+  return {
+    start: start,
+    toggle: function(){
+      if(playing){
+        audio.pause(); playing = false;
+      } else {
+        if(!started){ start(); return; }
+        audio.play().then(function(){ playing = true; updateSettingsUI(); }).catch(function(){});
+      }
+      updateSettingsUI();
+    },
+    next: function(){
+      loadTrack(idx+1);
+      if(!playing && started){ audio.play().then(function(){ playing=true; updateSettingsUI(); }).catch(function(){}); }
+    },
+    setVol: function(v){
+      currentVol = parseFloat(v);
+      audio.volume = currentVol;
+    },
+    isPlaying: function(){ return playing; },
+    currentName: function(){ return tracks[idx] ? tracks[idx].name : '—'; },
+    updateUI: updateSettingsUI
+  };
 })();
+
+// ══════════════════════════════════════════════
+// SETTINGS UI
+// ══════════════════════════════════════════════
+var SettingsUI = {
+  open: function(){
+    document.getElementById('settings-modal').classList.add('open');
+    BGMPL.updateUI();
+    // sync slider display
+    var vol = document.getElementById('sp-bgm-vol');
+    if(vol) document.getElementById('sp-bgm-vol-val').textContent = Math.round(vol.value*100)+'%';
+  },
+  close: function(){
+    document.getElementById('settings-modal').classList.remove('open');
+    // 重設二次確認狀態
+    var conf=document.getElementById('sp-restart-confirm');
+    var btn=document.getElementById('sp-restart-btn');
+    if(conf)conf.style.display='none';
+    if(btn)btn.style.display='';
+  },
+  toggleBGM: function(){ BGMPL.toggle(); },
+  nextTrack: function(){ BGMPL.next(); },
+  setBGMVol: function(v){
+    BGMPL.setVol(v);
+    document.getElementById('sp-bgm-vol-val').textContent = Math.round(v*100)+'%';
+  },
+  setBrightness: function(v){
+    document.body.style.filter = 'brightness('+v+'%)';
+    document.getElementById('sp-brightness-val').textContent = v+'%';
+  },
+  setSpeed: function(v){
+    window._battleSpeed = parseFloat(v);
+  },
+  setFontSize: function(v){
+    document.getElementById('root').style.fontSize = v+'px';
+  },
+  saveSetting: function(key, val){
+    try{ localStorage.setItem('rpg_'+key, val); } catch(e){}
+  },
+  askRestart: function(){
+    document.getElementById('sp-restart-confirm').style.display='block';
+    document.getElementById('sp-restart-btn').style.display='none';
+  },
+  cancelRestart: function(){
+    document.getElementById('sp-restart-confirm').style.display='none';
+    document.getElementById('sp-restart-btn').style.display='';
+  },
+  resetSettings: function(){
+    // BGM
+    var volEl = document.getElementById('sp-bgm-vol');
+    if(volEl){ volEl.value=0.8; SettingsUI.setBGMVol(0.8); }
+    // Brightness
+    var br = document.getElementById('sp-brightness');
+    if(br){ br.value=100; SettingsUI.setBrightness(100); }
+    // Speed
+    var sp = document.getElementById('sp-speed');
+    if(sp){ sp.value='1'; SettingsUI.setSpeed(1); }
+    // Font
+    var fs = document.getElementById('sp-fontsize');
+    if(fs){ fs.value='16'; SettingsUI.setFontSize(16); }
+    // Toggles
+    ['sp-sfx','sp-anim','sp-log'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.checked = true;
+    });
+  }
+};
+
+// Hook BGMPL into game flow
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof W !== 'undefined' && W.confirmSelect){
+    var orig = W.confirmSelect.bind(W);
+    W.confirmSelect = function(){
+      BGMPL.start();
+      return orig.apply(this, arguments);
+    };
+  }
+  var origShow = window.show;
+  if(typeof origShow === 'function'){
+    window.show = function(id){
+      if(id && id !== 'title') BGMPL.start();
+      return origShow.apply(this, arguments);
+    };
+  }
+});
 </script>
 </body>
 </html>
