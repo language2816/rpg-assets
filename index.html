@@ -2670,6 +2670,14 @@ const W = {
 // Init
 show('title');
 
+// 離開頁面時停止 BGM
+function stopAllBGM(){
+  try{ BGM.stop(); }catch(e){}
+  try{ BGMPL.stop(); }catch(e){}
+}
+window.addEventListener('pagehide', stopAllBGM);
+window.addEventListener('beforeunload', stopAllBGM);
+
 // ══════════════════════════════════════════════
 // BGM + SETTINGS
 // ══════════════════════════════════════════════
