@@ -1,0 +1,14 @@
+// 死亡
+function playDeath(vol=0.7) {
+  const ctx = new AudioContext();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.type='sine';
+  o.frequency.setValueAtTime(300, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(40, ctx.currentTime+0.8);
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.gain.setValueAtTime(vol, ctx.currentTime+0.1);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.9);
+  o.start(); o.stop(ctx.currentTime+0.9);
+}

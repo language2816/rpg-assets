@@ -1,0 +1,16 @@
+// 格擋
+function playBlock(vol=0.7) {
+  const ctx = new AudioContext();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  const f = ctx.createBiquadFilter();
+  f.type='bandpass'; f.frequency.value=800; f.Q.value=5;
+  o.connect(f); f.connect(g); g.connect(ctx.destination);
+  o.type='square';
+  o.frequency.setValueAtTime(400, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(800, ctx.currentTime+0.02);
+  o.frequency.exponentialRampToValueAtTime(300, ctx.currentTime+0.1);
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.12);
+  o.start(); o.stop(ctx.currentTime+0.12);
+}

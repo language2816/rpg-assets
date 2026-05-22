@@ -1,0 +1,15 @@
+// 鈍擊
+function playBlunt(vol=0.7) {
+  const ctx = new AudioContext();
+  const buf = ctx.createBuffer(1, ctx.sampleRate*0.15, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i=0; i<d.length; i++) d[i] = (Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.05));
+  const s = ctx.createBufferSource();
+  const g = ctx.createGain();
+  const f = ctx.createBiquadFilter();
+  f.type = 'lowpass'; f.frequency.value = 300;
+  s.buffer = buf; s.connect(f); f.connect(g); g.connect(ctx.destination);
+  g.gain.setValueAtTime(vol*1.5, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.15);
+  s.start();
+}

@@ -1,0 +1,15 @@
+// 劍擊
+function playSword(vol=0.7) {
+  const ctx = new AudioContext();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  const f = ctx.createBiquadFilter();
+  f.type = 'bandpass'; f.frequency.value = 1200; f.Q.value = 0.8;
+  o.connect(f); f.connect(g); g.connect(ctx.destination);
+  o.type = 'sawtooth';
+  o.frequency.setValueAtTime(900, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.08);
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+  o.start(); o.stop(ctx.currentTime + 0.12);
+}
