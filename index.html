@@ -2677,6 +2677,10 @@ function stopAllBGM(){
 }
 window.addEventListener('pagehide', stopAllBGM);
 window.addEventListener('beforeunload', stopAllBGM);
+// 切換分頁 / 最小化 / 離開頁面時立即停止 BGM
+document.addEventListener('visibilitychange', function(){
+  if(document.hidden){ stopAllBGM(); }
+});
 
 // ══════════════════════════════════════════════
 // BGM + SETTINGS
