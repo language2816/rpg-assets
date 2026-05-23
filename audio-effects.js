@@ -1,5 +1,6 @@
 // ══════════════════════════════════════════════════════════════════════════════
 // 🎵 遊戲音效系統 - 使用 Web Audio API 合成
+// 直接嵌入到 index.html 中
 // ══════════════════════════════════════════════════════════════════════════════
 
 const SFX = {
@@ -179,7 +180,7 @@ const SFX = {
     o.stop(now + 0.2);
   },
   
-  // 💥 爆裂/撞擊 - 低頻沉悶聲
+  // 💣 爆裂/撞擊 - 低頻沉悶聲
   impact(vol = 0.8) {
     if (!this.enabled) return;
     const ctx = this.init();
@@ -358,8 +359,3 @@ const SFX = {
     this.enabled = enabled;
   }
 };
-
-// 導出到全局變數（用於遊戲腳本）
-if (typeof window !== 'undefined') {
-  window.SFX = SFX;
-}
